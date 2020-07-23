@@ -45,11 +45,13 @@ namespace Bula.Fetcher {
             if (EQ(http_tester, "TestFull")) {
                 TestRun = true;
                 FineUrls = false;
+                ImmediateRedirect = false;
                 Site = "http://www.test.com";
             }
             else if (EQ(http_tester, "TestFine")) {
                 TestRun = true;
                 FineUrls = true;
+                ImmediateRedirect = false;
                 Site = "http://www.test.com";
             }
             else if (EQ(http_tester, "TestDirect")) {
@@ -75,7 +77,11 @@ namespace Bula.Fetcher {
             IsMobile = Host.IndexOf("m.") == 0;
             Lang = Host.LastIndexOf(".ru") != -1 ? "ru" : "en";
 
+            FineUrls = Config.FINE_URLS;
+            ImmediateRedirect = Config.IMMEDIATE_REDIRECT;
+
             CheckTestRun();
+
             UniqueHostId = Strings.Concat(
                 IsMobile ? "mob_" : "www_",
                 FineUrls ? (ImmediateRedirect ? "direct_" : "fine_") : "full_",

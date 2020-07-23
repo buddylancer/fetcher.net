@@ -161,7 +161,7 @@ namespace Bula.Model {
         }
 
         public DataSet EnumIds() { return EnumIds(null, null); }
-        public DataSet EnumIds(String Where) { return EnumIds(Where, null); }
+        public DataSet EnumIds(String where) { return EnumIds(where, null); }
 
         ///Get DataSet containing IDs only.
         /// <param name="where">Where condition [optional].</param>

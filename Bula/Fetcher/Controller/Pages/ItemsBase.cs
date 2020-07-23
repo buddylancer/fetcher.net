@@ -66,10 +66,10 @@ namespace Bula.Fetcher.Controller.Pages {
             Row["[#Source]"] = STR(oItem["s_SourceName"]);
             Row["[#Title]"] = Util.Show(STR(oItem["s_Title"]));
 
-            if (Config.Contains("Name_Category") && oItem.ContainsKey("s_Category") && STR(oItem["s_Category"]) != null)
+            if (Config.Contains("Name_Category") && oItem.ContainsKey("s_Category") && STR(oItem["s_Category"]) != "")
                 Row["[#Category]"] = STR(oItem["s_Category"]);
 
-            if (Config.Contains("Name_Creator") && oItem.ContainsKey("s_Creator") && STR(oItem["s_Creator"]) != null) {
+            if (Config.Contains("Name_Creator") && oItem.ContainsKey("s_Creator") && STR(oItem["s_Creator"]) != "") {
                 String s_Creator = STR(oItem["s_Creator"]);
                 if (s_Creator != null) {
                     if (s_Creator.IndexOf("(") != -1)
@@ -79,9 +79,9 @@ namespace Bula.Fetcher.Controller.Pages {
                     s_Creator = " "; //TODO -- "" doesn't works somehow, need to investigate
                 Row["[#Creator]"] = s_Creator;
             }
-            if (Config.Contains("Name_Custom1") && oItem.Contains("s_Custom1") && oItem["s_Custom1"] != null)
+            if (Config.Contains("Name_Custom1") && oItem.Contains("s_Custom1") && STR(oItem["s_Custom1"]) != "")
                 Row["[#Custom1]"] = oItem["s_Custom1"];
-            if (Config.Contains("Name_Custom2") && oItem.Contains("s_Custom2") && oItem["s_Custom2"] != null)
+            if (Config.Contains("Name_Custom2") && oItem.Contains("s_Custom2") && STR(oItem["s_Custom2"]) != "")
                 Row["[#Custom2]"] = oItem["s_Custom2"];
 
             String d_Date = Util.ShowTime(STR(oItem["d_Date"]));

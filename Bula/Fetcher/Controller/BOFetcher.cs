@@ -28,7 +28,7 @@ namespace Bula.Fetcher.Controller {
             Config.Set("Log_Object", this.oLogger);
             int log = Request.GetOptionalInteger("log");
             if (!NUL(log)) {
-                String filename_template = STR("C:/Temp/Log_{0}_{1}.html");
+                String filename_template = "C:/Temp/Log_{0}_{1}.html";
                 String filename = Util.FormatString(filename_template, ARR("fetch_items", DateTimes.Format("Y-m-d_h-i-s")));
                 this.oLogger.Init(filename);
             }

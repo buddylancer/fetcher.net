@@ -94,8 +94,6 @@ namespace Bula.Objects {
             String result = null;
             if (limit != 0 || has_pattern) {
                 // Use preg_replace
-                if (!has_pattern)
-                    from = Concat("/", from, "/");
     			if (limit == 0) {
                     result = Regex.Replace(input, from, to);
                 }
@@ -115,7 +113,7 @@ namespace Bula.Objects {
         /// <param name="to">Replacement string.</param>
         /// <returns>Resulting string.</returns>
         public static String ReplaceAll(String regex, String to, String input) {
-            return Replace(CAT("/", regex, "/"), to, input);
+            return Replace(regex, to, input);
         }
 
         ///Replace first substring with another string using regular expressions.
@@ -123,7 +121,7 @@ namespace Bula.Objects {
         /// <param name="to">Replacement string.</param>
         /// <returns>Resulting string.</returns>
         public static String ReplaceFirst(String regex , String to, String input) {
-            return Replace(CAT("/", regex, "/"), to, input, 1);
+            return Replace(regex, to, input, 1);
         }
 
         public static String ReplaceInTemplate(String template, Hashtable hash){

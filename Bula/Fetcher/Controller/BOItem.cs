@@ -176,6 +176,7 @@ namespace Bula.Fetcher.Controller {
         /// <returns>Resulting pattern (quoted).</returns>
         private String QuotePattern(String pattern) {
             pattern = pattern.Replace(".", "\\.");
+            pattern = pattern.Replace("|", "\\|");
             pattern = pattern.Replace("#", "\\#");
             pattern = pattern.Replace("+", "\\+");
             pattern = pattern.Replace("[", "\\[");

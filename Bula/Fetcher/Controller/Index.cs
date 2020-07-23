@@ -47,9 +47,9 @@ namespace Bula.Fetcher.Controller {
             String id_from_vars = Request.Contains("id") ? Request.Get("id") : null;
             String title = Config.SITE_NAME;
             if (p_from_vars != "home")
-                title = CAT(title, " . ", p_from_vars, (!NUL(id_from_vars)? CAT(" . ", id_from_vars) : null));
+                title = CAT(title, " :: ", p_from_vars, (!NUL(id_from_vars)? CAT(" :: ", id_from_vars) : null));
 
-            Prepare["[#Title]"] = Config.SITE_NAME; //TODO -- need unique title on each page
+            Prepare["[#Title]"] = title; //TODO -- need unique title on each page
             Prepare["[#Keywords]"] = Config.SITE_KEYWORDS;
             Prepare["[#Description]"] = Config.SITE_DESCRIPTION;
             Prepare["[#Styles]"] = CAT(

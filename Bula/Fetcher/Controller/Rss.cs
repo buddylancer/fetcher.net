@@ -133,7 +133,7 @@ namespace Bula.Fetcher.Controller {
 
             String pubDate = DateTimes.Format(Config.XML_DTS);
             int nowTime = DateTimes.GetTime(pubDate);
-            String fromDate = DateTimes.GmtFormat(Config.XML_DTS, nowTime - 6 * 60 * 60);
+            String fromDate = DateTimes.GmtFormat(Config.XML_DTS, nowTime - 6*60*60);
             DataSet dsItems = doItem.EnumItemsFromSource(fromDate, source, filter, count);
             int current = 0;
             String items_content = "";

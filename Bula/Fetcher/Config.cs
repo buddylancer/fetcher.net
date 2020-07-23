@@ -2,13 +2,14 @@ namespace Bula.Fetcher {
     using System;
 
     public class Config : Common {
-        public const String TOP_DIR = "/Web/"; // Exactly the same as RewriteBase in .htaccess
+        public const String TOP_DIR = "/"; // Exactly the same as RewriteBase in .htaccess
         public const String INDEX_PAGE = "index.aspx";
         public const String ACTION_PAGE = "action.aspx";
         public const String RSS_PAGE = "rss.aspx";
+
         public const String SECURITY_CODE = "1234";
 
-        public const Boolean FINE_URLS = false; // Use fine or full URLs
+        public const Boolean FINE_URLS = true; // Use fine or full URLs
 
         public const Boolean CACHE_PAGES = false;
         public const Boolean CACHE_RSS = false;
@@ -21,9 +22,8 @@ namespace Bula.Fetcher {
         public const int DB_ROWS = 20;
         public const int DB_HOME_ROWS = 15;
         public const int DB_ITEMS_ROWS = 25;
-        public const String GMT_DTS = "dd-MM-yyyy HH:mm GMT";
-        //public const String XML_DTS = "D, d M Y H:i:s GMT";
-        public const String XML_DTS = "ddd, d MMM yyyy H:mm:ss \\G\\M\\T";
+        public const String GMT_DTS = "dd-MMM-yyyy HH:mm \\G\\M\\T";
+        public const String XML_DTS = "ddd, d MMM yyyy HH:mm:ss \\G\\M\\T";
         public const String SQL_DTS = "yyyy-MM-d HH:mm:ss";
 
         // Fill these fields by your site data
