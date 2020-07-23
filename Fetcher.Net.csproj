@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{79481BF4-6060-4EB9-B05F-C26514B33B01}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fetcher.Net</RootNamespace>
+    <AssemblyName>Fetcher.Net</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mysql.data">
+      <HintPath>Bula\Model\mysql.data.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Bula\Fetcher\Common.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Bula\Fetcher\Config.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Action.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Actions\DoRedirect.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Actions\DoRedirectItem.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Actions\DoRedirectSource.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Bottom.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Engine.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Index.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Logger.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Menu.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Pages\FilterItems.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Pages\Home.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Pages\Items.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Pages\ItemsBase.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Pages\Sources.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Pages\ViewItem.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Rss.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Top.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Util.cs" />
+    <Compile Include="Bula\Fetcher\Model\DOCategory.cs" />
+    <Compile Include="Bula\Fetcher\Model\DOItem.cs" />
+    <Compile Include="Bula\Fetcher\Model\DOSource.cs" />
+    <Compile Include="Bula\Fetcher\Model\DOTime.cs" />
+    <Compile Include="Bula\Meta.cs" />
+    <Compile Include="Bula\Model\Connection.cs" />
+    <Compile Include="Bula\Model\DataAccess.cs" />
+    <Compile Include="Bula\Model\DataSet.cs" />
+    <Compile Include="Bula\Model\DBConfig.cs" />
+    <Compile Include="Bula\Model\PreparedStatement.cs" />
+    <Compile Include="Bula\Model\RecordSet.cs" />
+    <Compile Include="Bula\Objects\Arrays.cs" />
+    <Compile Include="Bula\Objects\DateTimes.cs" />
+    <Compile Include="Bula\Objects\Helper.cs" />
+    <Compile Include="Bula\Objects\Request.cs" />
+    <Compile Include="Bula\Objects\Response.cs" />
+    <Compile Include="Bula\Objects\Strings.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Bula\Fetcher\View\bottom.html" />
+    <Content Include="Bula\Fetcher\View\error.html" />
+    <Content Include="Bula\Fetcher\View\error_alone.html" />
+    <Content Include="Bula\Fetcher\View\index.html" />
+    <Content Include="Bula\Fetcher\View\menu.html" />
+    <Content Include="Bula\Fetcher\View\no_such_file.html" />
+    <Content Include="Bula\Fetcher\View\Pages\filter_items.html" />
+    <Content Include="Bula\Fetcher\View\Pages\home.html" />
+    <Content Include="Bula\Fetcher\View\Pages\items.html" />
+    <Content Include="Bula\Fetcher\View\Pages\sources.html" />
+    <Content Include="Bula\Fetcher\View\Pages\view_item.html" />
+    <Content Include="Bula\Fetcher\View\redirect.html" />
+    <Content Include="Bula\Fetcher\View\top.html" />
+    <Content Include="Bula\Fetcher\Web\page404.html" />
+    <Content Include="Bula\Fetcher\Web\styles.css" />
+    <Content Include="Bula\Fetcher\Web\styles2.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
