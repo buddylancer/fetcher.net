@@ -6,7 +6,7 @@ namespace Bula.Fetcher.Model {
     /**
      * Manipulating with times.
      */
-    public class DOTime : DataAccess {
+    public class DOTime : DOBase {
 
     	public DOTime (): base() {
     		this.table_name = "as_of_time";

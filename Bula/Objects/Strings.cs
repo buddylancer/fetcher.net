@@ -72,7 +72,7 @@ namespace Bula.Objects {
 
     	public static String[] Split(String divider, String input) {
     		String[] chunks = 
-                Regex.Split(input, divider);
+                Regex.Split(input, Regex.Escape(divider));
     		ArrayList result = new ArrayList();
             for (int n = 0; n < SIZE(chunks); n++)
     			result.Add(chunks[n]);

@@ -24,18 +24,18 @@ namespace Bula.Model {
         /// <param name="charset">DB charset.</param>
         /// <returns>Result of operation (1 - OK, -1 - error).</returns>
         public int Open(String host, int port, String admin, String password, String db, String charset) {
-            this.link = Mysqli_connect(host, admin, password, db, port); //TODO PHP
+            this.link = DataAccess.Connect(host, admin, password, db, port); //TODO PHP
             if (this.link == null)
                 return -1;
             //TODO!!!
-            //if (charset != null)
-            //    Mysqli_query(this.link, CAT("set names ", charset));
+            if (charset != null)
+                DataAccess.Query(this.link, CAT("set names ", charset));
             return 1;
         }
 
         ///Close connection to the database.
         public void Close() {
-            Mysqli_close(this.link);
+            DataAccess.Close(this.link);
             this.link = null;
         }
 
@@ -46,19 +46,6 @@ namespace Bula.Model {
             this.stmt.SetLink(this.link);
             this.stmt.SetSql(sql);
             return this.stmt;
-        }
-
-        private MySqlConnection Mysqli_connect(String host, String admin, String db, String password, int port) {
-            MySqlConnection link = new MySqlConnection();
-            link.ConnectionString =
-                CAT("server=", host, ";port=", port, ";uid=", admin, ";pwd=", password, ";database=", db, ";");
-            link.Open();
-            return link;
-        }
-
-        private void Mysqli_close(MySqlConnection link) {
-            link.Close();
-            link = null;
         }
     }
 }

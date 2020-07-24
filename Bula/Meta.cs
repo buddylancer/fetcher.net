@@ -8,8 +8,8 @@ namespace Bula {
     public class Meta {
 
         public static void STOP(Object str) {
-            System.Console.WriteLine(str.ToString());
-            System.Threading.Thread.CurrentThread.Abort();
+            Response.Write(str.ToString());
+            System.Web.HttpContext.Current.Response.End();
         }
 
         // Common functions

@@ -9,7 +9,7 @@ namespace Bula.Fetcher.Model {
     /**
      * Manipulating with categories.
      */
-    public class DOCategory : DataAccess {
+    public class DOCategory : DOBase {
 
         public DOCategory (): base() {
             this.table_name = "categories";

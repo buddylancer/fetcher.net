@@ -87,6 +87,7 @@
     <Compile Include="Bula\Model\DataAccess.cs" />
     <Compile Include="Bula\Model\DataSet.cs" />
     <Compile Include="Bula\Model\DBConfig.cs" />
+    <Compile Include="Bula\Model\DOBase.cs" />
     <Compile Include="Bula\Model\PreparedStatement.cs" />
     <Compile Include="Bula\Model\RecordSet.cs" />
     <Compile Include="Bula\Objects\Arrays.cs" />

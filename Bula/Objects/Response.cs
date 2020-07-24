@@ -11,6 +11,11 @@ namespace Bula.Objects {
         public static void WriteHeader(String name, String value) {
             HttpContext.Current.Response.Headers.Add(name, value);
         }
+
+        public static void End(String input) {
+            Write(input);
+            HttpContext.Current.Response.End();
+        }
     }
 
 }

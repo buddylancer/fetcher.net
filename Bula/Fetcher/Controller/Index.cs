@@ -28,11 +28,14 @@ namespace Bula.Fetcher.Controller {
             if (pages_array == null)
                 Initialize();
 
+            DataAccess.SetErrorDelegate(Bula.Objects.Response.End);
+            //DataAccess.SetPrintDelegate(Bula.Objects.Response.Write);
+
             Hashtable page_info = Request.TestPage(pages_array, "home");
 
             // Test action name
             if (!page_info.ContainsKey("page"))
-                STOP("Error in parameters -- no page");
+                Response.End("Error in parameters -- no page");
 
             Request.Initialize();
             if (INT(page_info["post_required"]) == 1)

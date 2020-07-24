@@ -9,7 +9,7 @@ namespace Bula.Fetcher.Model {
     /**
      * Manipulating with sources.
      */
-    public class DOSource : DataAccess {
+    public class DOSource : DOBase {
 
     	public DOSource (): base() {
     		this.table_name = "sources";

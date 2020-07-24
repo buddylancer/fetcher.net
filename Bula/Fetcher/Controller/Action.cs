@@ -30,11 +30,11 @@ namespace Bula.Fetcher.Controller {
 
             // Test action name
             if (!action_info.ContainsKey("page"))
-                STOP("Error in parameters -- no page");
+                Response.End("Error in parameters -- no page");
 
             // Test action context
             if (INT(action_info["post_required"]) == 1 && INT(action_info["from_post"]) == 0)
-                STOP("Error in parameters -- inconsistent pars");
+                Response.End("Error in parameters -- inconsistent pars");
 
             Request.Initialize();
             if (INT(action_info["post_required"]) == 1)
@@ -48,7 +48,7 @@ namespace Bula.Fetcher.Controller {
 
             if (INT(action_info["code_required"]) == 1) {
                 if (!Request.Contains("code") || !EQ(Request.Get("code"), Config.SECURITY_CODE)) //TODO -- hardcoded!!!
-                    STOP("No access.");
+                    Response.End("No access.");
             }
 
             String action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["page"]);

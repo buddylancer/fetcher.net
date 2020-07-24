@@ -8,7 +8,7 @@ namespace Bula.Model {
     using Bula.Objects;
 
     public class PreparedStatement : Bula.Meta {
-        private Object link; // Link to mysql instance.
+        private Object link; // Link to database instance
         private String sql; // Initial SQL-query
         private ArrayList pars; // List of parameters
         private String query; // Formed SQL-query
@@ -24,13 +24,14 @@ namespace Bula.Model {
         public RecordSet ExecuteQuery() {
             this.record_set = new RecordSet();
             if (this.FormQuery()) {
-                //Response.Write("[" . this.query . "]<br/>\r\n");
-                Object result = Mysqli_query(this.link, this.query);
-                    //or STOP("Query selection failed");
-                if (result == null)
+                DataAccess.CallPrintDelegate(CAT("Executing selection query [", this.query, "] ..."));
+                Object result = DataAccess.Query(this.link, this.query);
+                if (result == null) {
+                    DataAccess.CallErrorDelegate(CAT("Selection query failed [", this.query, "]"));
                     return null;
+                }
                 this.record_set.result = result;
-                this.record_set.SetRows(Mysqli_num_rows(result));
+                this.record_set.SetRows(DataAccess.NumRows(result));
                 this.record_set.SetPage(1);
                 return this.record_set;
             }
@@ -43,18 +44,13 @@ namespace Bula.Model {
         ///   -2 - error during execution.
         public int ExecuteUpdate() {
             if (this.FormQuery()) {
-                //PR("[this.query]<br/>\r\n");
-                Object result = Mysqli_query(this.link, this.query);
+                DataAccess.CallPrintDelegate(CAT("Executing update query [", this.query, "] ..."));
+                Object result = DataAccess.Query(this.link, this.query);
                 if (result == null) {
-                    //info = CAT("[", this.query, "]<hr/>");
-                    //if (Isset(CFG["Log_Object"]))
-                    //    CFG["Log_Object"].Out(info);
-                    //else
-                    //    PR(info);
+                    DataAccess.CallErrorDelegate(CAT("Query update failed [", this.query, "]"));
                     return -2;
-                    //STOP("Query update failed");
                 }
-                int ret = Mysqli_affected_rows(this.link);
+                int ret = DataAccess.AffectedRows(this.link);
                 return ret;
             }
             else
@@ -63,7 +59,7 @@ namespace Bula.Model {
 
         ///Get ID for just inserted record.
         public int GetInsertId() {
-            return Mysqli_insert_id(this.link);
+            return DataAccess.InsertId(this.link);
         }
 
         ///Form query (replace '?' marks with real parameters).
@@ -122,28 +118,6 @@ namespace Bula.Model {
 
         public void SetSql(String sql) {
             this.sql = sql;
-        }
-
-        private Object Mysqli_query(Object link, String query) {
-            MySqlCommand oCmd = ((MySqlConnection)link).CreateCommand();
-            oCmd.CommandText = query;
-            oCmd.Prepare();
-            System.Data.DataSet sysDs = new System.Data.DataSet();
-            MySqlDataAdapter oAdapter = new MySqlDataAdapter(oCmd);
-            oAdapter.Fill(sysDs);
-            return new Object[] { 0, sysDs };
-        }
-
-        private int Mysqli_num_rows(Object result) {
-            return ((System.Data.DataSet)((Object[])result)[1]).Tables[0].Rows.Count;
-        }
-
-        private int Mysqli_affected_rows(Object link) {
-            return 0; //TODO
-        }
-
-        private int Mysqli_insert_id(Object link) {
-            return 0; //TODO
         }
     }
 }
