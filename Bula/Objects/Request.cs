@@ -38,38 +38,38 @@ namespace Bula.Objects {
         }
 
         public static void ExtractPostVars() {
-            Hashtable vars = GetVars(INPUT_POST);
+            var vars = GetVars(INPUT_POST);
             Vars = Arrays.MergeHashtable(Vars, vars);
         }
 
         public static void ExtractServerVars() {
-            Hashtable vars = GetVars(INPUT_SERVER);
+            var vars = GetVars(INPUT_SERVER);
             Vars = Arrays.MergeHashtable(ServerVars, vars);
         }
 
         public static void ExtractAllVars() {
-            Hashtable vars = GetVars(INPUT_GET);
+            var vars = GetVars(INPUT_GET);
             Vars = Arrays.MergeHashtable(Vars, vars);
             ExtractPostVars();
         }
 
         public static Boolean CheckReferer(String text) {
             //return true; //TODO
-            String http_referer = GetVar(INPUT_SERVER, "HTTP_REFERER");
+            var http_referer = GetVar(INPUT_SERVER, "HTTP_REFERER");
             if (http_referer == null)
                 return false;
             return http_referer.IndexOf(text) != -1;
         }
 
         public static Boolean CheckTester() {
-            String http_tester = GetVar(INPUT_SERVER, "HTTP_USER_AGENT");
+            var http_tester = GetVar(INPUT_SERVER, "HTTP_USER_AGENT");
             if (http_tester == null)
                 return false;
             return http_tester.IndexOf("Wget") != -1;
         }
 
         public static String GetRequiredParameter(String name) {
-            String val = null;
+            var val = (String)null;
             if (Contains(name))
                 val = Get(name);
             else
@@ -78,37 +78,37 @@ namespace Bula.Objects {
         }
 
         public static String GetOptionalParameter(String name) {
-            String val = null;
+            var val = (String)null;
             if (Contains(name))
                 val = Get(name);
             return val;
         }
 
         public static int GetRequiredInteger(String name) {
-            String str = GetRequiredParameter(name);
+            var str = GetRequiredParameter(name);
             if (str == "" || !IsInteger(str))
                 STOP(CAT("Error in parameter '", name, "'!"));
             return INT(str);
         }
 
         public static int GetOptionalInteger(String name) {
-            String val = GetOptionalParameter(name);
+            var val = GetOptionalParameter(name);
             if (val == null)
                 return -99999; //TODO
 
-            String str = STR(val);
+            var str = STR(val);
             if (str == "" || !IsInteger(str))
                 STOP(CAT("Error in parameter '", name, "'!"));
             return INT(val);
         }
 
         public static String GetRequiredString(String name) {
-            String val = GetRequiredParameter(name);
+            var val = GetRequiredParameter(name);
             return val;
         }
 
         public static String GetOptionalString(String name) {
-            String val = GetOptionalParameter(name);
+            var val = GetOptionalParameter(name);
             return val;
         }
 
@@ -116,13 +116,13 @@ namespace Bula.Objects {
             return TestPage(pages, null); }
 
         public static Hashtable TestPage(Object[] pages, String default_page) {
-            Hashtable page_info = new Hashtable();
+            var page_info = new Hashtable();
 
             // Get page name
-            String page = null;
+            var page = (String)null;
             page_info["from_get"] = 0;
             page_info["from_post"] = 0;
-            String p_value = GetVar(INPUT_GET, "p");
+            var p_value = GetVar(INPUT_GET, "p");
             if (p_value != null) {
                 page = p_value;
                 page_info["from_get"] = 1;

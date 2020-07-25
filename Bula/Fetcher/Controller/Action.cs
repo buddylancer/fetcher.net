@@ -26,7 +26,7 @@ namespace Bula.Fetcher.Controller {
             if (actions_array == null)
                 Initialize();
 
-            Hashtable action_info = Request.TestPage(actions_array);
+            var action_info = Request.TestPage(actions_array);
 
             // Test action name
             if (!action_info.ContainsKey("page"))
@@ -51,7 +51,7 @@ namespace Bula.Fetcher.Controller {
                     Response.End("No access.");
             }
 
-            String action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["page"]);
+            var action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["page"]);
             Util.CallStaticMethod(action_class, "Execute");
 
             if (DBConfig.Connection != null) {

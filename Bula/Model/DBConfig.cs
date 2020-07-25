@@ -11,6 +11,7 @@ namespace Bula.Model {
         public const String DB_PASSWORD = null; // If null - DB_NAME will be used
         public const String DB_CHARSET = "utf8";
         public const int DB_PORT = 3306;
+        public const String SQL_DTS = "yyyy-MM-d HH:mm:ss";
         public static Connection Connection = null; // Do not change this! This is placeholder!
     }
 }

@@ -11,7 +11,7 @@ namespace Bula.Fetcher.Controller {
      */
     public class Util : Bula.Meta {
         public static String Safe(String input) {
-            String output = Strings.StripSlashes(input);
+            var output = Strings.StripSlashes(input);
             output = output.Replace("<", "&lt;");
             output = output.Replace(">", "&gt;");
             output = output.Replace("\"", "&quot;");
@@ -21,7 +21,7 @@ namespace Bula.Fetcher.Controller {
         public static String Show(String input) {
             if (input == null)
                 return null;
-            String output = Safe(input);
+            var output = Safe(input);
             output = output.Replace("\n", "<br/>");
             return output;
         }
@@ -33,11 +33,11 @@ namespace Bula.Fetcher.Controller {
         public static String FormatString(String format, Object[] arr) {
             if (BLANK(format))
                 return null;
-            String output = format;
-            int arr_size = SIZE(arr);
+            var output = format;
+            var arr_size = SIZE(arr);
             for (int n = 0; n < arr_size; n++) {
-                String match = CAT("{", n, "}");
-                int ind = format.IndexOf(match);
+                var match = CAT("{", n, "}");
+                var ind = format.IndexOf(match);
                 if (ind == -1)
                     continue;
                 output = output.Replace(match, (String)arr[n]);
@@ -63,35 +63,35 @@ namespace Bula.Fetcher.Controller {
                     query = "p=home";
             }
 
-            String content = null;
+            var content = (String)null;
 
             // Clean twitter-added parameters -- &utm_source=twitterfeed&utm_medium=twitter
             if (EQ(page, "view_item")) {
                 if (!Request.Contains("id") || !Request.IsInteger(Request.Get("id"))) {
-                    Hashtable Prepare = new Hashtable();
+                    var Prepare = new Hashtable();
                     Prepare["[#ErrMessage]"] = "Incorrect Item ID, or not set ID!";
                     content = Engine.ShowTemplate("Bula/Fetcher/View/index.html", Prepare);
                     return content;
                 }
                 //TODO -- cut off "&title=some-title-of-the-item
-                int title_pos = query.IndexOf("&title=");
+                var title_pos = query.IndexOf("&title=");
                 if (title_pos != -1)
                     query = query.Substring(0, title_pos);
                 //query = Str_replace("&utm_source=twitterfeed&utm_medium=twitter", "", query);
             }
 
-            String hash = query;
+            var hash = query;
             //hash = Str_replace("?", "_Q_", hash);
             hash = Strings.Replace("=", "_EQ_", hash);
             hash = Strings.Replace("&", "_AND_", hash);
-            String file_name = Strings.Concat(cache_folder, "/", hash, ".cache");
+            var file_name = Strings.Concat(cache_folder, "/", hash, ".cache");
             if (Helper.FileExists(file_name)) {
                 content = Helper.ReadAllText(file_name);
                 //content = CAT("*** Got from cache ", Str_replace("/", " /", file_name), "***<br/>", content);
             }
             else {
-                String prefix = EQ(page, "bottom") ? null : "pages/";
-                int bottom_flag = EQ(page, "bottom") ? 1 : 0;
+                var prefix = EQ(page, "bottom") ? null : "pages/";
+                var bottom_flag = EQ(page, "bottom") ? 1 : 0;
                 content = Engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/", prefix, page));
 
                 TestFileFolder(file_name);
@@ -108,7 +108,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="to">Substring to extract info "To"</param>
         /// <returns>Resulting string</returns>
         public static String ExtractInfo(String source, String after, String to = null) {
-            String result = null;
+            var result = (String)null;
             if (!NUL(source)) {
                 int index1 = 0;
                 if (!NUL(after)) {
@@ -123,7 +123,7 @@ namespace Bula.Fetcher.Controller {
                     if (index2 == -1)
                         index2 = source.Length;
                 }
-                int length = index2 - index1;
+                var length = index2 - index1;
                 if (length > MAX_EXTRACT)
                     length = MAX_EXTRACT;
                 result = source.Substring(index1, length);
@@ -137,7 +137,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="to">Substring to remove "To"</param>
         /// <returns>Resulting string</returns>
         public static String RemoveInfo(String source, String from, String to = null) {
-            String result = null;
+            var result = (String)null;
             int index1 = from == null ? 0 : IXOF(source, from);
             if (index1 != -1) {
                 if (to == null)
@@ -161,7 +161,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="folder">Folder's full path</param>
         public static void TestFolder(String folder) {
             String[] chunks = folder.Split(new char[] {'/'});
-            String pathname = null;
+            var pathname = (String)null;
             for (int n = 0; n < SIZE(chunks); n++) {
                 pathname = CAT(pathname, chunks[n]);
                 if (!Helper.DirExists(pathname))
@@ -174,7 +174,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="filename">Filename's full path</param>
         public static void TestFileFolder(String filename) {
             String[] chunks = filename.Split(new char[] {'/'});
-            String pathname = null;
+            var pathname = (String)null;
             for (int n = 0; n < SIZE(chunks) - 1; n++) {
                 pathname = CAT(pathname, chunks[n]);
                 if (!Helper.DirExists(pathname))

@@ -39,7 +39,7 @@ namespace Bula.Fetcher {
 
         public static Boolean TestRun = false;
         public static void CheckTestRun() {
-            String http_tester = Request.GetVar(Request.INPUT_SERVER, "HTTP_USER_AGENT");
+            var http_tester = Request.GetVar(Request.INPUT_SERVER, "HTTP_USER_AGENT");
             if (http_tester == null)
                 return;
             if (EQ(http_tester, "TestFull")) {
@@ -65,9 +65,9 @@ namespace Bula.Fetcher {
         public static void Initialize() {
             //------------------------------------------------------------------------------
             // You can change something below this line if you know what are you doing :)
-            String root_dir = Request.GetVar(Request.INPUT_SERVER, "APPL_PHYSICAL_PATH");
+            var root_dir = Request.GetVar(Request.INPUT_SERVER, "APPL_PHYSICAL_PATH");
             for (int n = 0; n <= 3; n++) {
-                int last_slash_index = root_dir.LastIndexOf("\\");
+                var last_slash_index = root_dir.LastIndexOf("\\");
                 root_dir = root_dir.Substring(0, last_slash_index);
             }
             LocalRoot = root_dir += ("/");
@@ -110,9 +110,6 @@ namespace Bula.Fetcher {
             if (fieldInfo != null) Set("Name_Custom1", fieldInfo.GetValue(null));
             fieldInfo = typeof(Config).GetField("NAME_CUSTOM2");
             if (fieldInfo != null) Set("Name_Custom2", fieldInfo.GetValue(null));
-            /*Java
-            TODO
-            Java*/
 
             // Map custom names
             GlobalConstants["[#Name_Item]"] = Config.NAME_ITEM;

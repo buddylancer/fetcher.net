@@ -30,7 +30,7 @@ namespace Bula.Fetcher.Controller {
 
             DataAccess.SetErrorDelegate(Bula.Objects.Response.End);
 
-            Hashtable page_info = Request.TestPage(pages_array, "home");
+            var page_info = Request.TestPage(pages_array, "home");
 
             // Test action name
             if (!page_info.ContainsKey("page"))
@@ -43,11 +43,11 @@ namespace Bula.Fetcher.Controller {
                 Request.ExtractAllVars();
             Config.Set("Page", page_info["page"]);
 
-            Hashtable Prepare = new Hashtable();
+            var Prepare = new Hashtable();
             Prepare["[#Site_Name]"] = Config.SITE_NAME;
-            String p_from_vars = Request.Contains("p") ? Request.Get("p") : "home";
-            String id_from_vars = Request.Contains("id") ? Request.Get("id") : null;
-            String title = Config.SITE_NAME;
+            var p_from_vars = Request.Contains("p") ? Request.Get("p") : "home";
+            var id_from_vars = Request.Contains("id") ? Request.Get("id") : null;
+            var title = Config.SITE_NAME;
             if (p_from_vars != "home")
                 title = CAT(title, " :: ", p_from_vars, (!NUL(id_from_vars)? CAT(" :: ", id_from_vars) : null));
 
@@ -79,7 +79,7 @@ namespace Bula.Fetcher.Controller {
 
             // All is ready - apply template
             Engine.Push(true);
-            String content = Engine.ShowTemplate("Bula/Fetcher/View/index.html", Prepare);
+            var content = Engine.ShowTemplate("Bula/Fetcher/View/index.html", Prepare);
 
             // Fix <title>
             //TODO -- comment for now

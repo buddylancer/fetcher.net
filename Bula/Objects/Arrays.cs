@@ -37,10 +37,10 @@ namespace Bula.Objects {
             if (extra == null)
                 return input;
 
-            Hashtable output = (Hashtable)input.Clone();
-            IEnumerator keys = extra.Keys.GetEnumerator();
+            var output = (Hashtable)input.Clone();
+            var keys = extra.Keys.GetEnumerator();
             while (keys.MoveNext()) {
-                String key = (String)keys.Current;
+                var key = (String)keys.Current;
                 output[key] = extra[key];
             }
             return output;
@@ -56,7 +56,7 @@ namespace Bula.Objects {
             if (extra == null)
                 return input;
 
-            ArrayList output = NewArrayList();
+            var output = NewArrayList();
             for (int n = 0; n < SIZE(input); n++)
                 output.Add(input[n]);
             for (int n = 0; n < SIZE(extra); n++)
@@ -74,9 +74,9 @@ namespace Bula.Objects {
             if (extra == null)
                 return input;
 
-            int input_size = SIZE(input);
-            int extra_size = SIZE(extra);
-            int new_size = input_size + extra_size;
+            var input_size = SIZE(input);
+            var extra_size = SIZE(extra);
+            var new_size = input_size + extra_size;
             Object[] output = NewArray(new_size);
             for (int n = 0; n < input_size; n++)
                 output[n] = input[n];
@@ -95,8 +95,8 @@ namespace Bula.Objects {
             if (element == null)
                 return input;
 
-            int input_size = SIZE(input);
-            int new_size = input_size + 1;
+            var input_size = SIZE(input);
+            var new_size = input_size + 1;
             Object[] output = NewArray(new_size);
             for (int n = 0; n < input_size; n++)
                 output[n] = input[n];
@@ -107,7 +107,7 @@ namespace Bula.Objects {
         public static ArrayList CreateArrayList(Object[] input) {
     		if (input == null)
                 return null;
-            ArrayList output = new ArrayList();
+            var output = new ArrayList();
             if (SIZE(input) == 0)
                 return output;
             foreach (Object obj in input)

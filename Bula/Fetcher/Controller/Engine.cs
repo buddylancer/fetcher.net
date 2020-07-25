@@ -26,7 +26,7 @@ namespace Bula.Fetcher.Controller {
         ///Push engine.
         /// <param name="print_flag">Whether to print content immediately (true) or save it for further processing (false).</param>
         public static void Push(Boolean print_flag) {
-            Engine engine = new Engine();
+            var engine = new Engine();
             engine.print_flag = print_flag;
             current_index++;
             if (engine_instances == null)
@@ -44,17 +44,17 @@ namespace Bula.Fetcher.Controller {
         }
 
         private static void SetPrintString(String val) {
-            Engine engine = (Engine)engine_instances[current_index];
+            var engine = (Engine)engine_instances[current_index];
             engine.print_string = val;
         }
 
         private static String GetPrintString() {
-            Engine engine = (Engine)engine_instances[current_index];
+            var engine = (Engine)engine_instances[current_index];
             return engine.print_string;
         }
 
         public static void Write(String val) {
-            Engine engine = (Engine)engine_instances[current_index];
+            var engine = (Engine)engine_instances[current_index];
             if (engine.print_flag)
                 Response.Write(val);
             else
@@ -89,10 +89,10 @@ namespace Bula.Fetcher.Controller {
         /// <returns>Resulting content.</returns>
         public static String IncludeTemplate(String class_name, Hashtable args) {
             Push(false);
-            String file_name = 
+            var file_name = 
                 CAT(class_name, ".cs");
 
-            String content = null;
+            var content = (String)null;
             if (Helper.FileExists(CAT(Config.LocalRoot, file_name))) {
                 //Config.IncludeFile(file_name);
                 Util.CallStaticMethod(class_name, "Execute");
@@ -112,9 +112,9 @@ namespace Bula.Fetcher.Controller {
         /// <param name="hash">Data in the form of Hashtable to use for merging.</param>
         /// <returns>Resulting content.</returns>
         public static String ShowTemplate(String filename, Hashtable hash) {
-            ArrayList template = GetTemplate(filename);
+            var template = GetTemplate(filename);
 
-            String content = "";
+            var content = "";
             content += (CAT("\n<!-- BEGIN ", Strings.Replace("Bula/Fetcher/", "", filename), " -->\n"));
             content += (ProcessTemplate(template, hash));
             content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/", "", filename), " -->\n"));
@@ -130,7 +130,7 @@ namespace Bula.Fetcher.Controller {
                 return Arrays.CreateArrayList(lines);
             }
             else {
-                ArrayList temp = new ArrayList();
+                var temp = new ArrayList();
                 temp.Add(CAT("File nor found -- '", filename, "'<hr/>"));
                 return temp;
             }
@@ -143,7 +143,7 @@ namespace Bula.Fetcher.Controller {
         public static String FormatTemplate(String template, Hashtable hash) {
             if (hash == null)
                 hash = new Hashtable();
-            String content = Strings.ReplaceInTemplate(template, hash);
+            var content = Strings.ReplaceInTemplate(template, hash);
             return Strings.ReplaceInTemplate(content, Config.GlobalConstants);
         }
 
@@ -151,8 +151,8 @@ namespace Bula.Fetcher.Controller {
         /// <param name="str">Input string.</param>
         /// <returns>Resulting string.</returns>
         private static String TrimComments(String str) {
-            String line = str;
-            Boolean trimmed = false;
+            var line = str;
+            var trimmed = false;
             if (line.IndexOf("<!--#") != -1) {
                 line = line.Replace("<!--", "");
                 line = line.Replace("-->", "");
@@ -174,27 +174,27 @@ namespace Bula.Fetcher.Controller {
             if (Config.IsMobile)
                 hash["[#Is_Mobile]"] = "1";
 
-            Boolean trim_line = true;
-            String trim_end = "\n";
-            int if_mode = 0;
-            int repeat_mode = 0;
-            ArrayList if_buf = new ArrayList();
-            ArrayList repeat_buf = new ArrayList();
-            String if_what = "";
-            String repeat_what = "";
-            String content = "";
+            var trim_line = true;
+            var trim_end = "\n";
+            var if_mode = 0;
+            var repeat_mode = 0;
+            var if_buf = new ArrayList();
+            var repeat_buf = new ArrayList();
+            var if_what = "";
+            var repeat_what = "";
+            var content = "";
             for (int n = 0; n < template.Count; n++) {
-                String line = (String)template[n];
-                String line_no_comments = TrimComments(line);
+                var line = (String)template[n];
+                var line_no_comments = TrimComments(line);
                 if (if_mode > 0) {
                     if (line_no_comments.IndexOf("#if") == 0)
                         if_mode++;
                     if (line_no_comments.IndexOf("#end if") == 0) {
                         if (if_mode == 1) {
-                            Boolean not = (if_what.IndexOf("!") == 0);
-                            Boolean eq = (if_what.IndexOf("==") != -1);
-                            Boolean neq = (if_what.IndexOf("!=") != -1);
-                            Boolean process_flag = false;
+                            var not = (if_what.IndexOf("!") == 0);
+                            var eq = (if_what.IndexOf("==") != -1);
+                            var neq = (if_what.IndexOf("!=") != -1);
+                            var process_flag = false;
                             if (not == true) {
                                 if (!hash.ContainsKey(if_what.Substring(1))) //TODO
                                     process_flag = true;
@@ -235,7 +235,7 @@ namespace Bula.Fetcher.Controller {
                     if (line_no_comments.IndexOf("#end repeat") == 0) {
                         if (repeat_mode == 1) {
                             if (hash.ContainsKey(repeat_what)) {
-                                ArrayList rows = (ArrayList)hash[repeat_what];
+                                var rows = (ArrayList)hash[repeat_what];
                                 for (int r = 0; r < rows.Count; r++)
                                     content += (ProcessTemplate(repeat_buf, (Hashtable)rows[r]));
                                 hash.Remove(repeat_what);
@@ -268,7 +268,7 @@ namespace Bula.Fetcher.Controller {
                     }
                 }
             }
-            String result = FormatTemplate(content, hash);
+            var result = FormatTemplate(content, hash);
             return result;
         }
     }

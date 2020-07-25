@@ -12,23 +12,23 @@ namespace Bula.Fetcher.Controller.Pages {
      */
     public class Home : ItemsBase {
         public static void Execute() {
-            Hashtable Prepare = new Hashtable();
+            var Prepare = new Hashtable();
 
-            DOItem doItem = new DOItem();
+            var doItem = new DOItem();
 
-            String all_items_href =
+            var all_items_href =
                 CAT(Config.TOP_DIR, (Config.FineUrls ? null : CAT(Config.INDEX_PAGE, "?p=")), "items");
             Prepare["[#BrowseItemsLink]"] = all_items_href;
 
-            String source = null;
-            String search = null;
-            int max_rows = Config.DB_HOME_ROWS;
-            DataSet dsItems = doItem.EnumItems(source, search, 1, max_rows);
-            int row_count = 1;
-            ArrayList Items = new ArrayList();
+            var source = (String)null;
+            var search = (String)null;
+            var max_rows = Config.DB_HOME_ROWS;
+            var dsItems = doItem.EnumItems(source, search, 1, max_rows);
+            var row_count = 1;
+            var Items = new ArrayList();
             for (int n = 0; n < dsItems.GetSize(); n++) {
-                Hashtable oItem = dsItems.GetRow(n);
-                Hashtable Row = FillItemRow(oItem, doItem.GetIdField(), row_count);
+                var oItem = dsItems.GetRow(n);
+                var Row = FillItemRow(oItem, doItem.GetIdField(), row_count);
                 Items.Add(Row);
                 row_count++;
             }

@@ -21,15 +21,15 @@ namespace Bula.Fetcher.Controller.Pages {
             if (CheckSource() == false)
                 return;
 
-            String err_message = "";
-            String filter_name = null;
-            String filter = null;
+            var err_message = "";
+            var filter_name = (String)null;
+            var filter = (String)null;
             if (Request.Contains("filter")) {
                 filter_name = Request.Get("filter");
                 if (BLANK(filter_name))
                     err_message += ("Empty filter name!<br/>");
                 else {
-                    DOCategory doCategory = new DOCategory();
+                    var doCategory = new DOCategory();
                     Hashtable[] oCategory =
                         {new Hashtable()};
                     if (!doCategory.CheckFilterName(filter_name, oCategory))
@@ -39,12 +39,12 @@ namespace Bula.Fetcher.Controller.Pages {
                 }
             }
 
-            Hashtable Prepare = new Hashtable();
-            String source_name = null;
+            var Prepare = new Hashtable();
+            var source_name = (String)null;
             if (Request.Contains("source")) {
                 // Check source exists
                 source_name = Request.Get("source");
-                DOSource doSource = new DOSource();
+                var doSource = new DOSource();
                 Hashtable[] oSource =
                     {new Hashtable()};
                 if (!doSource.CheckSourceName(source_name, oSource))
@@ -60,7 +60,7 @@ namespace Bula.Fetcher.Controller.Pages {
             // Uncomment to enable filtering by source and/or category
             Prepare["[#FilterItems]"] = Engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/FilterItems");
 
-            String s_Title = CAT(
+            var s_Title = CAT(
                 "Browse ",
                 Config.NAME_ITEMS,
                 (Config.IsMobile ? "<br/>" : null),
@@ -70,13 +70,14 @@ namespace Bula.Fetcher.Controller.Pages {
 
             Prepare["[#Title]"] = s_Title;
 
-            int max_rows = Config.DB_ITEMS_ROWS;
+            var max_rows = Config.DB_ITEMS_ROWS;
+            var list = INT(Request.Get("list"));
 
-            DOItem doItem = new DOItem();
-            DataSet dsItems = doItem.EnumItems(source_name, filter, INT(Request.Get("list")), max_rows);
+            var doItem = new DOItem();
+            var dsItems = doItem.EnumItems(source_name, filter, list, max_rows);
 
-            int list_total = dsItems.GetTotalPages();
-            if (INT(Request.Get("list")) > list_total) {
+            var list_total = dsItems.GetTotalPages();
+            if (list > list_total) {
                 Prepare["[#ErrMessage]"] = "List number is too large!";
                 Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
                 return;
@@ -86,25 +87,25 @@ namespace Bula.Fetcher.Controller.Pages {
                 Prepare["[#List]"] = Request.Get("list");
             }
 
-            int count = 1;
-            ArrayList Rows = new ArrayList();
+            var count = 1;
+            var Rows = new ArrayList();
             for (int n = 0; n < dsItems.GetSize(); n++) {
-                Hashtable oItem = dsItems.GetRow(n);
-                Hashtable Row = FillItemRow(oItem, doItem.GetIdField(), count);
+                var oItem = dsItems.GetRow(n);
+                var Row = FillItemRow(oItem, doItem.GetIdField(), count);
                 count++;
                 Rows.Add(Row);
             }
             Prepare["[#Rows]"] = Rows;
 
             if (list_total > 1) {
-                int chunk = 2;
-                Boolean before = false;
-                Boolean after = false;
+                var chunk = 2;
+                var before = false;
+                var after = false;
 
-                ArrayList Pages = new ArrayList();
+                var Pages = new ArrayList();
                 for (int n = 1; n <= list_total; n++) {
-                    Hashtable Page = new Hashtable();
-                    if (n < INT(Request.Get("list")) - chunk) {
+                    var Page = new Hashtable();
+                    if (n < list - chunk) {
                         if (!before) {
                             before = true;
                             Page["[#Text]"] = "1";
@@ -117,7 +118,7 @@ namespace Bula.Fetcher.Controller.Pages {
                         }
                         continue;
                     }
-                    if (n > INT(Request.Get("list")) + chunk) {
+                    if (n > list + chunk) {
                         if (!after) {
                             after = true;
                             Page["[#Text]"] = " ... ";
@@ -129,7 +130,7 @@ namespace Bula.Fetcher.Controller.Pages {
                         }
                         continue;
                     }
-                    if (INT(Request.Get("list")) == n) {
+                    if (list == n) {
                         Page["[#Text]"] = CAT("=", n, "=");
                         Pages.Add(Page);
                     }

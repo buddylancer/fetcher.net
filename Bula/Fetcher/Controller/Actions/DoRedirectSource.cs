@@ -11,16 +11,16 @@ namespace Bula.Fetcher.Controller.Actions {
      */
     public class DoRedirectSource : Bula.Meta {
         public static void Execute() {
-            String error_message = null;
-            String link_to_redirect = null;
+            var error_message = (String)null;
+            var link_to_redirect = (String)null;
             if (!Request.Contains("source"))
                 error_message = "Source name is required!";
             else {
-                String source_name = Request.Get("source");
+                var source_name = Request.Get("source");
                 if (!Request.IsDomainName(source_name))
                     error_message = "Incorrect source name!";
                 else {
-                    DOSource doSource = new DOSource();
+                    var doSource = new DOSource();
                     Hashtable[] oSource =
                         {new Hashtable()};
                     if (!doSource.CheckSourceName(source_name, oSource))

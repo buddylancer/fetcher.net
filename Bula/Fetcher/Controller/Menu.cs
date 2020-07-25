@@ -10,7 +10,7 @@ namespace Bula.Fetcher.Controller {
      */
     public class Menu : Bula.Meta {
         public static void Execute() {
-            ArrayList public_pages = new ArrayList();
+            var public_pages = new ArrayList();
 
             public_pages.Add("Home");
             public_pages.Add("home");
@@ -39,12 +39,12 @@ namespace Bula.Fetcher.Controller {
                 public_pages.Add("sources");
             }
 
-            ArrayList MenuItems = new ArrayList();
+            var MenuItems = new ArrayList();
             for (int n = 0; n < public_pages.Count; n += 2) {
-                Hashtable Row = new Hashtable();
-                String title = STR(public_pages[n+0]);
-                String page = STR(public_pages[n+1]);
-                String href = null;
+                var Row = new Hashtable();
+                var title = STR(public_pages[n+0]);
+                var page = STR(public_pages[n+1]);
+                var href = (String)null;
                 if (page.Equals("home"))
                     href = Config.TOP_DIR;
                 else {
@@ -62,7 +62,7 @@ namespace Bula.Fetcher.Controller {
                 MenuItems.Add(Row);
             }
 
-            Hashtable Prepare = new Hashtable();
+            var Prepare = new Hashtable();
             Prepare["[#MenuItems]"] = MenuItems;
             Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/menu.html", Prepare));
         }

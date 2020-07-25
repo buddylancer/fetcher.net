@@ -4,6 +4,9 @@ namespace Bula.Model {
     using System.Collections;
     using Bula.Objects;
 
+    /**
+     * Base class for manipulating with DB objects.
+     */
     public class DOBase : Bula.Meta {
         private Connection db_connection = null;
         protected String table_name;
@@ -20,10 +23,10 @@ namespace Bula.Model {
 
         // Create connection to the database given parameters from DBConfig.
         private Connection CreateConnection() {
-            Connection oConn = new Connection();
-            String db_admin = DBConfig.DB_ADMIN != null ? DBConfig.DB_ADMIN : DBConfig.DB_NAME;
-            String db_password = DBConfig.DB_PASSWORD != null ? DBConfig.DB_PASSWORD : DBConfig.DB_NAME;
-            int ret = 0;
+            var oConn = new Connection();
+            var db_admin = DBConfig.DB_ADMIN != null ? DBConfig.DB_ADMIN : DBConfig.DB_NAME;
+            var db_password = DBConfig.DB_PASSWORD != null ? DBConfig.DB_PASSWORD : DBConfig.DB_NAME;
+            var ret = 0;
             if (DBConfig.DB_CHARSET != null)
                 ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, db_admin, db_password, DBConfig.DB_NAME, DBConfig.DB_CHARSET);
             else
@@ -35,10 +38,12 @@ namespace Bula.Model {
             return oConn;
         }
 
+        ///Get current connection.
         public Connection GetConnection() {
             return this.db_connection;
         }
 
+        ///Get current ID field name.
         public String GetIdField() {
             return this.id_field;
         }
@@ -48,23 +53,23 @@ namespace Bula.Model {
         /// <param name="pars">Query parameters.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet GetDataSet(String query, Object[] pars) {
-            PreparedStatement oStmt = this.db_connection.PrepareStatement(query);
+            var oStmt = this.db_connection.PrepareStatement(query);
             if (pars != null && SIZE(pars) > 0) {
-                int n = 1;
+                var n = 1;
                 for (int i = 0; i < SIZE(pars); i += 2) {
-                    String type = (String)pars[i];
-                    Object value = pars[i+1];
+                    var type = (String)pars[i];
+                    var value = pars[i+1];
                     CALL(oStmt, type, ARR(n, value));
                     n++;
                 }
             }
-            RecordSet oRs = oStmt.ExecuteQuery();
+            var oRs = oStmt.ExecuteQuery();
             if (oRs == null) {
                 oStmt.Close();
                 return null;
             }
 
-            DataSet ds = new DataSet();
+            var ds = new DataSet();
             while (oRs.Next() != 0) {
                 ds.AddRow(oRs.record);
             }
@@ -83,25 +88,25 @@ namespace Bula.Model {
             if (rows <= 0 || list <= 0)
                 return this.GetDataSet(query, pars);
 
-            PreparedStatement oStmt = this.db_connection.PrepareStatement(query);
+            var oStmt = this.db_connection.PrepareStatement(query);
             if (SIZE(pars) > 0) {
-                int n = 1;
+                var n = 1;
                 for (int p = 0; p < SIZE(pars); p += 2) {
-                    String type = (String) pars[p];
-                    Object value = pars[p+1];
+                    var type = (String) pars[p];
+                    var value = pars[p+1];
                     CALL(oStmt, type, ARR(n, value));
                     n++;
                 }
             }
-            RecordSet oRs = oStmt.ExecuteQuery();
+            var oRs = oStmt.ExecuteQuery();
             if (oRs == null) {
                 DataAccess.CallErrorDelegate(CAT("Error in query: ", query, "<hr/>"));
             }
-            DataSet ds = new DataSet();
-            int total_rows = oRs.GetRows();
-            ds.SetTotalPages(INT((total_rows - 1)/ rows) + 1);
+            var ds = new DataSet();
+            var total_rows = oRs.GetRows();
+            ds.SetTotalPages(INT((total_rows - 1) / rows + 1));
 
-            int count = 0;
+            var count = 0;
             if (list != 1) {
                 count = (list - 1) * rows;
                 while (oRs.Next() != 0) {
@@ -134,17 +139,17 @@ namespace Bula.Model {
         /// <param name="operation">Operation - "update" (default) or "insert".</param>
         /// <returns>Update status (or inserted ID for "insert" operation).</returns>
         protected int UpdateInternal(String query, Object[] pars, Object operation) {
-            PreparedStatement oStmt = this.db_connection.PrepareStatement(query);
+            var oStmt = this.db_connection.PrepareStatement(query);
             if (SIZE(pars) > 0) {
-                int n = 1;
+                var n = 1;
                 for (int i = 0; i < SIZE(pars); i += 2) {
-                    String type = (String)pars[i];
-                    Object value = pars[i+1];
+                    var type = (String)pars[i];
+                    var value = pars[i+1];
                     CALL(oStmt, type, ARR(n, value));
                     n++;
                 }
             }
-            int ret = oStmt.ExecuteUpdate();
+            var ret = oStmt.ExecuteUpdate();
             if (ret > 0 && EQ(operation, "insert"))
                 ret = oStmt.GetInsertId();
             oStmt.Close();
@@ -157,7 +162,7 @@ namespace Bula.Model {
         /// <param name="id">Unique ID.</param>
         /// <returns>Resulting data set.</returns>
         public virtual DataSet GetById(int id) {
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " select * from ", this.table_name,
                 " where ", this.id_field, " = ?"
             );
@@ -173,7 +178,7 @@ namespace Bula.Model {
         /// <param name="order">Field to order by [optional].</param>
         /// <returns>Resulting data set.</returns>
         public DataSet EnumIds(String where, String order) {
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " select ", this.id_field, " from ", this.table_name, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
                 " order by ",
@@ -191,7 +196,7 @@ namespace Bula.Model {
         /// <param name="order">Field to order by [optional].</param>
         /// <returns>Resulting data set.</returns>
         public DataSet EnumAll(String where, String order) {
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " select * from ", this.table_name, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
                 (BLANK(order) ? null : CAT(" order by ", order))
@@ -209,7 +214,7 @@ namespace Bula.Model {
         /// <param name="order">Field to order by [optional].</param>
         /// <returns>Resulting data set.</returns>
         public DataSet EnumFields(String fields, String where, String order) {
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " select ", fields, " from ", this.table_name, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
                 (BLANK(order) ? null : CAT(" order by ", order))
@@ -231,7 +236,7 @@ namespace Bula.Model {
             if (fields == null)
                 fields = "_this.*";
 
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " select ", fields,
                 " from ", this.table_name, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
@@ -259,7 +264,7 @@ namespace Bula.Model {
         public DataSet SelectList(int list, int rows, String fields, String where, String order) {
             if (fields == null)
                 fields = "_this.*";
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " select ",  fields,
                 " from ", this.table_name, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
@@ -267,7 +272,7 @@ namespace Bula.Model {
             );
 
             Object[] pars = ARR();
-            DataSet ds = this.GetDataSetList(query, pars, list, rows);
+            var ds = this.GetDataSetList(query, pars, list, rows);
             return ds;
         }
 
@@ -275,7 +280,7 @@ namespace Bula.Model {
         /// <param name="id">Unique ID.</param>
         /// <returns>Result of operation.</returns>
         public int DeleteById(int id) {
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " delete from ", this.table_name,
                 " where ", this.id_field, " = ?"
             );
@@ -285,14 +290,14 @@ namespace Bula.Model {
 
         // Insert new record based on fields array.
         public int Insert(Hashtable fields) {
-            IEnumerator keys = fields.Keys.GetEnumerator();
-            String field_names = "";
-            String field_values = "";
+            var keys = fields.Keys.GetEnumerator();
+            var field_names = "";
+            var field_values = "";
             Object[] pars = ARR();
             //pars.SetPullValues(true);
-            int n = 0;
+            var n = 0;
             while (keys.MoveNext()) {
-                String key = (String)keys.Current;
+                var key = (String)keys.Current;
                 if (n != 0) field_names += (", ");
                 if (n != 0) field_values += (", ");
                 field_names += (key);
@@ -300,7 +305,7 @@ namespace Bula.Model {
                 pars = ADD(pars, this.SetFunction(key), fields[key]);
                 n++;
             }
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " insert into ", this.table_name, " (", field_names, ") ",
                 " values (", field_values, ")"
             );
@@ -309,12 +314,12 @@ namespace Bula.Model {
 
         // Update existing record by ID based on fields array.
         public int UpdateById(Object id, Hashtable fields) {
-            IEnumerator keys = fields.Keys.GetEnumerator();
-            String set_values = "";
+            var keys = fields.Keys.GetEnumerator();
+            var set_values = "";
             Object[] pars = ARR();
-            int n = 0;
+            var n = 0;
             while (keys.MoveNext()) {
-                String key = (String)keys.Current;
+                var key = (String)keys.Current;
                 if (key == this.id_field) //TODO PHP
                     continue;
                 if (n != 0)
@@ -324,7 +329,7 @@ namespace Bula.Model {
                 n++;
             }
             pars = ADD(pars, this.SetFunction(this.id_field), id);
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " update ", this.table_name, " set ", set_values,
                 " where (", this.id_field, " = ?)"
             );
@@ -333,8 +338,8 @@ namespace Bula.Model {
 
         // Map for setting parameters.
         private String SetFunction(String key) {
-            String prefix = key.Substring(0, 2);
-            String func = "SetString";
+            var prefix = key.Substring(0, 2);
+            var func = "SetString";
             if (prefix.Equals("s_") || prefix.Equals("t_"))
                 func = "SetString";
             else if (prefix.Equals("i_") || prefix.Equals("b_"))

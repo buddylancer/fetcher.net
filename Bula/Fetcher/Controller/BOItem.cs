@@ -54,8 +54,8 @@ namespace Bula.Fetcher.Controller {
 
         ///Process description.
         public void ProcessDescription() {
-            String BR = "\n";
-            String title = Strings.RemoveTags(this.full_title);
+            var BR = "\n";
+            var title = Strings.RemoveTags(this.full_title);
             title = title.Replace("&#", "[--amp--]");
             title = title.Replace("#", "[sharp]");
             title = title.Replace("[--amp--]", "&#");
@@ -64,7 +64,7 @@ namespace Bula.Fetcher.Controller {
 
             if (this.full_description == null)
                 return;
-            String description = this.full_description;
+            var description = this.full_description;
 
             //TODO -- Fixes for FetchRSS feeds (parsed from Twitter) here...
             description = description.Replace("&#160;", "");
@@ -73,11 +73,11 @@ namespace Bula.Fetcher.Controller {
             // Start -- Fixes and workarounds for some sources here...
             // End
 
-            Boolean has_p = Regex.IsMatch(description, "<p[^>]*>");
-            Boolean has_br = description.IndexOf("<br") != -1;
-            Boolean has_li = description.IndexOf("<li") != -1;
-            Boolean has_div = description.IndexOf("<div") != -1;
-            String include_tags = Strings.Concat(
+            var has_p = Regex.IsMatch(description, "<p[^>]*>");
+            var has_br = description.IndexOf("<br") != -1;
+            var has_li = description.IndexOf("<li") != -1;
+            var has_div = description.IndexOf("<div") != -1;
+            var include_tags = Strings.Concat(
                 "<br>",
                 (has_p ? "<p>" : null),
                 (has_li ? "<ul><ol><li>" : null),
@@ -110,7 +110,7 @@ namespace Bula.Fetcher.Controller {
                 description = description.Replace(" \n", "\n");
             while (description.IndexOf("\n\n\n") != -1)
                 description = description.Replace("\n\n\n", "\n\n");
-            description = Regex.Replace(description, "\n\n[ \t]*[+-*][^+-*][ \t]*", "\n* ");
+            description = Regex.Replace(description, "\n\n[ \t]*[+\\-\\*][^+\\-\\*][ \t]*", "\n* ");
             description = Regex.Replace(description, "[ \t]+", " ");
 
             this.description = description.Trim();
@@ -119,7 +119,7 @@ namespace Bula.Fetcher.Controller {
         ///Process category (if any).
         public void ProcessCategory() {
             // Set or fix category from item
-            String category = null;
+            var category = (String)null;
             if (!BLANK(this.item["category"]))
                 category = this.PreProcessCategory(STR(this.item["category"]));
             else {
@@ -142,12 +142,12 @@ namespace Bula.Fetcher.Controller {
                 // Fix categories from something.com
             }
 
-            String category = null;
+            var category = (String)null;
             if (category_item.Length != 0) {
                 String[] categories_arr = category_item.Replace(",&,", " & ").Split(new char[] {','});
-                ArrayList categories_new = new ArrayList();
+                var categories_new = new ArrayList();
                 for (int c = 0; c < SIZE(categories_arr); c++) {
-                    String temp = categories_arr[c];
+                    var temp = categories_arr[c];
                     if (!BLANK(temp))
                         categories_new.Add(temp);
                 }
@@ -162,7 +162,7 @@ namespace Bula.Fetcher.Controller {
         private String ExtractCategory() {
             // Try to extract category from description body (if no item["category"])
 
-            String category = null;
+            var category = (String)null;
 
             //TODO -- This is just sample - implement your own logic for extracting category
             //if (Config.RssAllowed == null)
@@ -194,34 +194,37 @@ namespace Bula.Fetcher.Controller {
             String[] category_tags = BLANK(this.category) ?
                 Strings.EmptyArray() : this.category.Split(new char[] {','});
             for (int n1 = 0; n1 < dsCategories.GetSize(); n1++) {
-                Hashtable oCategory = dsCategories.GetRow(n1);
-                String rss_allowed_key = STR(oCategory["s_CatId"]);
-                String name = STR(oCategory["s_Name"]);
+                var oCategory = dsCategories.GetRow(n1);
+                var rss_allowed_key = STR(oCategory["s_CatId"]);
+                var name = STR(oCategory["s_Name"]);
 
-                String filter_value = STR(oCategory["s_Filter"]);
+                var filter_value = STR(oCategory["s_Filter"]);
                 String[] filter_chunks = Regex.Split(filter_value, "~");
                 String[] include_chunks = SIZE(filter_chunks) > 0 ?
-                    Regex.Split(filter_chunks[0], "|") : Strings.EmptyArray();
+                    Regex.Split(filter_chunks[0], "\\|") : Strings.EmptyArray();
                 String[] exclude_chunks = SIZE(filter_chunks) > 1 ?
-                    Regex.Split(filter_chunks[1], "|") : Strings.EmptyArray();
+                    Regex.Split(filter_chunks[1], "\\|") : Strings.EmptyArray();
 
-                Boolean include_flag = false;
+                var include_flag = false;
                 for (int n2 = 0; n2 < SIZE(include_chunks); n2++) {
-                    String include_chunk = QuotePattern(include_chunks[n2]);
+                    var include_chunk = QuotePattern(include_chunks[n2]);
                     if (!BLANK(this.description) && Regex.IsMatch(this.description, include_chunk, RegexOptions.IgnoreCase))
                         include_flag |= true;
                     if (Regex.IsMatch(this.title, include_chunk, RegexOptions.IgnoreCase))
                         include_flag |= true;
                 }
                 for (int n3 = 0; n3 < SIZE(exclude_chunks); n3++) {
-                    String exclude_chunk = QuotePattern(exclude_chunks[n3]);
+                    var exclude_chunk = QuotePattern(exclude_chunks[n3]);
                     if (!BLANK(this.description) && Regex.IsMatch(this.description, exclude_chunk, RegexOptions.IgnoreCase))
                         include_flag &= false;
                     if (Regex.IsMatch(this.title, exclude_chunk, RegexOptions.IgnoreCase))
                         include_flag |= true;
                 }
                 if (include_flag) {
-                    category_tags = (String[])ADD(category_tags, name);
+                    //category_tags = (String[])ADD(category_tags, name);
+                    var arrayList = Arrays.CreateArrayList(category_tags);
+                    arrayList.Add(name);
+                    category_tags = (String[])arrayList.ToArray(typeof(String));
                 }
             }
             if (SIZE(category_tags) == 0)
@@ -243,7 +246,7 @@ namespace Bula.Fetcher.Controller {
                 else if (!BLANK(this.item["source"]))
                     this.creator = STR(this.item["source"]);
                 else if (!BLANK(this.item["dc"])) { //TODO implement [dc][creator]
-                    Hashtable temp = (Hashtable)this.item["dc"];
+                    var temp = (Hashtable)this.item["dc"];
                     if (!BLANK(temp["creator"]))
                         this.creator = STR(temp["creator"]);
                 }
@@ -263,7 +266,7 @@ namespace Bula.Fetcher.Controller {
         ///    will became
         /// "officials-fireworks-spark-utah-wildfire-evacuations"
         public String GetUrlTitle(Boolean translit = false) {
-            String title = Strings.AddSlashes(this.title);
+            var title = Strings.AddSlashes(this.title);
 
             if (translit)
                 title = Util.TransliterateRusToLat(title);

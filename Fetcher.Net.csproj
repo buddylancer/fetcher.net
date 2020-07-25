@@ -61,9 +61,13 @@
     </Compile>
     <Compile Include="Bula\Fetcher\Config.cs" />
     <Compile Include="Bula\Fetcher\Controller\Action.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Actions\DoCleanCache.cs" />
     <Compile Include="Bula\Fetcher\Controller\Actions\DoRedirect.cs" />
     <Compile Include="Bula\Fetcher\Controller\Actions\DoRedirectItem.cs" />
     <Compile Include="Bula\Fetcher\Controller\Actions\DoRedirectSource.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Actions\DoTestItems.cs" />
+    <Compile Include="Bula\Fetcher\Controller\BOFetcher.cs" />
+    <Compile Include="Bula\Fetcher\Controller\BOItem.cs" />
     <Compile Include="Bula\Fetcher\Controller\Bottom.cs" />
     <Compile Include="Bula\Fetcher\Controller\Engine.cs" />
     <Compile Include="Bula\Fetcher\Controller\Index.cs" />

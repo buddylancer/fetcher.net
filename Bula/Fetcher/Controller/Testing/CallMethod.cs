@@ -13,13 +13,13 @@ namespace Bula.Fetcher.Controller.Testing {
 
     		if (!Request.Contains("code"))
     			STOP("Code is required!");
-    		String code = Request.Get("code");
+    		var code = Request.Get("code");
     		if (!EQ(code, Config.SECURITY_CODE))
     			STOP("Incorrect code!");
 
     		if (!Request.Contains("package"))
     			STOP("Package is required!");
-    		String package = Request.Get("package");
+    		var package = Request.Get("package");
     		if (BLANK(package))
     			STOP("Empty package!");
             String[] package_chunks = Strings.Split("-", package);
@@ -29,23 +29,23 @@ namespace Bula.Fetcher.Controller.Testing {
 
     		if (!Request.Contains("class"))
     			STOP("Class is required!");
-    		String className = Request.Get("class");
+    		var className = Request.Get("class");
     		if (BLANK(className))
     			STOP("Empty class!");
 
     		if (!Request.Contains("method"))
     			STOP("Method is required!");
-    		String method = Request.Get("method");
+    		var method = Request.Get("method");
     		if (BLANK(method))
     			STOP("Empty method!");
 
-    		int count = 0;
-    		ArrayList pars = new ArrayList();
+    		var count = 0;
+    		var pars = new ArrayList();
     		for (int n = 1; n <= 6; n++) {
-    			String par_name = CAT("par", n);
+    			var par_name = CAT("par", n);
     			if (!Request.Contains(par_name))
     				break;
-    			String par_value = Request.Get(par_name);
+    			var par_value = Request.Get(par_name);
     			if (EQ(par_value, "_"))
     				par_value = "";
     			//pars_array[] = par_value;
@@ -53,10 +53,10 @@ namespace Bula.Fetcher.Controller.Testing {
     			count++;
     		}
 
-            String buffer = null;
-            DataSet result = null;
+            var buffer = (String)null;
+            var result = (DataSet)null;
 
-            String full_class = CAT(package, "/", className);
+            var full_class = CAT(package, "/", className);
 
     		full_class = Strings.Replace("/", ".", full_class);
             method = Strings.FirstCharToUpper(method);

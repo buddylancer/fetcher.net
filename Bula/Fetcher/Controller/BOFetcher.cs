@@ -26,17 +26,17 @@ namespace Bula.Fetcher.Controller {
         private void InitializeLog() {
             this.oLogger = new Logger();
             Config.Set("Log_Object", this.oLogger);
-            int log = Request.GetOptionalInteger("log");
-            if (!NUL(log)) {
-                String filename_template = "C:/Temp/Log_{0}_{1}.html";
-                String filename = Util.FormatString(filename_template, ARR("fetch_items", DateTimes.Format("Y-m-d_h-i-s")));
+            var log = Request.GetOptionalInteger("log");
+            if (!NUL(log) && log != -99999) {
+                var filename_template = "C:/Temp/Log_{0}_{1}.html";
+                var filename = Util.FormatString(filename_template, ARR("fetch_items", DateTimes.Format(Config.SQL_DTS)));
                 this.oLogger.Init(filename);
             }
         }
 
         ///Pre-load categories into DataSet.
         private void PreLoadCategories() {
-            DOCategory doCategory = new DOCategory();
+            var doCategory = new DOCategory();
             this.dsCategories = doCategory.EnumCategories();
         }
 
@@ -44,24 +44,24 @@ namespace Bula.Fetcher.Controller {
         /// <param name="oSource">Source object.</param>
         /// <returns>Resulting items.</returns>
         private Object[] FetchFromSource(Hashtable oSource) {
-            String url = STR(oSource["s_Feed"]);
+            var url = STR(oSource["s_Feed"]);
             if (url.Length == 0)
                 return null;
 
-            String source = STR(oSource["s_SourceName"]);
+            var source = STR(oSource["s_SourceName"]);
             if (Request.Contains("m") && !source.Equals(Request.Get("m")))
                 return null;
 
             this.oLogger.Output("<br/>\r\nStarted ");
 
             if (url.IndexOf("https") != -1) {
-                String enc_url = url.Replace("?", "%3F");
+                var enc_url = url.Replace("?", "%3F");
                 enc_url = enc_url.Replace("&", "%26");
                 url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", enc_url);
             }
             this.oLogger.Output(CAT("[[[", url, "]]]<br/>\r\n"));
-            Object rss = Fetch_rss(url); //TODO PHP
-            if (!rss) {
+            var rss = Fetch_rss(url); //TODO PHP
+            if (rss == null) {
                 this.oLogger.Output("-- problems --<br/>\r\n");
                 //problems++;
                 //if (problems == 5) {
@@ -70,7 +70,7 @@ namespace Bula.Fetcher.Controller {
                 //}
                 return null;
             }
-            return rss.items;
+            return rss;
         }
 
         ///Parse data from the item.
@@ -80,15 +80,15 @@ namespace Bula.Fetcher.Controller {
         private int ParseItemData(Hashtable oSource, Hashtable item) {
             // Load original values
 
-            String source_name = STR(oSource["s_SourceName"]);
-            int source_id = INT(oSource["i_SourceId"]);
-            BOItem boItem = new BOItem(source_name, item);
-            String pubdate = STR(item["pubdate"]);
-            String date = Strings.GetSqlDate(pubdate);
+            var source_name = STR(oSource["s_SourceName"]);
+            var source_id = INT(oSource["i_SourceId"]);
+            var boItem = new BOItem(source_name, item);
+            var pubdate = STR(item["pubdate"]);
+            var date = Strings.GetSqlDate(pubdate);
 
             // Check whether item with the same link exists already
-            DOItem doItem = new DOItem();
-            DataSet dsItems = doItem.FindItemByLink(boItem.link, source_id);
+            var doItem = new DOItem();
+            var dsItems = doItem.FindItemByLink(boItem.link, source_id);
             if (dsItems.GetSize() > 0)
                 return 0;
 
@@ -100,8 +100,8 @@ namespace Bula.Fetcher.Controller {
             // Try to add/embed standard categories from description
             boItem.AddStandardCategories(this.dsCategories, Config.Lang);
 
-            String url = boItem.GetUrlTitle(true); //TODO -- Need to pass true if transliteration is required
-            Hashtable fields = new Hashtable();
+            var url = boItem.GetUrlTitle(true); //TODO -- Need to pass true if transliteration is required
+            var fields = new Hashtable();
             fields["s_Link"] = boItem.link;
             fields["s_Title"] = boItem.title;
             fields["s_FullTitle"] = boItem.full_title;
@@ -121,7 +121,7 @@ namespace Bula.Fetcher.Controller {
             if (!BLANK(boItem.custom2))
                 fields["s_Custom2"] = boItem.custom2;
 
-            int result = doItem.Insert(fields);
+            var result = doItem.Insert(fields);
             return result;
         }
 
@@ -132,9 +132,9 @@ namespace Bula.Fetcher.Controller {
             if (!Helper.DirExists(path_name))
                 return;
 
-            IEnumerator entries = Helper.ListDirEntries(path_name);
+            var entries = Helper.ListDirEntries(path_name);
             while (entries.MoveNext()) {
-                String entry = CAT(entries.Current);
+                var entry = CAT(entries.Current);
 
                 if (Helper.IsFile(entry) && entry.EndsWith(ext)) {
                     this.oLogger.Output(CAT("Deleting of ", entry, " ...<br/>\r\n"));
@@ -152,12 +152,12 @@ namespace Bula.Fetcher.Controller {
         public void CleanCache() {
             // Clean cached rss content
             this.oLogger.Output(CAT("Cleaning Rss Folder ", Config.RssFolderRoot, " ...<br/>\r\n"));
-            String rssFolder = Strings.Concat(Config.RssFolderRoot);
+            var rssFolder = Strings.Concat(Config.RssFolderRoot);
             CleanCacheFolder(rssFolder, ".xml");
 
             // Clean cached pages content
             this.oLogger.Output(CAT("Cleaning Cache Folder ", Config.CacheFolderRoot,  "...<br/>\r\n"));
-            String cacheFolder = Strings.Concat(Config.CacheFolderRoot);
+            var cacheFolder = Strings.Concat(Config.CacheFolderRoot);
             CleanCacheFolder(cacheFolder, ".cache");
 
             this.oLogger.Output("<br/>... Done.<br/>\r\n");
@@ -171,20 +171,20 @@ namespace Bula.Fetcher.Controller {
             //doItem = new DOItem();
             //doItem.PurgeOldItems(10);
 
-            Define("MAGPIE_CACHE_ON", true);
-            Define("MAGPIE_OUTPUT_ENCODING", "UTF-8");
-            Define("MAGPIE_DEBUG", 1);
-            Define("MAGPIE_FETCH_TIME_OUT", 30);
-            Define("MAGPIE_CACHE_DIR", CAT(Config.FeedFolder));
-            DOSource doSource = new DOSource();
-            DataSet dsSources = doSource.EnumFetchedSources();
+            //Define("MAGPIE_CACHE_ON", true);
+            //Define("MAGPIE_OUTPUT_ENCODING", "UTF-8");
+            //Define("MAGPIE_DEBUG", 1);
+            //Define("MAGPIE_FETCH_TIME_OUT", 30);
+            //Define("MAGPIE_CACHE_DIR", CAT(Config.FeedFolder));
+            var doSource = new DOSource();
+            var dsSources = doSource.EnumFetchedSources();
 
-            int total_counter = 0;
+            var total_counter = 0;
             this.oLogger.Output(CAT("<br/>\r\nChecking ", dsSources.GetSize(), " sources..."));
 
             // Loop through sources
             for (int n = 0; n < dsSources.GetSize(); n++) {
-                Hashtable oSource = dsSources.GetRow(n);
+                var oSource = dsSources.GetRow(n);
 
                 Object[] items_array = this.FetchFromSource(oSource);
                 if (items_array == null)
@@ -193,13 +193,14 @@ namespace Bula.Fetcher.Controller {
                 // Fetch done for this source
                 this.oLogger.Output(" fetched ");
 
-                int items_counter = 0;
+                var items_counter = 0;
                 // Loop through fetched items and parse their data
                 for (int i = SIZE(items_array) - 1; i >= 0; i--) {
-                    Hashtable hash = Arrays.CreateHashtable(items_array[i]);
+                    //var hash = Arrays.CreateHashtable(items_array[i]);
+                    var hash = (Hashtable)items_array[i];
                     if (BLANK(hash["link"]))
                         continue;
-                    int itemid = this.ParseItemData(oSource, hash);
+                    var itemid = this.ParseItemData(oSource, hash);
                     if (itemid > 0) {
                         items_counter++;
                         total_counter++;
@@ -227,22 +228,71 @@ namespace Bula.Fetcher.Controller {
         ///Execute re-counting of categories.
         private void RecountCategories() {
             this.oLogger.Output(CAT("Recount categories ... <br/>\r\n"));
-            DOCategory doCategory = new DOCategory();
-            DataSet dsCategories = doCategory.EnumCategories();
+            var doCategory = new DOCategory();
+            var dsCategories = doCategory.EnumCategories();
             for (int n = 0; n < dsCategories.GetSize(); n++) {
-                Hashtable oCategory = dsCategories.GetRow(n);
-                String id = STR(oCategory["s_CatId"]);
-                String filter = STR(oCategory["s_Filter"]);
-                DOItem doItem = new DOItem();
-                String sql_filter = doItem.BuildSqlFilter(filter);
-                DataSet dsItems = doItem.EnumIds(sql_filter);
-                Hashtable fields = new Hashtable();
+                var oCategory = dsCategories.GetRow(n);
+                var id = STR(oCategory["s_CatId"]);
+                var filter = STR(oCategory["s_Filter"]);
+                var doItem = new DOItem();
+                var sql_filter = doItem.BuildSqlFilter(filter);
+                var dsItems = doItem.EnumIds(sql_filter);
+                var fields = new Hashtable();
                 fields["i_Counter"] = dsItems.GetSize();
-                int result = doCategory.UpdateById(id, fields);
+                var result = doCategory.UpdateById(id, fields);
                 if (result < 0)
                     this.oLogger.Output("-- problems --<br/>\r\n");
             }
             this.oLogger.Output(CAT(" ... Done<br/>\r\n"));
+        }
+
+        private Object[] Fetch_rss(String url) {
+            var items = new ArrayList();
+
+            System.Xml.XmlDocument rssXmlDoc = new System.Xml.XmlDocument();
+
+            // Load the RSS file from the RSS URL
+            rssXmlDoc.Load(url);
+
+            // Parse the Items in the RSS file
+            System.Xml.XmlNodeList rssNodes = rssXmlDoc.SelectNodes("rss/channel/item");
+
+            System.Text.StringBuilder rssContent = new System.Text.StringBuilder();
+
+            // Iterate through the items in the RSS file
+            foreach (System.Xml.XmlNode rssNode in rssNodes)
+            {
+                var item = new Hashtable();
+
+                System.Xml.XmlNode rssSubNode = rssNode.SelectSingleNode("title");
+                if (rssSubNode != null)
+                    item["title"] = rssSubNode.InnerText;
+                
+
+                rssSubNode = rssNode.SelectSingleNode("link");
+                if (rssSubNode != null)
+                    item["link"] = rssSubNode.InnerText;
+
+                rssSubNode = rssNode.SelectSingleNode("description");
+                if (rssSubNode != null)
+                    item["description"] = rssSubNode.InnerText;
+
+                rssSubNode = rssNode.SelectSingleNode("pubDate");
+                if (rssSubNode != null)
+                    item["pubDate"] = rssSubNode.InnerText;
+
+                rssSubNode = rssNode.SelectSingleNode("dc:creator");
+                if (rssSubNode != null)
+                {
+                    item["dc"] = new Hashtable();
+                    item["dc"]["creator"] = rssSubNode.InnerText;
+                }
+
+                items.Add(item);
+            }
+
+            // Return the string that contain the RSS items
+            return items.ToArray();
         }
     }
 }

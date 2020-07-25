@@ -19,14 +19,14 @@ namespace Bula.Fetcher.Controller {
             Request.ExtractAllVars();
 
             // Check source
-            String source = null;
-            String err_message = "";
+            var source = (String)null;
+            var err_message = "";
             if (Request.Contains("source")) {
                 source = Request.Get("source");
                 if (BLANK(source))
                     err_message += ("Empty source!");
                 else {
-                    DOSource doSource = new DOSource();
+                    var doSource = new DOSource();
                     Hashtable[] oSource =
                         {new Hashtable()};
                     if (!doSource.CheckSourceName(source, oSource))
@@ -34,17 +34,17 @@ namespace Bula.Fetcher.Controller {
                 }
             }
 
-            Boolean any_filter = false;
+            var any_filter = false;
             if (Request.Contains("code")) {
                 if (Request.Get("code") == Config.SECURITY_CODE)
                     any_filter = true;
             }
 
             // Check filter
-            String filter_name = null;
-            String filter = null;
-            DOCategory doCategory = new DOCategory();
-            DataSet dsCategories = doCategory.EnumCategories();
+            var filter_name = (String)null;
+            var filter = (String)null;
+            var doCategory = new DOCategory();
+            var dsCategories = doCategory.EnumCategories();
             if (dsCategories.GetSize() > 0) {
                 if (Request.Contains("filter")) {
                     filter_name = Request.Get("filter");
@@ -65,9 +65,9 @@ namespace Bula.Fetcher.Controller {
             }
 
             // Check that parameters contain only 'source' or/and 'filter'
-            IEnumerator keys = Request.GetKeys();
+            var keys = Request.GetKeys();
             while (keys.MoveNext()) {
-                String key = (String)keys.Current;
+                var key = (String)keys.Current;
                 if (key != "source" && key != "filter" && key != "code" && key != "count") {
                     if (err_message.Length > 0)
                         err_message += (" ");
@@ -82,12 +82,12 @@ namespace Bula.Fetcher.Controller {
                 return;
             }
 
-            Boolean full_title = false;
+            var full_title = false;
             if (Request.Contains("title") && STR(Request.Get("title")) == "full")
                 full_title = true;
 
-            int count = Config.MAX_RSS_ITEMS;
-            Boolean count_set = false;
+            var count = Config.MAX_RSS_ITEMS;
+            var count_set = false;
             if (Request.Contains("count")) {
                 if (INT(Request.Get("count")) > 0) {
                     count = INT(Request.Get("count"));
@@ -100,7 +100,7 @@ namespace Bula.Fetcher.Controller {
             }
 
             // Get content from cache (if enabled and cache data exists)
-            String cached_file = "";
+            var cached_file = "";
             if (Config.CACHE_RSS && !count_set) {
                 cached_file = Strings.Concat(
                     Config.RssFolder, "/rss",
@@ -109,13 +109,13 @@ namespace Bula.Fetcher.Controller {
                     (full_title ? "-full" : null), ".xml");
                 if (Helper.FileExists(cached_file)) {
                     Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
-                    String temp_content = Helper.ReadAllText(cached_file);
+                    var temp_content = Helper.ReadAllText(cached_file);
                     Response.Write(temp_content.Substring(3)); //TODO -- BOM?
                     return;
                 }
             }
 
-            DOItem doItem = new DOItem();
+            var doItem = new DOItem();
 
             // 0 - item url
             // 1 - item title
@@ -125,53 +125,53 @@ namespace Bula.Fetcher.Controller {
             // 5 - description
             // 6 - category
 
-            String pubDate = DateTimes.Format(Config.XML_DTS);
-            int nowTime = DateTimes.GetTime(pubDate);
-            String fromDate = DateTimes.GmtFormat(Config.XML_DTS, nowTime - 6*60*60);
-            DataSet dsItems = doItem.EnumItemsFromSource(fromDate, source, filter, count);
-            int current = 0;
-            String items_content = "";
+            var pubDate = DateTimes.Format(Config.XML_DTS);
+            var nowTime = DateTimes.GetTime(pubDate);
+            var fromDate = DateTimes.GmtFormat(Config.XML_DTS, nowTime - 6*60*60);
+            var dsItems = doItem.EnumItemsFromSource(fromDate, source, filter, count);
+            var current = 0;
+            var items_content = "";
             for (int n = 0; n < dsItems.GetSize(); n++) {
-                Hashtable oItem = dsItems.GetRow(n);
-                String date = STR(oItem["d_Date"]);
+                var oItem = dsItems.GetRow(n);
+                var date = STR(oItem["d_Date"]);
                 if (DateTimes.GetTime(date) > nowTime)
                     continue;
 
                 if (current == 0)
                     pubDate = DateTimes.Format(Config.XML_DTS, DateTimes.GetTime(date));
 
-                String category = Config.Contains("Name_Category") ? STR(oItem["s_Category"]) : null;
-                String creator = Config.Contains("Name_Creator") ? STR(oItem["s_Creator"]) : null;
+                var category = Config.Contains("Name_Category") ? STR(oItem["s_Category"]) : null;
+                var creator = Config.Contains("Name_Creator") ? STR(oItem["s_Creator"]) : null;
                 String custom1 = Config.Contains("Name_Custom1") ? STR(oItem["s_Custom1"]) : null;
                 String custom2 = Config.Contains("Name_Custom2") ? STR(oItem["s_Custom2"]) : null;
 
-                String source_name = STR(oItem["s_SourceName"]);
-                String description = STR(oItem["t_Description"]);
+                var source_name = STR(oItem["s_SourceName"]);
+                var description = STR(oItem["t_Description"]);
                 if (!BLANK(description)) {
                     description = Regex.Replace(description, "<br/>", " ", RegexOptions.IgnoreCase);
                     description = Regex.Replace(description, "&nbsp;", " ");
                     description = Regex.Replace(description, "[ \r\n\t]+", " ");
                     if (description.Length > 512) {
                         description = description.Substring(0, 511);
-                        int last_space_index = description.LastIndexOf(" ");
+                        var last_space_index = description.LastIndexOf(" ");
                         description = Strings.Concat(description.Substring(0, last_space_index), " ...");
                     }
                     //Boolean utfIsValid = Mb_check_encoding(description, "UTF-8");
                     //if (utfIsValid == false)
                     //    description = ""; //TODO
                 }
-                String item_title = CAT(
+                var item_title = CAT(
                     (full_title == true && !BLANK(custom2) ? CAT(custom2, " | ") : null),
                     Strings.RemoveTags(Strings.StripSlashes(STR(oItem["s_Title"]))),
                     (full_title == true ? CAT(" [", source_name, "]") : null)
                 );
 
-                String link = null;
+                var link = (String)null;
                 if (Config.ImmediateRedirect)
                     link = STR(oItem["s_Link"]);
                 else {
-                    String url = STR(oItem["s_Url"]);
-                    String id_field = doItem.GetIdField();
+                    var url = STR(oItem["s_Url"]);
+                    var id_field = doItem.GetIdField();
                     link = CAT(
                         Config.Site, Config.TOP_DIR,
                         (Config.FineUrls ? "item/" : CAT(Config.INDEX_PAGE, "?p=view_item&amp;id=")),
@@ -186,13 +186,13 @@ namespace Bula.Fetcher.Controller {
                 args[2] = CAT(Config.Site, Config.TOP_DIR, Config.ACTION_PAGE, "?p=do_redirect_source&amp;source=", source_name);
                 args[3] = source_name;
                 args[4] = DateTimes.Format(Config.XML_DTS, DateTimes.GetTime(date));
-                String additional = CAT(
+                var additional = CAT(
                     (BLANK(creator) ? null : CAT(Config.Get("Name_Creator"), ": ", creator, "<br/>")),
                     (BLANK(category) ? null : CAT(Config.Get("Name_Categories"), ": ", category, "<br/>")),
                     (BLANK(custom2) ? null : CAT(Config.Get("Name_Custom2"), ": ", custom2, "<br/>")),
                     (BLANK(custom1) ? null : CAT(Config.Get("Name_Custom1"), ": ", custom1, "<br/>"))
                 );
-                String extended_description = null;
+                var extended_description = (String)null;
                 if (!BLANK(description)) {
                     if (BLANK(additional))
                         extended_description = description;
@@ -204,7 +204,7 @@ namespace Bula.Fetcher.Controller {
                 args[5] = extended_description;
                 args[6] = category;
 
-                String xml_template = Strings.Concat(
+                var xml_template = Strings.Concat(
                     "<item>\r\n",
                     "<title><![CDATA[{1}]]></title>\r\n",
                     "<link>{0}</link>\r\n",
@@ -218,11 +218,11 @@ namespace Bula.Fetcher.Controller {
                 current++;
             }
 
-            String rss_title = CAT(
+            var rss_title = CAT(
                 "Items for ", (BLANK(source) ? "ALL sources" : CAT("'", source, "'")),
                 (BLANK(filter_name) ? null : CAT(" and filtered by '", filter_name, "'"))
             );
-            String xml_content = Strings.Concat(
+            var xml_content = Strings.Concat(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n",
                 "<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\r\n",
                 "<channel>\r\n",

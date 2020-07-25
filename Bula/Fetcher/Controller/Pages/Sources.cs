@@ -12,19 +12,19 @@ namespace Bula.Fetcher.Controller.Pages {
      */
     public class Sources : ItemsBase {
         public static void Execute() {
-            Hashtable Prepare = new Hashtable();
+            var Prepare = new Hashtable();
 
-            DOSource doSource = new DOSource();
-            DOItem doItem = new DOItem();
+            var doSource = new DOSource();
+            var doItem = new DOItem();
 
-            DataSet dsSources = doSource.EnumSources();
-            int count = 1;
-            ArrayList Sources = new ArrayList();
+            var dsSources = doSource.EnumSources();
+            var count = 1;
+            var Sources = new ArrayList();
             for (int ns = 0; ns < dsSources.GetSize(); ns++) {
-                Hashtable oSource = dsSources.GetRow(ns);
-                String source_name = STR(oSource["s_SourceName"]);
+                var oSource = dsSources.GetRow(ns);
+                var source_name = STR(oSource["s_SourceName"]);
 
-                Hashtable SourceRow = new Hashtable();
+                var SourceRow = new Hashtable();
                 SourceRow["[#SourceName]"] = source_name;
                 //SourceRow["[#RedirectSource]"] = Config.TOP_DIR .
                 //    (Config.FINE_URLS ? "redirect/source/" : "action.php?p=do_redirect_source&source=") .
@@ -32,11 +32,11 @@ namespace Bula.Fetcher.Controller.Pages {
                 SourceRow["[#RedirectSource]"] = CAT(Config.TOP_DIR,
                     (Config.FineUrls ? "items/source/" : CAT(Config.INDEX_PAGE, "?p=items&source=")), source_name);
 
-                DataSet dsItems = doItem.EnumItemsFromSource(null, source_name, null, 3);
-                ArrayList Items = new ArrayList();
-                int item_count = 0;
+                var dsItems = doItem.EnumItemsFromSource(null, source_name, null, 3);
+                var Items = new ArrayList();
+                var item_count = 0;
                 for (int ni = 0; ni < dsItems.GetSize(); ni++) {
-                    Hashtable oItem = dsItems.GetRow(ni);
+                    var oItem = dsItems.GetRow(ni);
                     Items.Add(FillItemRow(oItem, doItem.GetIdField(), item_count));
                     item_count++;
                 }

@@ -28,7 +28,7 @@ namespace Bula.Model {
 
         public void SetRows(int no) {
             this.num_rows = no;
-            this.num_pages = INT(no/this.page_rows) + 1;
+            this.num_pages = INT(no / this.page_rows) + 1;
         }
 
         public int GetRows() {
@@ -42,7 +42,7 @@ namespace Bula.Model {
         public void SetPage(int pNo) {
             this.page_no = pNo;
             if (pNo != 1) {
-                int n = (pNo - 1) * this.page_rows;
+                var n = (pNo - 1) * this.page_rows;
                 while (n-- > 0)
                     this.Next();
             }
@@ -52,8 +52,12 @@ namespace Bula.Model {
             return this.page_no;
         }
 
+        ///Get next record from the result of operation.
+        /// <returns>Status of operation:</returns>
+        ///   1 - next record exists
+        ///   0 - next record not exists
         public int Next() {
-            Object arr = DataAccess.FetchArray(this.result);
+            var arr = DataAccess.FetchArray(this.result);
 
             if (arr != null) {
                 this.record = (Hashtable)arr;
@@ -63,26 +67,37 @@ namespace Bula.Model {
                 return 0;
         }
 
+        ///Get value from the record.
+        /// <param name="par">Number of value.</param>
         public Object GetValue(int par) {
             return this.record[par];
         }
 
+        ///Get String value from the record.
+        /// <param name="par">Number of value.</param>
         public String GetString(int par) {
             return STR(this.record[par]);
         }
 
+        ///Get DateTime value from the record.
+        /// <param name="par">Number of value.</param>
         public String GetDate(int par) {
             return STR(this.record[par]);
         }
 
+        ///Get integer value from the record.
+        /// <param name="par">Number of value.</param>
         public int GetInt(int par) {
             return INT(this.record[par]);
         }
 
+        ///Get real value from the record.
+        /// <param name="par">Number of value.</param>
         public Double GetFloat(int par) {
             return FLOAT(this.record[par]);
         }
 
+        ///Close this RecordSet.
         public void Close() {
             DataAccess.FreeResult(this.result);
         }

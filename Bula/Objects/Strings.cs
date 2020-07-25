@@ -27,8 +27,8 @@ namespace Bula.Objects {
         /// <param name="strings">Array of strings.</param>
         /// <returns>Resulting string.</returns>
         public static String Join(String divider, String[] strings) {
-            String output = "";
-            int count = 0;
+            var output = "";
+            var count = 0;
             foreach (String string1 in strings) {
                 if (count > 0)
                     output += (divider);
@@ -47,22 +47,22 @@ namespace Bula.Objects {
     	}
 
     	public static String AddSlashes(String input) {
-            return input; //TODO!!!
+            return input.Replace("'", "\\'"); //TODO!!!
     	}
 
     	public static String StripSlashes(String input) {
-            return input; //TODO!!!
+            return input.Replace("\\'", "'"); //TODO!!!
     	}
 
     	public static int CountSubstrings(String input, String chunk) {
     		if (input.Length == 0)
     			return 0;
-    		String replaced = input.Replace(chunk, "");
+    		var replaced = input.Replace(chunk, "");
     		return input.Length - replaced.Length;
     	}
 
         public static String Concat(params object[] args) {
-    		String output = "";
+    		var output = "";
     		if (SIZE(args) != 0) {
                 foreach (object arg in args) {
                     if (arg == null)
@@ -80,7 +80,7 @@ namespace Bula.Objects {
     	public static String[] Split(String divider, String input) {
     		String[] chunks = 
                 Regex.Split(input, Regex.Escape(divider));
-    		ArrayList result = new ArrayList();
+    		var result = new ArrayList();
             for (int n = 0; n < SIZE(chunks); n++)
     			result.Add(chunks[n]);
     		return (String[])result.ToArray(typeof(String));
@@ -97,8 +97,8 @@ namespace Bula.Objects {
         /// <param name="limit">Max number of replacements [optional].</param>
         /// <returns>Resulting string.</returns>
         public static String Replace(String from, String to, String input, int limit) {
-    		Boolean has_pattern = from.Length > 1 && from.StartsWith("/") && from.EndsWith("/");
-            String result = null;
+    		var has_pattern = from.Length > 1 && from.StartsWith("/") && from.EndsWith("/");
+            var result = (String)null;
             if (limit != 0 || has_pattern) {
                 // Use preg_replace
     			if (limit == 0) {
@@ -139,9 +139,6 @@ namespace Bula.Objects {
                 sb.Replace(key, STR(hash[key]));
             }
             return sb.ToString();
-            /*Java
-            TODO
-            Java*/
         }
 
     }

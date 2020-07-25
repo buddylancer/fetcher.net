@@ -13,19 +13,21 @@ namespace Bula.Model {
         private ArrayList pars; // List of parameters
         private String query; // Formed SQL-query
 
-        public RecordSet record_set; // Resulting record set
+        ///Resulting record set of the last operation.
+        /// @var RecordSet
+        public RecordSet record_set;
 
         public PreparedStatement () {
             this.pars = new ArrayList();
             this.pars.Add("dummy"); // Parameter number will start from 1.
         }
 
-        ///Execute query.
+        ///Execute selection query.
         public RecordSet ExecuteQuery() {
             this.record_set = new RecordSet();
             if (this.FormQuery()) {
                 DataAccess.CallPrintDelegate(CAT("Executing selection query [", this.query, "] ..."));
-                Object result = DataAccess.Query(this.link, this.query);
+                var result = DataAccess.Query(this.link, this.query);
                 if (result == null) {
                     DataAccess.CallErrorDelegate(CAT("Selection query failed [", this.query, "]"));
                     return null;
@@ -39,18 +41,18 @@ namespace Bula.Model {
                 return null;
         }
 
-        ///Execute update query.
+        ///Execute updating query.
         ///   -1 - error during form query.
         ///   -2 - error during execution.
         public int ExecuteUpdate() {
             if (this.FormQuery()) {
                 DataAccess.CallPrintDelegate(CAT("Executing update query [", this.query, "] ..."));
-                Object result = DataAccess.Query(this.link, this.query);
+                var result = DataAccess.Query(this.link, this.query);
                 if (result == null) {
                     DataAccess.CallErrorDelegate(CAT("Query update failed [", this.query, "]"));
                     return -2;
                 }
-                int ret = DataAccess.AffectedRows(this.link);
+                var ret = DataAccess.AffectedRows(this.link);
                 return ret;
             }
             else
@@ -64,14 +66,14 @@ namespace Bula.Model {
 
         ///Form query (replace '?' marks with real parameters).
         private Boolean FormQuery() {
-            int question_index = -1;
-            int start_from = 0;
-            int n = 1;
-            String str = this.sql;
+            var question_index = -1;
+            var start_from = 0;
+            var n = 1;
+            var str = this.sql;
             while ((question_index = str.IndexOf("?", start_from)) != -1) {
-                String value = (String)this.pars[n];
-                String before = str.Substring(0, question_index);
-                String after = str.Substring(question_index + 1);
+                var value = (String)this.pars[n];
+                var before = str.Substring(0, question_index);
+                var after = str.Substring(question_index + 1);
                 str = before; str += (value); start_from = str.Length;
                 str += (after);
                 n++;
@@ -88,34 +90,47 @@ namespace Bula.Model {
                 this.pars[n] = val;
         }
 
-        // Set int parameter.
+        ///Set int parameter.
+        /// <param name="n">Parameter number.</param>
+        /// <param name="val">Parameter value.</param>
         public void SetInt(int n, int val) {
             SetValue(n, CAT(val));
         }
 
-        // Set String parameter.
+        ///Set String parameter.
+        /// <param name="n">Parameter number.</param>
+        /// <param name="val">Parameter value.</param>
         public void SetString(int n, String val) {
             SetValue(n, CAT("'", Strings.AddSlashes(val), "'"));
         }
 
-        // Set DateTime parameter.
+        ///Set DateTime parameter.
+        /// <param name="n">Parameter number.</param>
+        /// <param name="val">Parameter value.</param>
         public void SetDate(int n, String val) {
-            SetValue(n, CAT("'", DateTimes.Format("Y-m-d H:i:s", DateTimes.GetTime(val)), "'"));
+            SetValue(n, CAT("'", DateTimes.Format(DBConfig.SQL_DTS, DateTimes.GetTime(val)), "'"));
         }
 
-        // Set Float parameter.
+        ///Set Float parameter.
+        /// <param name="n">Parameter number.</param>
+        /// <param name="val">Parameter value.</param>
         public void SetFloat(int n, Double val) {
             SetValue(n, CAT(val));
         }
 
+        ///Close.
         public void Close() {
             this.link = null;
         }
 
+        ///Set DB link.
+        /// @param Object link
         public void SetLink(Object link) {
             this.link = link;
         }
 
+        ///Set SQL-query,
+        /// @param String sql
         public void SetSql(String sql) {
             this.sql = sql;
         }

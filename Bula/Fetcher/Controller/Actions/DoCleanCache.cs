@@ -8,7 +8,7 @@ namespace Bula.Fetcher.Controller.Actions {
      */
     public class DoCleanCache : Bula.Meta {
         public void Execute() {
-            BOFetcher boFetcher = new BOFetcher();
+            var boFetcher = new BOFetcher();
             boFetcher.CleanCache();
         }
     }

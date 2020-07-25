@@ -15,7 +15,7 @@ namespace Bula.Fetcher.Controller.Pages {
         public static Boolean CheckList() {
             if (Request.Contains("list")) {
                 if (!Request.IsInteger(Request.Get("list"))) {
-                    Hashtable Prepare = new Hashtable();
+                    var Prepare = new Hashtable();
                     Prepare["[#ErrMessage]"] = "Incorrect list number!";
                     Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
                     return false;
@@ -29,9 +29,9 @@ namespace Bula.Fetcher.Controller.Pages {
         ///Check source name from current query.
         /// <returns>True - source exists, False - error.</returns>
         public static Boolean CheckSource() {
-            String err_message = "";
+            var err_message = "";
             if (Request.Contains("source")) {
-                String source = Request.Get("source");
+                var source = Request.Get("source");
                 if (BLANK(source))
                     err_message += ("Empty source name!<br/>");
                 else if (!Request.IsDomainName("source"))
@@ -40,7 +40,7 @@ namespace Bula.Fetcher.Controller.Pages {
             if (err_message.Length == 0)
                 return true;
 
-            Hashtable Prepare = new Hashtable();
+            var Prepare = new Hashtable();
             Prepare["[#ErrMessage]"] = err_message;
             Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
             return false;
@@ -52,10 +52,10 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <param name="count">The number of inserted Row in HTML table</param>
         /// <returns>Resulting Row</returns>
         protected static Hashtable FillItemRow(Hashtable oItem, String id_field, int count) {
-            Hashtable Row = new Hashtable();
-            int item_id = INT(oItem[id_field]);
-            String url_title = STR(oItem["s_Url"]);
-            String item_href = Config.ImmediateRedirect ? GetRedirectItemLink(item_id, url_title) :
+            var Row = new Hashtable();
+            var item_id = INT(oItem[id_field]);
+            var url_title = STR(oItem["s_Url"]);
+            var item_href = Config.ImmediateRedirect ? GetRedirectItemLink(item_id, url_title) :
                     GetViewItemLink(item_id, url_title);
             Row["[#Link]"] = item_href;
             if ((count % 2) == 0)
@@ -70,7 +70,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 Row["[#Category]"] = STR(oItem["s_Category"]);
 
             if (Config.Contains("Name_Creator") && oItem.ContainsKey("s_Creator") && STR(oItem["s_Creator"]) != "") {
-                String s_Creator = STR(oItem["s_Creator"]);
+                var s_Creator = STR(oItem["s_Creator"]);
                 if (s_Creator != null) {
                     if (s_Creator.IndexOf("(") != -1)
                         s_Creator = s_Creator.Replace("(", "<br/>(");
@@ -84,7 +84,7 @@ namespace Bula.Fetcher.Controller.Pages {
             if (Config.Contains("Name_Custom2") && oItem.Contains("s_Custom2") && STR(oItem["s_Custom2"]) != "")
                 Row["[#Custom2]"] = oItem["s_Custom2"];
 
-            String d_Date = Util.ShowTime(STR(oItem["d_Date"]));
+            var d_Date = Util.ShowTime(STR(oItem["d_Date"]));
             if (Config.IsMobile)
                 d_Date = Strings.ReplaceAll("-", " ", d_Date);
             else
@@ -92,12 +92,6 @@ namespace Bula.Fetcher.Controller.Pages {
             Row["[#Date]"] = d_Date;
             return Row;
         }
-
-        /*Java
-        public static String GetRedirectItemLink(int item_id) {
-            return GetRedirectItemLink(item_id, null);
-        }
-        Java*/
 
         ///Get link for redirecting to external item.
         /// <param name="item_id">Item ID</param>
@@ -110,12 +104,6 @@ namespace Bula.Fetcher.Controller.Pages {
                 (url_title != null ? CAT(Config.FineUrls ? "/" : "&title=", url_title) : null)
             );
         }
-
-        /*Java
-        public static String GetViewItemLink(int item_id) {
-            return GetViewItemLink(item_id, null);
-        }
-        Java*/
 
         ///Get link for redirecting to the item (internally).
         /// <param name="item_id">Item ID</param>
@@ -133,7 +121,7 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <param name="list_no">Page no</param>
         /// <returns>Resulting internal link to the page</returns>
         protected static String GetPageLink(int list_no) {
-            String href = CAT(
+            var href = CAT(
                 Config.TOP_DIR,
                 (Config.FineUrls ?
                     "items" : CAT(Config.INDEX_PAGE, "?p=items")),

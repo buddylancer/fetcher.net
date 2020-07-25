@@ -35,16 +35,16 @@ namespace Bula.Fetcher.Controller.Actions {
         }
 
         public static void Execute() {
-            Boolean insert_required = false;
-            Boolean update_required = false;
+            var insert_required = false;
+            var update_required = false;
 
-            DOTime doTime = new DOTime();
+            var doTime = new DOTime();
 
-            DataSet dsTimes = doTime.GetById(1);
-            int time_shift = 240; // 4 min
-            int current_time = DateTimes.GetTime("now");
+            var dsTimes = doTime.GetById(1);
+            var time_shift = 240; // 4 min
+            var current_time = DateTimes.GetTime();
             if (dsTimes.GetSize() > 0) {
-                Hashtable oTime = dsTimes.GetRow(0);
+                var oTime = dsTimes.GetRow(0);
                 if (current_time > DateTimes.GetTime(STR(oTime["d_Time"])) + time_shift)
                     update_required = true;
             }
@@ -55,12 +55,12 @@ namespace Bula.Fetcher.Controller.Actions {
             if (update_required || insert_required) {
                 Response.Write("Fetching new items... Please wait...<br/>\r\n");
 
-                BOFetcher boFetcher = new BOFetcher();
+                var boFetcher = new BOFetcher();
                 boFetcher.Execute();
 
                 doTime = new DOTime(); // Need for DB reopen
-                Hashtable fields = new Hashtable();
-                fields["d_Time"] = DateTimes.Format(Config.SQL_DTS, DateTimes.GetTime("now"));
+                var fields = new Hashtable();
+                fields["d_Time"] = DateTimes.Format(Config.SQL_DTS, DateTimes.GetTime());
                 if (insert_required) {
                     fields["i_Id"] = 1;
                     doTime.Insert(fields);

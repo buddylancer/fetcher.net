@@ -22,7 +22,7 @@ namespace Bula.Fetcher.Model {
         public DataSet GetCategoryById(String catid) {
             if (BLANK(catid))
                 return null;
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " SELECT * FROM ", this.table_name, " _this " ,
                 " WHERE _this.", this.id_field, " = ? ");
             Object[] pars = ARR("SetString", catid);
@@ -35,7 +35,7 @@ namespace Bula.Fetcher.Model {
         public DataSet GetCategoryByName(String catname) {
             if (BLANK(catname))
                 return null;
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " SELECT * FROM ", this.table_name, " _this ",
                 " WHERE _this.s_Name = ? ");
             Object[] pars = ARR("SetString", catname);
@@ -68,7 +68,7 @@ namespace Bula.Fetcher.Model {
         public DataSet EnumCategories(String order, int min_count, int limit) {
             if (min_count < 0)
                 return null;
-            String query = Strings.Concat(
+            var query = Strings.Concat(
                 " SELECT * FROM ", this.table_name, " _this ",
                 (min_count > 0 ? CAT(" WHERE _this.i_Counter > ", min_count) : null),
                 " ORDER BY ", (EQ(order, "counter") ? " _this.i_Counter desc " : " _this.s_CatId asc "),
@@ -83,10 +83,10 @@ namespace Bula.Fetcher.Model {
         /// <param name="category">Category object (if found) copied to element 0 of object array</param>
         /// <returns>True if exists</returns>
         public Boolean CheckFilterName(String filter_name, Object[]category) {
-    		DataSet dsCategories = this.Select("_this.s_CatId, _this.s_Filter");
-    		Boolean filter_found = false;
+    		var dsCategories = this.Select("_this.s_CatId, _this.s_Filter");
+    		var filter_found = false;
     		for (int n = 0; n < dsCategories.GetSize(); n++) {
-    			Hashtable oCategory = dsCategories.GetRow(n);
+    			var oCategory = dsCategories.GetRow(n);
     			if (EQ(oCategory["s_CatId"], filter_name)) {
     				filter_found = true;
     				if (category != null)

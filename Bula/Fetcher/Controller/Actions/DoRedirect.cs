@@ -11,8 +11,8 @@ namespace Bula.Fetcher.Controller.Actions {
      */
     public class DoRedirect : Bula.Meta {
         public static void Execute(String link_to_redirect, String error_message) {
-            Hashtable Prepare = new Hashtable();
-            String template_name = null;
+            var Prepare = new Hashtable();
+            var template_name = (String)null;
             if (!NUL(error_message)) {
                 Prepare["[#Title]"] = "Error";
                 Prepare["[#ErrMessage]"] = error_message;

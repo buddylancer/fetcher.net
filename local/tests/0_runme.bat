@@ -32,7 +32,7 @@ set log=%output%\log.txt
 echo > %log%
 
 rem Just for debugging -- remove on production!!!
-goto :STYLES
+rem goto :STYLES
 
 :CREATE
 echo *** Starting 1_create.bat >> %log%

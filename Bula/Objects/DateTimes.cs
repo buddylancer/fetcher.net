@@ -12,6 +12,14 @@ namespace Bula.Objects {
         ///Get unix timestamp.
         /// <param name="time_string">Input string.</param>
         /// <returns>Resulting timestamp.</returns>
+        public static int GetTime()
+        {
+            return (int)System.DateTime.Now.Subtract(unix).TotalSeconds;
+        }
+
+        ///Get unix timestamp.
+        /// <param name="time_string">Input string.</param>
+        /// <returns>Resulting timestamp.</returns>
         public static int GetTime(String time_string) {
             return (int)System.DateTime.Parse(time_string).Subtract(unix).TotalSeconds;
         }

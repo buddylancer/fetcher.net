@@ -10,7 +10,7 @@ namespace Bula.Fetcher.Controller {
      */
     public class Top : Bula.Meta {
         public static void Execute() {
-            Hashtable Prepare = new Hashtable();
+            var Prepare = new Hashtable();
             Prepare["[#ImgWidth]"] = Config.IsMobile ? 234 : 468;
             Prepare["[#ImgHeight]"] = Config.IsMobile ? 30 : 60;
             if (Config.TestRun)
