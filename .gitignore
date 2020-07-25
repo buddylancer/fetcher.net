@@ -1,0 +1,10 @@
+*.bak
+*.cache
+*.tmp
+*.dll
+/local/cache/feed
+/obj/Debug
+/Bula/Fetcher/Web/Bin
+/bin/Debug
+/local/cache
+output

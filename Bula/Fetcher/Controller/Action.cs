@@ -52,7 +52,7 @@ namespace Bula.Fetcher.Controller {
             }
 
             String action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["page"]);
-            Util.CallMethod(action_class, "Execute");
+            Util.CallStaticMethod(action_class, "Execute");
 
             if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();

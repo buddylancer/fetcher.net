@@ -30,13 +30,12 @@ namespace Bula.Fetcher.Controller.Pages {
                     err_message += ("Empty filter name!<br/>");
                 else {
                     DOCategory doCategory = new DOCategory();
-                    DataSet dsCategories = doCategory.GetCategoryById(filter_name);
-                    if (dsCategories.GetSize() == 0)
+                    Hashtable[] oCategory =
+                        {new Hashtable()};
+                    if (!doCategory.CheckFilterName(filter_name, oCategory))
                         err_message += ("Non-existing filter name!<br/>");
-                    else {
-                        Hashtable oCategory = dsCategories.GetRow(0);
-                        filter = STR(oCategory["s_Filter"]);
-                    }
+                    else
+                        filter = STR(oCategory[0]["s_Filter"]);
                 }
             }
 
@@ -47,7 +46,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 source_name = Request.Get("source");
                 DOSource doSource = new DOSource();
                 Hashtable[] oSource =
-    {new Hashtable()};
+                    {new Hashtable()};
                 if (!doSource.CheckSourceName(source_name, oSource))
                     err_message += ("Non-existing source name!<br/>");
             }

@@ -2,12 +2,13 @@ namespace Bula.Fetcher.Controller.Testing {
     using System;
 
     using Bula.Fetcher;
-    using Bula.Objects;
     using System.Collections;
     using Bula.Objects;
+    using Bula.Model;
 
     public class CallMethod : Bula.Meta {
     	public static void Execute() {
+            Request.Initialize();
     		Request.ExtractAllVars();
 
     		if (!Request.Contains("code"))
@@ -21,12 +22,15 @@ namespace Bula.Fetcher.Controller.Testing {
     		String package = Request.Get("package");
     		if (BLANK(package))
     			STOP("Empty package!");
-    		package = Strings.Replace("-", "/", package);
+            String[] package_chunks = Strings.Split("-", package);
+            for (int n = 0; n < SIZE(package_chunks); n++)
+                package_chunks[n] = Strings.FirstCharToUpper(package_chunks[n]);
+    		package = Strings.Join("/", package_chunks);
 
     		if (!Request.Contains("class"))
     			STOP("Class is required!");
-    		String class = Request.Get("class");
-    		if (BLANK(class))
+    		String className = Request.Get("class");
+    		if (BLANK(className))
     			STOP("Empty class!");
 
     		if (!Request.Contains("method"))
@@ -35,14 +39,9 @@ namespace Bula.Fetcher.Controller.Testing {
     		if (BLANK(method))
     			STOP("Empty method!");
 
-    		String full_class = CAT(package, "/", class);
-    		String class_file = CAT(full_class, ".class.php");
-                    		if (doClass == null)
-    			STOP("Can not instantiate class!");
-
     		int count = 0;
     		ArrayList pars = new ArrayList();
-    		for (Intenger n = 1; n <= 6; n++) {
+    		for (int n = 1; n <= 6; n++) {
     			String par_name = CAT("par", n);
     			if (!Request.Contains(par_name))
     				break;
@@ -54,14 +53,19 @@ namespace Bula.Fetcher.Controller.Testing {
     			count++;
     		}
 
-            Ob_start();
-            		if (result == null)
-    			echo "null";
-    		else {
-                        }
-            buffer = Str_replace(CAT(Config.LocalRoot), "_ROOT_", Ob_get_contents());
-            Ob_end_clean();
-            echo buffer;
+            String buffer = null;
+
+            String full_class = CAT(package, "/", className);
+
+    		full_class = Strings.Replace("/", ".", full_class);
+            method = Strings.FirstCharToUpper(method);
+            DataSet ds = (DataSet)Util.CallMethod(full_class, method, pars);
+            if (ds == null)
+                buffer = "NULL";
+            else
+                buffer = ds.Serialize();
+
+            Response.Write(buffer);
     	}
     }
 

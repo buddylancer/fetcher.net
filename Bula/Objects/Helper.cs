@@ -20,13 +20,13 @@ namespace Bula.Objects {
         /// <param name="path">File name.</param>
         public static Boolean FileExists(String path) {
             return File.Exists(path);
-            	}
+    	}
 
     	///Check whether file exists.
         /// <param name="path">File name.</param>
     	public static Boolean DirExists(String path) {
             return Directory.Exists(path);
-            	}
+    	}
 
         ///Create directory.
         /// @param String path
@@ -39,7 +39,7 @@ namespace Bula.Objects {
                 return false;
             }
             return true;
-            	}
+    	}
 
     	///Delete file.
         /// <param name="path">File name.</param>
@@ -52,7 +52,7 @@ namespace Bula.Objects {
                 return false;
             }
             return true;
-            	}
+    	}
 
     	///Delete directory.
         /// <param name="path">Directory name.</param>
@@ -82,7 +82,7 @@ namespace Bula.Objects {
                 return false;
             }
             return true;
-                }
+        }
 
         public static String ReadAllText(String filename) {
             return ReadAllText(filename, null); }
@@ -162,14 +162,14 @@ namespace Bula.Objects {
         /// <returns>True - is a file.</returns>
         public static Boolean IsFile(String path) {
             return File.Exists(path) && (File.GetAttributes(path) & FileAttributes.Directory) == 0;
-                }
+        }
 
         ///Check whether given path is a directory.
         /// <param name="path">Path of an object.</param>
         /// <returns>True - is a directory.</returns>
         public static Boolean IsDir(String path) {
             return Directory.Exists(path) && (File.GetAttributes(path) & FileAttributes.Directory) != 0;
-                }
+        }
 
         public static IEnumerator ListDirEntries(String path) {
             String[] entries = Directory.GetDirectories(path);

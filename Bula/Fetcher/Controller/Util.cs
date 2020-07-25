@@ -184,24 +184,24 @@ namespace Bula.Fetcher.Controller {
         }
 
         private static String[] ru_chars =
-    {
+        {
             "а","б","в","г","д","е","ё","ж","з","и","й","к","л","м","н","о","п",
             "р","с","т","у","ф","х","ц","ч","ш","щ","ъ","ы","ь","э","ю","я",
             "А","Б","В","Г","Д","Е","Ё","Ж","З","И","Й","К","Л","М","Н","О","П",
             "Р","С","Т","У","Ф","Х","Ц","Ч","Ш","Щ","Ъ","Ы","Ь","Э","Ю","Я",
             "á", "ą", "ä", "ę", "ó", "ś",
             "Á", "Ą", "Ä", "Ę", "Ó", "Ś"
-    };
+        };
 
         private static String[] en_chars =
-    {
+        {
             "a","b","v","g","d","e","io","zh","z","i","y","k","l","m","n","o","p",
             "r","s","t","u","f","h","ts","ch","sh","shch","\"","i","\"","e","yu","ya",
             "A","B","V","G","D","E","IO","ZH","Z","I","Y","K","L","M","N","O","P",
             "R","S","T","U","F","H","TS","CH","SH","SHCH","\"","I","\"","E","YU","YA",
             "a", "a", "ae", "e", "o", "s",
             "A", "a", "AE", "E", "O", "S"
-    };
+        };
         public static String TransliterateRusToLat(String ru_text) {
             System.Text.StringBuilder sb = new System.Text.StringBuilder(ru_text);
             for (int n = 0; n < ru_chars.Length; n++)
@@ -213,15 +213,15 @@ namespace Bula.Fetcher.Controller {
         /// <param name="class_name">Class name</param>
         /// <param name="method_name">Method name</param>
         /// <returns>Result of method execution</returns>
-        public static Object CallMethod(String class_name, String method_name) {
+        public static Object CallStaticMethod(String class_name, String method_name) {
             return CallMethod(class_name, method_name, null); }
 
-        ///Call method of given class using provided arguments.
+        ///Call static method of given class using provided arguments.
         /// <param name="class_name">Class name</param>
         /// <param name="method_name">Method name</param>
         /// <param name="args">List of arguments</param>
         /// <returns>Result of method execution</returns>
-        public static Object CallMethod(String class_name, String method_name, ArrayList args) {
+        public static Object CallStaticMethod(String class_name, String method_name, ArrayList args) {
             Type type = Type.GetType(class_name.Replace('/', '.'));
             System.Reflection.MethodInfo methodInfo = type.GetMethod(method_name);
             if (args != null && args.Count > 0)
@@ -231,6 +231,49 @@ namespace Bula.Fetcher.Controller {
             /*Java
             TODO
             Java*/
+        }
+
+        ///Call method of given class using provided arguments.
+        /// <param name="class_name">Class name</param>
+        /// <param name="method_name">Method name</param>
+        /// <param name="args">List of arguments</param>
+        /// <returns>Result of method execution</returns>
+        public static Object CallMethod(String class_name, String method_name, ArrayList args) {
+            Type type = Type.GetType(class_name.Replace('/', '.'));
+            System.Reflection.ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
+            Object doObject = constructorInfo.Invoke(new Object[] { });
+
+            Type[] types = args != null && args.Count > 0 ? new Type[args.Count] : new Type[0];
+            if (types.Length > 0) {
+                for (int n = 0; n < args.Count; n++)
+                {
+                    int result;
+                    if (int.TryParse((String)args[n], out result))
+                    {
+                        types[n] = typeof(int);
+                        args[n] = result;
+                    }
+                    else
+                        types[n] = args[n].GetType();
+                }
+            }
+
+            System.Reflection.MethodInfo methodInfo = type.GetMethod(method_name, types);
+            if (methodInfo != null) {
+                if (args != null && args.Count > 0)
+                    return methodInfo.Invoke(doObject, args.ToArray());
+                else
+                    return methodInfo.Invoke(doObject, null);
+            }
+            else
+            {
+                int x = 1;
+                return null;
+            }
+            /*Java
+            TODO
+            Java*/
+
         }
     }
 }

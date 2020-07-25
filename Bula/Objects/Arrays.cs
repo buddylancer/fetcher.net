@@ -18,13 +18,13 @@ namespace Bula.Objects {
             return new Hashtable();
         }
 
-    public static Object[] NewArray() { return NewArray(0); }
+        public static Object[] NewArray() { return NewArray(0); }
 
         ///Create new array of objects.
         /// <param name="size">Size of array.</param>
         /// <returns>Resulting array.</returns>
         public static Object[] NewArray(int size) {
-    return new Object[size];
+            return new Object[size];
         }
 
         ///Merge Hashtables.

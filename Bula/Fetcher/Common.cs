@@ -5,7 +5,7 @@ namespace Bula.Fetcher {
     using System.Collections;
 
     public class Common : Bula.Meta {
-            static Common() { Initialize(); }
+        static Common() { Initialize(); }
 
         protected static Hashtable Values = new Hashtable();
         public static String Get(String name) {
@@ -77,11 +77,7 @@ namespace Bula.Fetcher {
             IsMobile = Host.IndexOf("m.") == 0;
             Lang = Host.LastIndexOf(".ru") != -1 ? "ru" : "en";
 
-            FineUrls = Config.FINE_URLS;
-            ImmediateRedirect = Config.IMMEDIATE_REDIRECT;
-
             CheckTestRun();
-
             UniqueHostId = Strings.Concat(
                 IsMobile ? "mob_" : "www_",
                 FineUrls ? (ImmediateRedirect ? "direct_" : "fine_") : "full_",

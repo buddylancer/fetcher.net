@@ -2,6 +2,7 @@ namespace Bula.Model {
     using System;
 
     using System.Collections;
+    using Bula.Objects;
 
     // Non-typed data set
     public class DataSet : Bula.Meta {
@@ -38,6 +39,38 @@ namespace Bula.Model {
         }
     	public void SetTotalPages(int total_pages) {
             this.total_pages = total_pages;
+        }
+
+        private String AddSpaces(int level) {
+            String spaces = "";
+            for (int n = 0; n < level; n++)
+                spaces += ("    ");
+            return spaces;
+        }
+
+        public String Serialize() {
+            int level = 0;
+            String spaces = null;
+            String output = "";
+            output += ("<DataSet>\n");
+            for (int n = 0; n < this.GetSize(); n++) {
+                Hashtable row = this.GetRow(n);
+                level++; spaces = this.AddSpaces(level);
+                output += (CAT(spaces, "<Row>\n"));
+                IEnumerator keys = row.Keys.GetEnumerator();
+                while (keys.MoveNext()) {
+                    level++; spaces = this.AddSpaces(level);
+                    String key = (String)keys.Current;
+                    output += (CAT(spaces, "<Item name=\"", key, "\">"));
+                    output += (row[key]);
+                    output += ("</Item>\n");
+                    level--; spaces = this.AddSpaces(level);
+                }
+                output += (CAT(spaces, "</Row>\n"));
+                level--; spaces = this.AddSpaces(level);
+            }
+            output += ("</DataSet>\n");
+            return output;
         }
     }
 }

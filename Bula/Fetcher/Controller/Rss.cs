@@ -28,7 +28,7 @@ namespace Bula.Fetcher.Controller {
                 else {
                     DOSource doSource = new DOSource();
                     Hashtable[] oSource =
-    {new Hashtable()};
+                        {new Hashtable()};
                     if (!doSource.CheckSourceName(source, oSource))
                         err_message += (CAT("Incorrect source '", source, "'!"));
                 }
@@ -54,18 +54,12 @@ namespace Bula.Fetcher.Controller {
                         err_message += ("Empty filter!");
                     }
                     else {
-                        dsCategories = doCategory.GetCategoryById(filter_name);
-                        if (dsCategories.GetSize() == 0) {
-                            if (any_filter)
-                                filter = filter_name;
-                            else {
-                                if (err_message.Length > 0)
-                                    err_message += (" ");
-                                err_message += (CAT("Incorrect filter '", filter_name , "'!"));
-                            }
-                        }
+                        Hashtable[] oCategory =
+                            {new Hashtable()};
+                        if (!doCategory.CheckFilterName(filter_name, oCategory))
+                            err_message += (CAT("Incorrect filter '", filter_name, "'!"));
                         else
-                            filter = STR(dsCategories.GetRow(0)["s_Filter"]);
+                            filter = STR(oCategory[0]["s_Filter"]);
                     }
                 }
             }
@@ -258,8 +252,10 @@ namespace Bula.Fetcher.Controller {
             Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
             Response.Write(xml_content);
 
-            if (DBConfig.Connection != null)
+            if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();
+                DBConfig.Connection = null;
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 else {
                     DOSource doSource = new DOSource();
                     Hashtable[] oSource =
-    {new Hashtable()};
+                        {new Hashtable()};
                     if (!doSource.CheckSourceName(source_name, oSource))
                         error_message = "No such source name!";
                     else

@@ -77,5 +77,24 @@ namespace Bula.Fetcher.Model {
             Object[] pars = ARR();
             return this.GetDataSet(query, pars);
         }
+
+        ///Check whether category (filter) exists.
+        /// <param name="filter_name">Category ID.</param>
+        /// <param name="category">Category object (if found) copied to element 0 of object array</param>
+        /// <returns>True if exists</returns>
+        public Boolean CheckFilterName(String filter_name, Object[]category) {
+    		DataSet dsCategories = this.Select("_this.s_CatId, _this.s_Filter");
+    		Boolean filter_found = false;
+    		for (int n = 0; n < dsCategories.GetSize(); n++) {
+    			Hashtable oCategory = dsCategories.GetRow(n);
+    			if (EQ(oCategory["s_CatId"], filter_name)) {
+    				filter_found = true;
+    				if (category != null)
+                        category[0] = oCategory;
+    				break;
+    			}
+    		}
+    		return filter_found;
+    	}
     }
 }

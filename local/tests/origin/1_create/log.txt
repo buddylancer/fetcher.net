@@ -278,7 +278,7 @@ insert into categories values ('IL', 'Illinois', ' IL.| IL;| IL,|Illinois|Chicag
 --------------
 
 --------------
-insert into categories values ('IN', 'Indiana', ' IN.| IN;| IN,|Indiana', 0)
+insert into categories values ('IN', 'Indiana', ' IN.| IN;| IN,|Indiana~IN...', 0)
 --------------
 
 --------------

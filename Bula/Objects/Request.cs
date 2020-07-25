@@ -8,13 +8,13 @@ namespace Bula.Objects {
     public class Request : Bula.Meta {
         private static Hashtable Vars = null;
         private static Hashtable ServerVars = null;
-    public const int INPUT_POST = 0;
-    public const int INPUT_GET = 1;
-    public const int INPUT_COOKIE = 2;
-    public const int INPUT_ENV = 4;
-    public const int INPUT_SERVER = 5;
+        public const int INPUT_POST = 0;
+        public const int INPUT_GET = 1;
+        public const int INPUT_COOKIE = 2;
+        public const int INPUT_ENV = 4;
+        public const int INPUT_SERVER = 5;
 
-            static Request() { Initialize(); }
+        static Request() { Initialize(); }
 
         public static void Initialize() {
             Vars = Arrays.NewHashtable();
@@ -94,7 +94,7 @@ namespace Bula.Objects {
         public static int GetOptionalInteger(String name) {
             String val = GetOptionalParameter(name);
             if (val == null)
-    return -99999; //TODO
+                return -99999; //TODO
 
             String str = STR(val);
             if (str == "" || !IsInteger(str))
@@ -172,9 +172,21 @@ namespace Bula.Objects {
                     break;
             }
             IEnumerator keys = vars.AllKeys.GetEnumerator();
-            while (keys.MoveNext()) {
-                String key = (String)keys.Current;
-                hash.Add(key, vars[key]);
+            //while (keys.MoveNext()) {
+            //    String key = (String)keys.Current;
+            //    if (key != null)
+            //        hash.Add(key, vars[key]);
+            //}
+            for (int n = 0; n < vars.Count; n++)
+            {
+                String key = vars.GetKey(n);
+                String[] values = vars.GetValues(n);
+                if (key == null) {
+                    for (int v = 0; v < values.Length; v++)
+                        hash.Add(values[v], null);
+                }
+                else
+                    hash.Add(key, values[0]);
             }
             return hash;
         }

@@ -29,7 +29,6 @@ namespace Bula.Fetcher.Controller {
                 Initialize();
 
             DataAccess.SetErrorDelegate(Bula.Objects.Response.End);
-            //DataAccess.SetPrintDelegate(Bula.Objects.Response.Write);
 
             Hashtable page_info = Request.TestPage(pages_array, "home");
 

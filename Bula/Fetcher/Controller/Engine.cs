@@ -95,7 +95,7 @@ namespace Bula.Fetcher.Controller {
             String content = null;
             if (Helper.FileExists(CAT(Config.LocalRoot, file_name))) {
                 //Config.IncludeFile(file_name);
-                Util.CallMethod(class_name, "Execute");
+                Util.CallStaticMethod(class_name, "Execute");
                 content = GetPrintString();
             }
             else

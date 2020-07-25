@@ -76,6 +76,7 @@
     <Compile Include="Bula\Fetcher\Controller\Pages\Sources.cs" />
     <Compile Include="Bula\Fetcher\Controller\Pages\ViewItem.cs" />
     <Compile Include="Bula\Fetcher\Controller\Rss.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Testing\CallMethod.cs" />
     <Compile Include="Bula\Fetcher\Controller\Top.cs" />
     <Compile Include="Bula\Fetcher\Controller\Util.cs" />
     <Compile Include="Bula\Fetcher\Model\DOCategory.cs" />
@@ -118,6 +119,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Bula\Fetcher\Web\Testing\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

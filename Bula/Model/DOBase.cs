@@ -68,7 +68,7 @@ namespace Bula.Model {
             while (oRs.Next() != 0) {
                 ds.AddRow(oRs.record);
             }
-             oRs.Close();
+            oRs.Close();
             oStmt.Close();
             return ds;
         }

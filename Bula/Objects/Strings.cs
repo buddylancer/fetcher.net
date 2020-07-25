@@ -12,7 +12,7 @@ namespace Bula.Objects {
      */
     public class Strings : Bula.Meta {
         public static String[] EmptyArray() {
-    return new String[0];
+            return new String[0];
         }
 
     	///Convert first char of a string to upper case.
@@ -27,8 +27,15 @@ namespace Bula.Objects {
         /// <param name="strings">Array of strings.</param>
         /// <returns>Resulting string.</returns>
         public static String Join(String divider, String[] strings) {
-            return String.Join(divider, strings);
-
+            String output = "";
+            int count = 0;
+            foreach (String string1 in strings) {
+                if (count > 0)
+                    output += (divider);
+                output += (string1);
+                count++;
+            }
+            return output;
     	}
 
     	public static String RemoveTags(String input) {
@@ -55,10 +62,10 @@ namespace Bula.Objects {
     	}
 
         public static String Concat(params object[] args) {
-        		String output = "";
+    		String output = "";
     		if (SIZE(args) != 0) {
                 foreach (object arg in args) {
-                                if (arg == null)
+                    if (arg == null)
                         continue;
     				output = output += (arg);
     			}
@@ -105,7 +112,7 @@ namespace Bula.Objects {
                 // Use str_replace
                 result = (new Regex(from)).Replace(input, to);
             }
-    return result;
+            return result;
     	}
 
         ///Replace all substrings with another string using regular expressions.
