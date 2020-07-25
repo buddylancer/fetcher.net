@@ -228,9 +228,6 @@ namespace Bula.Fetcher.Controller {
                 return methodInfo.Invoke(null, args.ToArray());
             else
                 return methodInfo.Invoke(null, null);
-            /*Java
-            TODO
-            Java*/
         }
 
         ///Call method of given class using provided arguments.
@@ -266,14 +263,7 @@ namespace Bula.Fetcher.Controller {
                     return methodInfo.Invoke(doObject, null);
             }
             else
-            {
-                int x = 1;
                 return null;
-            }
-            /*Java
-            TODO
-            Java*/
-
         }
     }
 }

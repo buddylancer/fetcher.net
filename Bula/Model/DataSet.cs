@@ -52,7 +52,7 @@ namespace Bula.Model {
             int level = 0;
             String spaces = null;
             String output = "";
-            output += ("<DataSet>\n");
+            output += (CAT("<DataSet Rows=\"", this.rows.Count, "\">\n"));
             for (int n = 0; n < this.GetSize(); n++) {
                 Hashtable row = this.GetRow(n);
                 level++; spaces = this.AddSpaces(level);
@@ -61,7 +61,7 @@ namespace Bula.Model {
                 while (keys.MoveNext()) {
                     level++; spaces = this.AddSpaces(level);
                     String key = (String)keys.Current;
-                    output += (CAT(spaces, "<Item name=\"", key, "\">"));
+                    output += (CAT(spaces, "<Item Name=\"", key, "\">"));
                     output += (row[key]);
                     output += ("</Item>\n");
                     level--; spaces = this.AddSpaces(level);

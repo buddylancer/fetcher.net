@@ -148,11 +148,11 @@ namespace Bula.Objects {
         }
 
         public static Boolean IsDomainName(String input) {
-            return Regex.IsMatch(input, "^[A-Za-z0-9.]+");
+            return Regex.IsMatch(input, "^[A-Za-z0-9.]+$");
         }
 
         public static Boolean IsInteger(String input) {
-            return Regex.IsMatch(input, "^[0-9]+");
+            return Regex.IsMatch(input, "^[0-9]+$");
         }
 
         public static Hashtable GetVars(int type) {
