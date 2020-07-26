@@ -24,7 +24,7 @@ namespace Bula.Fetcher {
         public const int DB_ITEMS_ROWS = 25;
         public const String GMT_DTS = "dd-MMM-yyyy HH:mm \\G\\M\\T";
         public const String XML_DTS = "ddd, dd MMM yyyy HH:mm:ss \\G\\M\\T";
-        public const String SQL_DTS = "yyyy-MM-d HH:mm:ss";
+        public const String SQL_DTS = "yyyy-MM-dd HH:mm:ss";
 
         // Fill these fields by your site data
         public const String SITE_NAME = "Buddy Fetcher";

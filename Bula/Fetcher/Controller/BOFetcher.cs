@@ -27,9 +27,9 @@ namespace Bula.Fetcher.Controller {
             this.oLogger = new Logger();
             Config.Set("Log_Object", this.oLogger);
             var log = Request.GetOptionalInteger("log");
-            if (!NUL(log) && log != -99999) {
+            if (!NUL(log) && log != -99999) { //TODO
                 var filename_template = "C:/Temp/Log_{0}_{1}.html";
-                var filename = Util.FormatString(filename_template, ARR("fetch_items", DateTimes.Format(Config.SQL_DTS)));
+                var filename = Util.FormatString(filename_template, ARR("fetch_items", DateTimes.Format(DBConfig.SQL_DTS)));
                 this.oLogger.Init(filename);
             }
         }
@@ -84,7 +84,7 @@ namespace Bula.Fetcher.Controller {
             var source_id = INT(oSource["i_SourceId"]);
             var boItem = new BOItem(source_name, item);
             var pubdate = STR(item["pubdate"]);
-            var date = Strings.GetSqlDate(pubdate);
+            var date = DateTimes.Format(Config.SQL_DTS, DateTimes.FromRss(pubdate));
 
             // Check whether item with the same link exists already
             var doItem = new DOItem();
@@ -171,11 +171,6 @@ namespace Bula.Fetcher.Controller {
             //doItem = new DOItem();
             //doItem.PurgeOldItems(10);
 
-            //Define("MAGPIE_CACHE_ON", true);
-            //Define("MAGPIE_OUTPUT_ENCODING", "UTF-8");
-            //Define("MAGPIE_DEBUG", 1);
-            //Define("MAGPIE_FETCH_TIME_OUT", 30);
-            //Define("MAGPIE_CACHE_DIR", CAT(Config.FeedFolder));
             var doSource = new DOSource();
             var dsSources = doSource.EnumFetchedSources();
 
@@ -196,7 +191,6 @@ namespace Bula.Fetcher.Controller {
                 var items_counter = 0;
                 // Loop through fetched items and parse their data
                 for (int i = SIZE(items_array) - 1; i >= 0; i--) {
-                    //var hash = Arrays.CreateHashtable(items_array[i]);
                     var hash = (Hashtable)items_array[i];
                     if (BLANK(hash["link"]))
                         continue;
@@ -251,6 +245,9 @@ namespace Bula.Fetcher.Controller {
 
             System.Xml.XmlDocument rssXmlDoc = new System.Xml.XmlDocument();
 
+            System.Xml.XmlNamespaceManager nsmgr = new System.Xml.XmlNamespaceManager(rssXmlDoc.NameTable);
+            nsmgr.AddNamespace("dc", "http://purl.org/dc/elements/1.1/");
+
             // Load the RSS file from the RSS URL
             rssXmlDoc.Load(url);
 
@@ -267,7 +264,6 @@ namespace Bula.Fetcher.Controller {
                 System.Xml.XmlNode rssSubNode = rssNode.SelectSingleNode("title");
                 if (rssSubNode != null)
                     item["title"] = rssSubNode.InnerText;
-                
 
                 rssSubNode = rssNode.SelectSingleNode("link");
                 if (rssSubNode != null)
@@ -279,13 +275,12 @@ namespace Bula.Fetcher.Controller {
 
                 rssSubNode = rssNode.SelectSingleNode("pubDate");
                 if (rssSubNode != null)
-                    item["pubDate"] = rssSubNode.InnerText;
+                    item["pubdate"] = rssSubNode.InnerText; //Yes, lower case
 
-                rssSubNode = rssNode.SelectSingleNode("dc:creator");
-                if (rssSubNode != null)
-                {
+                rssSubNode = rssNode.SelectSingleNode("dc:creator", nsmgr);
+                if (rssSubNode != null) {
                     item["dc"] = new Hashtable();
-                    item["dc"]["creator"] = rssSubNode.InnerText;
+                    ((Hashtable)item["dc"])["creator"] = rssSubNode.InnerText;
                 }
 
                 items.Add(item);

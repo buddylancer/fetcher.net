@@ -1,4 +1,4 @@
-delete from sources;
+﻿delete from sources;
 /* DO NOT change IDs after initial load */
 insert into sources values (10, 'education.usnews.com', 1, 1,	'http://www.usnews.com/education',	'http://www.ff.com/testing/feed.php?source=Education');
 insert into sources values (20, 'health.usnews.com', 1, 1,	'http://health.usnews.com',		'http://www.ff.com/testing/feed.php?source=Health');
@@ -22,7 +22,7 @@ insert into categories values ('GA', 'Georgia', ' GA.| GA;| GA,|Georgia|Atlanta'
 insert into categories values ('HI', 'Hawaii', ' HI.| HI;| HI,|Hawaii|Honolulu', 0);
 insert into categories values ('ID', 'Idaho', ' ID.| ID;| ID,|Idaho', 0);
 insert into categories values ('IL', 'Illinois', ' IL.| IL;| IL,|Illinois|Chicago', 0);
-insert into categories values ('IN', 'Indiana', ' IN.| IN;| IN,|Indiana', 0);
+insert into categories values ('IN', 'Indiana', ' IN.| IN;| IN,|Indiana~IN...', 0);
 insert into categories values ('IA', 'Iowa', ' IA.| IA;| IA,|Iowa', 0);
 insert into categories values ('KS', 'Kansas', ' KS.| KS;| KS,|Kansas~Arkansas', 0);
 insert into categories values ('KY', 'Kentucky', ' KY.| KY;| KY,|Kentucky', 0);

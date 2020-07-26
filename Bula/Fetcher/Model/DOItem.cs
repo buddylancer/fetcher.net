@@ -59,9 +59,9 @@ namespace Bula.Fetcher.Model {
         public String BuildSqlFilter(String filter) {
             String[] filter_chunks = Strings.Split("~", filter);
             String[] include_chunks = SIZE(filter_chunks) > 0 ?
-                Strings.Split("|", filter_chunks[0]) : null;
+                Strings.Split("\\|", filter_chunks[0]) : null;
             String[] exclude_chunks = SIZE(filter_chunks) > 1 ?
-                Strings.Split("|", filter_chunks[1]) : null;
+                Strings.Split("\\|", filter_chunks[1]) : null;
             var include_filter = "";
             for (int n = 0; n < SIZE(include_chunks); n++) {
                 if (include_filter.Length != 0)
@@ -199,7 +199,7 @@ namespace Bula.Fetcher.Model {
         /// <param name="days">Remove items older than days.</param>
         /// <returns>Resulting data set.</returns>
         public int PurgeOldItems(int days) {
-    		var purge_date = DateTimes.Format(Config.SQL_DTS, DateTimes.GetTime(CAT("-", days, " days")));
+    		var purge_date = DateTimes.Format(DBConfig.SQL_DTS, DateTimes.GetTime(CAT("-", days, " days")));
     		var query = Strings.Concat("DELETE FROM ", this.table_name, " WHERE d_Date < ?");
     		Object[] pars = ARR("SetDate", purge_date);
 

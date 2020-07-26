@@ -176,7 +176,7 @@ namespace Bula.Fetcher.Controller {
         /// <returns>Resulting pattern (quoted).</returns>
         private String QuotePattern(String pattern) {
             pattern = pattern.Replace(".", "\\.");
-            pattern = pattern.Replace("|", "\\|");
+            pattern = pattern.Replace("\\|", "\\|");
             pattern = pattern.Replace("#", "\\#");
             pattern = pattern.Replace("+", "\\+");
             pattern = pattern.Replace("[", "\\[");
@@ -221,9 +221,7 @@ namespace Bula.Fetcher.Controller {
                         include_flag |= true;
                 }
                 if (include_flag) {
-                    //category_tags = (String[])ADD(category_tags, name);
-                    var arrayList = Arrays.CreateArrayList(category_tags);
-                    arrayList.Add(name);
+                    ArrayList arrayList = Arrays.CreateArrayList(category_tags); arrayList.Add(name);
                     category_tags = (String[])arrayList.ToArray(typeof(String));
                 }
             }
@@ -271,15 +269,15 @@ namespace Bula.Fetcher.Controller {
             if (translit)
                 title = Util.TransliterateRusToLat(title);
 
-            title = Regex.Replace(title, "&amp;", " and ");
-            title = Regex.Replace(title, "[^A-Za-z0-9-. ]", " ");
+            title = Regex.Replace(title, "\\&amp\\;", " and ");
+            title = Regex.Replace(title, "[^A-Za-z0-9\\-\\. ]", " ");
             title = Regex.Replace(title, " +", " ");
             title = title.Trim();
-            title = Regex.Replace(title, ".+", "-");
-            title = Regex.Replace(title, " - ", "-");
-            title = Regex.Replace(title, " . ", ".");
+            title = Regex.Replace(title, "\\.+", "-");
+            title = Regex.Replace(title, " \\- ", "-");
+            title = Regex.Replace(title, " \\. ", ".");
             title = Regex.Replace(title, "[ ]+", "-");
-            title = Regex.Replace(title, "-+", "-");
+            title = Regex.Replace(title, "\\-+", "-");
             title = title.Trim(new char[] {'-'}).ToLower();
             return title;
         }

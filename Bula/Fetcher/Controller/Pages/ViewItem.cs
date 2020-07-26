@@ -65,7 +65,7 @@ namespace Bula.Fetcher.Controller.Pages {
             Prepare["[#RedirectSource]"] = redirect_source;
             Prepare["[#SourceName]"] = source_name;
             Prepare["[#Date]"] = Util.ShowTime(STR(oItem["d_Date"]));
-            Prepare["[#Creator]"] = oItem["s_Creator"];
+            Prepare["[#Creator]"] = STR(oItem["s_Creator"]);
             Prepare["[#Description]"] = oItem.ContainsKey("t_Description") ? Util.Show(STR(oItem["t_Description"])) : "";
             Prepare["[#ItemID]"] = oItem[id_field];
             if (Config.Contains("Name_Category")) Prepare["[#Category]"] = STR(oItem["s_Category"]);

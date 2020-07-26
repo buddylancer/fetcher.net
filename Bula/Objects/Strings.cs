@@ -97,9 +97,8 @@ namespace Bula.Objects {
         /// <param name="limit">Max number of replacements [optional].</param>
         /// <returns>Resulting string.</returns>
         public static String Replace(String from, String to, String input, int limit) {
-    		var has_pattern = from.Length > 1 && from.StartsWith("/") && from.EndsWith("/");
             var result = (String)null;
-            if (limit != 0 || has_pattern) {
+            if (limit != 0) {
                 // Use preg_replace
     			if (limit == 0) {
                     result = Regex.Replace(input, from, to);

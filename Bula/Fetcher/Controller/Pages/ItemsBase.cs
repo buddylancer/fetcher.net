@@ -86,7 +86,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var d_Date = Util.ShowTime(STR(oItem["d_Date"]));
             if (Config.IsMobile)
-                d_Date = Strings.ReplaceAll("-", " ", d_Date);
+                d_Date = Strings.ReplaceAll("\\-", " ", d_Date);
             else
                 d_Date = Strings.ReplaceFirst(" ", "<br/>", d_Date);
             Row["[#Date]"] = d_Date;
