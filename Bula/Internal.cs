@@ -9,6 +9,13 @@
 
         public static String RemoveTags(String input, String except)
         {
+            Boolean has_open = Regex.IsMatch(input, "<[a-z]+[^>]*>");
+            Boolean has_close = Regex.IsMatch(input, "</[a-z]+>");
+            Boolean has_twin = Regex.IsMatch(input, "<[a-z]+/>");
+
+            if (!has_open && !has_close && !has_twin)
+                return input;
+
             if (except == null)
                 return RemoveTag(input, "[a-z]+");
 
@@ -21,12 +28,12 @@
 
         private static String RemoveTag(String input, String tag)
         {
-            return Regex.Replace(Regex.Escape(input), CAT("<[/]*", tag, "[/]*>"), "");
+            return Regex.Replace(input, CAT("<[/]*", tag, "[^>]*[/]*>"), "");
         }
 
         private static String DecorateTags(String input, String except)
         {
-            String[] chunks = Regex.Replace(Regex.Escape(input), "[/]*>", "").Split(new char[] {'<'});
+            String[] chunks = Regex.Replace(except, "[/]*>", "").Split(new char[] {'<'});
             String output = input;
             foreach (String chunk in chunks)
             {
@@ -38,7 +45,7 @@
 
         private static String DecorateTag(String input, String tag)
         {
-            return Regex.Replace(input, CAT("<([/]*", tag, "[^>]+)>"), "~{$1}~");
+            return Regex.Replace(input, CAT("<([/]*", tag, "[^>]*[/]*)>"), "~{$1}~");
         }
 
         private static String UndecorateTags(String input)

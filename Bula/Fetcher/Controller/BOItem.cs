@@ -43,9 +43,9 @@ namespace Bula.Fetcher.Controller {
 
             // Pre-process full description & title
             // Trick to eliminate non-UTF-8 characters
-            this.full_title = Regex.Replace((String)Item["title"], "[\xF0-\xF7]...", "");
+            this.full_title = Regex.Replace((String)Item["title"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
             if (Item.ContainsKey("description") && !BLANK(Item["description"]))
-                this.full_description = Regex.Replace((String)Item["description"], "[\xF0-\xF7]...", "");
+                this.full_description = Regex.Replace((String)Item["description"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
 
             this.PreProcessLink();
         }
