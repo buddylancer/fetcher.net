@@ -22,7 +22,7 @@ namespace Bula.Fetcher.Controller.Pages {
             }
             var id = Request.Get("id");
             if (!Request.IsInteger(id)) {
-                Prepare["[#ErrMessage]"] = "Item ID must be integer!";
+                Prepare["[#ErrMessage]"] = "Item ID must be positive integer!";
                 Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
                 return;
             }

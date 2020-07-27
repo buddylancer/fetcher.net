@@ -80,8 +80,8 @@ namespace Bula.Fetcher.Model {
 
         ///Check whether category (filter) exists.
         /// <param name="filter_name">Category ID.</param>
-        /// <param name="category">Category object (if found) copied to element 0 of object array</param>
-        /// <returns>True if exists</returns>
+        /// <param name="category">Category object (if found) copied to element 0 of object array.</param>
+        /// <returns>True if exists.</returns>
         public Boolean CheckFilterName(String filter_name, Object[]category) {
     		var dsCategories = this.Select("_this.s_CatId, _this.s_Filter");
     		var filter_found = false;

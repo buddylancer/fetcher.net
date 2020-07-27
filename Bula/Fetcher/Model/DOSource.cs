@@ -7,7 +7,7 @@ namespace Bula.Fetcher.Model {
     using Bula.Model;
 
     /**
-     * Manipulating with sources.
+     * Manipulations with sources.
      */
     public class DOSource : DOBase {
 
@@ -16,8 +16,8 @@ namespace Bula.Fetcher.Model {
     		this.id_field = "i_SourceId";
     	}
 
-        ///Enumerate all sources.
-        /// <returns>Resulting data set</returns>
+        ///Enumerates all sources.
+        /// <returns>Resulting data set.</returns>
         public DataSet EnumSources() {
     		var query = Strings.Concat(
     			" SELECT _this.* FROM ", this.table_name, " _this ",
@@ -28,8 +28,8 @@ namespace Bula.Fetcher.Model {
     		return this.GetDataSet(query, pars);
     	}
 
-        ///Enumerated sources, which are active for fetching.
-        /// <returns>Resulting data set</returns>
+        ///Enumerates sources, which are active for fetching.
+        /// <returns>Resulting data set.</returns>
     	public DataSet EnumFetchedSources() {
     		var query = Strings.Concat(
     			" SELECT _this.* FROM ", this.table_name, " _this ",
@@ -40,8 +40,8 @@ namespace Bula.Fetcher.Model {
     		return this.GetDataSet(query, pars);
     	}
 
-        ///Enumerate all sources with counters.
-        /// <returns>Resulting data set</returns>
+        ///Enumerates all sources with counters.
+        /// <returns>Resulting data set.</returns>
     	public DataSet EnumSourcesWithCounters() {
     		var query = Strings.Concat(
     			" select _this.", this.id_field, ", _this.s_SourceName, ",
@@ -57,8 +57,8 @@ namespace Bula.Fetcher.Model {
     	}
 
         ///Get source by ID.
-        /// <param name="sourceid">Source ID</param>
-        /// <returns>Resulting data set</returns>
+        /// <param name="sourceid">Source ID.</param>
+        /// <returns>Resulting data set.</returns>
         public DataSet GetSourceById(int sourceid) {
             if (sourceid <= 0) return null;
     		var query = Strings.Concat("SELECT * FROM sources where i_SourceId = ?");
@@ -67,8 +67,8 @@ namespace Bula.Fetcher.Model {
     	}
 
     	///Get source by name.
-        /// <param name="sourcename">Source name</param>
-        /// <returns>Resulting data set</returns>
+        /// <param name="sourcename">Source name.</param>
+        /// <returns>Resulting data set.</returns>
         public DataSet GetSourceByName(String sourcename) {
             if (sourcename == null || sourcename == "") return null;
     		var query = Strings.Concat("SELECT * FROM sources where s_SourceName = ?");
@@ -77,9 +77,16 @@ namespace Bula.Fetcher.Model {
     	}
 
         ///Check whether source exists.
-        /// <param name="sourcename">Source name</param>
-        /// <param name="source">Source object (if found) copied to element 0 of object array</param>
-        /// <returns>True if exists</returns>
+        /// <param name="sourcename">Source name.</param>
+        /// <returns>True if exists.</returns>
+    	public Boolean CheckSourceName(String sourcename) {
+        	return CheckSourceName(sourcename, null);
+        }
+
+        ///Check whether source exists.
+        /// <param name="sourcename">Source name.</param>
+        /// <param name="source">Source object (if found) copied to element 0 of object array.</param>
+        /// <returns>True if exists.</returns>
         public Boolean CheckSourceName(String sourcename, Object[]source) {
     		var dsSources = this.EnumSources();
     		var source_found = false;

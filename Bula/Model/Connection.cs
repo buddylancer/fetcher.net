@@ -25,11 +25,12 @@ namespace Bula.Model {
         /// <returns>Result of operation (1 - OK, -1 - error).</returns>
         public int Open(String host, int port, String admin, String password, String db, String charset) {
             this.link = DataAccess.Connect(host, admin, password, db, port); //TODO PHP
-            if (this.link == null)
+            if (this.link == null) {
+                DataAccess.CallErrorDelegate("Can't open DB! Check whether it exists!");
                 return -1;
-            //TODO!!!
+            }
             if (charset != null)
-                DataAccess.Query(this.link, CAT("set names ", charset));
+                DataAccess.NonQuery(this.link, CAT("set names ", charset));
             return 1;
         }
 
@@ -40,7 +41,8 @@ namespace Bula.Model {
         }
 
         ///Prepare statement.
-        /// @param String sql
+        /// <param name="sql">SQL-query.</param>
+        /// <returns>statement.</returns>
         public PreparedStatement PrepareStatement(String sql) {
             this.stmt = new PreparedStatement();
             this.stmt.SetLink(this.link);

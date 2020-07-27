@@ -54,8 +54,8 @@ namespace Bula.Model {
 
         ///Get next record from the result of operation.
         /// <returns>Status of operation:</returns>
-        ///   1 - next record exists
-        ///   0 - next record not exists
+        ///   1 - next record exists.
+        ///   0 - next record not exists.
         public int Next() {
             var arr = DataAccess.FetchArray(this.result);
 

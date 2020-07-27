@@ -60,7 +60,7 @@ namespace Bula.Fetcher.Controller.Testing {
 
     		full_class = Strings.Replace("/", ".", full_class);
             method = Strings.FirstCharToUpper(method);
-            result = (DataSet)Util.CallMethod(full_class, method, pars);
+            result = (DataSet)Internal.CallMethod(full_class, method, pars);
 
             buffer = result == null ? "NULL" : result.Serialize();
             Response.Write(buffer);

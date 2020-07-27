@@ -22,7 +22,7 @@ namespace Bula.Objects {
     	}
 
         ///Create directory.
-        /// @param String path
+        /// <param name="path">Directory path to create.</param>
         /// <returns>True - created OK, False - error.</returns>
         public static Boolean CreateDir(String path) {
             try {

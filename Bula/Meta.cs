@@ -1,25 +1,39 @@
 namespace Bula {
     using System;
-    // Below are meta functions, that can be replaced when converting to other language (Java, C#)
 
     using Bula.Objects;
     using System.Collections;
 
+    /// <summary>
+    /// Meta functions, that can be replaced when converting to other language (Java, C#).
+    /// </summary>
     public class Meta {
 
+        /// <summary>
+        /// Stop executiong.
+        /// </summary>
+        /// <param name="str">Error message</param>
         public static void STOP(Object str) {
             Response.Write(str.ToString());
             System.Web.HttpContext.Current.Response.End();
         }
 
         // Common functions
-        public static bool NUL(object value) { return value == null; }
 
-        /**
-         * Convert object to Integer
-         * @param object value
-         * @return Integer
-         */
+        /// <summary>
+        /// Check whether an object is null.
+        /// </summary>
+        /// <param name="value">Input object</param>
+        /// <returns></returns>
+        public static bool NUL(object value) {
+            return value == null;
+        }
+
+        /// <summary>
+        /// Get integer value of any object.
+        /// </summary>
+        /// <param name="value">Input object</param>
+        /// <returns>Integer result</returns>
         public static int INT(object value) {
             if (NUL(value))
                 return 0;
@@ -28,7 +42,13 @@ namespace Bula {
             return int.Parse(value.ToString());
         }
 
-        public static float FLOAT(object value) {
+        /// <summary>
+        /// Get float value of any object.
+        /// </summary>
+        /// <param name="value">Input object</param>
+        /// <returns>Float result</returns>
+        public static float FLOAT(object value)
+        {
             if (NUL(value))
                 return 0;
 	        if (value is string)
@@ -36,7 +56,13 @@ namespace Bula {
             return float.Parse(value.ToString());
         }
 
-        public static String STR(object value) {
+        /// <summary>
+        /// Get string value of any object.
+        /// </summary>
+        /// <param name="value">Input object</param>
+        /// <returns>String result</returns>
+        public static String STR(object value)
+        {
             if (NUL(value))
                 return null;
 	        if (value is String)
@@ -44,13 +70,25 @@ namespace Bula {
             return value.ToString();
         }
 
+        /// <summary>
+        /// Check whether 2 object are equal.
+        /// </summary>
+        /// <param name="value1">First object</param>
+        /// <param name="value2">Second object</param>
+        /// <returns></returns>
         public static bool EQ(Object value1, Object value2) {
             if (value1 == null || value2 == null)
                 return false;
 	        return value1.ToString() == value2.ToString();
         }
 
-        // TString functions
+        // String functions
+
+        /// <summary>
+        /// Check whether an object is empty.
+        /// </summary>
+        /// <param name="arg">Input object</param>
+        /// <returns></returns>
         public static bool BLANK(object arg) {
 	        if (arg == null)
 		        return true;
@@ -63,6 +101,11 @@ namespace Bula {
             return BLANK(str) ? 0 : str.ToString().Length;
         }
 
+        /// <summary>
+        /// Concatenate any number of objects as string.
+        /// </summary>
+        /// <param name="args">Array of objects</param>
+        /// <returns>Resulting string</returns>
         public static string CAT(params object[] args) {
 	        string result = "";
             foreach (object arg in args)
@@ -72,9 +115,6 @@ namespace Bula {
 
         public static int IXOF(string str, string what, int off = 0) {
 	        return str.IndexOf(what, off);
-        }
-
-        public static void PR(object str) {
         }
 
         public static object[] ARR(params object[] args) {
@@ -94,6 +134,11 @@ namespace Bula {
             return output;
         }
 
+        /// <summary>
+        /// Identify the size of any object.
+        /// </summary>
+        /// <param name="val">Input object</param>
+        /// <returns>Resulting size</returns>
         public static int SIZE(object val) {
             if (val == null) return 0;
             else if (val is Object[]) return ((Object[])val).Length;
@@ -114,6 +159,5 @@ namespace Bula {
             System.Reflection.MethodInfo methodInfo = obj.GetType().GetMethod(method);
             return methodInfo.Invoke(obj, args);
         }
-
     }
 }

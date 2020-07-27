@@ -171,19 +171,6 @@ namespace Bula.Fetcher.Controller {
             return category;
         }
 
-        ///Quote pattern for Regex operations.
-        /// <param name="pattern">Input pattern (not-quoted).</param>
-        /// <returns>Resulting pattern (quoted).</returns>
-        private String QuotePattern(String pattern) {
-            pattern = pattern.Replace(".", "\\.");
-            pattern = pattern.Replace("\\|", "\\|");
-            pattern = pattern.Replace("#", "\\#");
-            pattern = pattern.Replace("+", "\\+");
-            pattern = pattern.Replace("[", "\\[");
-            pattern = pattern.Replace("]", "\\]");
-            return pattern;
-        }
-
         ///Add standard categories (from DB).
         /// <param name="dsCategories">Data set with categories (from DB).</param>
         /// <param name="lang">Input language.</param>
@@ -199,22 +186,22 @@ namespace Bula.Fetcher.Controller {
                 var name = STR(oCategory["s_Name"]);
 
                 var filter_value = STR(oCategory["s_Filter"]);
-                String[] filter_chunks = Regex.Split(filter_value, "~");
+                String[] filter_chunks = Strings.Split("~", filter_value);
                 String[] include_chunks = SIZE(filter_chunks) > 0 ?
-                    Regex.Split(filter_chunks[0], "\\|") : Strings.EmptyArray();
+                    Strings.Split("|", filter_chunks[0]) : Strings.EmptyArray();
                 String[] exclude_chunks = SIZE(filter_chunks) > 1 ?
-                    Regex.Split(filter_chunks[1], "\\|") : Strings.EmptyArray();
+                    Strings.Split("|", filter_chunks[1]) : Strings.EmptyArray();
 
                 var include_flag = false;
                 for (int n2 = 0; n2 < SIZE(include_chunks); n2++) {
-                    var include_chunk = QuotePattern(include_chunks[n2]);
+                    var include_chunk = Regex.Escape(include_chunks[n2]);
                     if (!BLANK(this.description) && Regex.IsMatch(this.description, include_chunk, RegexOptions.IgnoreCase))
                         include_flag |= true;
                     if (Regex.IsMatch(this.title, include_chunk, RegexOptions.IgnoreCase))
                         include_flag |= true;
                 }
                 for (int n3 = 0; n3 < SIZE(exclude_chunks); n3++) {
-                    var exclude_chunk = QuotePattern(exclude_chunks[n3]);
+                    var exclude_chunk = Regex.Escape(exclude_chunks[n3]);
                     if (!BLANK(this.description) && Regex.IsMatch(this.description, exclude_chunk, RegexOptions.IgnoreCase))
                         include_flag &= false;
                     if (Regex.IsMatch(this.title, exclude_chunk, RegexOptions.IgnoreCase))

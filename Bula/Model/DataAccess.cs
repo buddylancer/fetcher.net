@@ -28,17 +28,22 @@ namespace Bula.Model {
             link = null;
         }
 
-        public static Object Query(Object link, String query)
+        public static int NonQuery(Object link, String query)
         {
-            MySqlCommand oCmd = ((MySqlConnection)link).CreateCommand();
-            oCmd.CommandText = query;
-            oCmd.Prepare();
-            System.Data.DataSet sysDs = new System.Data.DataSet();
-            MySqlDataAdapter oAdapter = new MySqlDataAdapter(oCmd);
-            oAdapter.Fill(sysDs);
+            return MySqlHelper.ExecuteNonQuery((MySqlConnection)link, query, new MySqlParameter[] { });
+        }
+
+        public static Object SelectQuery(Object link, String query)
+        {
+            System.Data.DataSet sysDs = MySqlHelper.ExecuteDataset((MySqlConnection)link, query);
             return new Object[] { 0, sysDs };
         }
 
+        public static Object UpdateQuery(Object link, String query)
+        {
+            System.Data.DataSet sysDs = MySqlHelper.ExecuteDataset((MySqlConnection)link, query);
+            return new Object[] { 0, sysDs };
+        }
         public static int NumRows(Object result)
         {
             return ((System.Data.DataSet)((Object[])result)[1]).Tables[0].Rows.Count;
@@ -49,6 +54,7 @@ namespace Bula.Model {
         }
 
         public static int InsertId(Object link) {
+            Object result = MySqlHelper.ExecuteScalar((MySqlConnection)link, "select last_insert_id()");
             return 0; //TODO;
         }
 

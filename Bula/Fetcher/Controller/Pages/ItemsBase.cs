@@ -46,11 +46,11 @@ namespace Bula.Fetcher.Controller.Pages {
             return false;
         }
 
-        ///Fill Row from Item
-        /// <param name="oItem">Original Item</param>
-        /// <param name="id_field">Name of ID field</param>
-        /// <param name="count">The number of inserted Row in HTML table</param>
-        /// <returns>Resulting Row</returns>
+        ///Fill Row from Item.
+        /// <param name="oItem">Original Item.</param>
+        /// <param name="id_field">Name of ID field.</param>
+        /// <param name="count">The number of inserted Row in HTML table.</param>
+        /// <returns>Resulting Row.</returns>
         protected static Hashtable FillItemRow(Hashtable oItem, String id_field, int count) {
             var Row = new Hashtable();
             var item_id = INT(oItem[id_field]);
@@ -86,7 +86,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var d_Date = Util.ShowTime(STR(oItem["d_Date"]));
             if (Config.IsMobile)
-                d_Date = Strings.ReplaceAll("\\-", " ", d_Date);
+                d_Date = Strings.Replace("-", " ", d_Date);
             else
                 d_Date = Strings.ReplaceFirst(" ", "<br/>", d_Date);
             Row["[#Date]"] = d_Date;
@@ -94,9 +94,16 @@ namespace Bula.Fetcher.Controller.Pages {
         }
 
         ///Get link for redirecting to external item.
-        /// <param name="item_id">Item ID</param>
-        /// <param name="url_title">Normalized title (to include in the link)</param>
-        /// <returns>Resulting external link</returns>
+        /// <param name="item_id">Item ID.</param>
+        /// <returns>Resulting external link.</returns>
+        public static String GetRedirectItemLink(int item_id) {
+            return GetRedirectItemLink(item_id, null);
+        }
+
+        ///Get link for redirecting to external item.
+        /// <param name="item_id">Item ID.</param>
+        /// <param name="url_title">Normalized title (to include in the link).</param>
+        /// <returns>Resulting external link.</returns>
         public static String GetRedirectItemLink(int item_id, String url_title) {
             return CAT(
                 Config.TOP_DIR,
@@ -106,9 +113,16 @@ namespace Bula.Fetcher.Controller.Pages {
         }
 
         ///Get link for redirecting to the item (internally).
-        /// <param name="item_id">Item ID</param>
-        /// <param name="url_title">Normalized title (to include in the link)</param>
-        /// <returns>Resulting internal link</returns>
+        /// <param name="item_id">Item ID.</param>
+        /// <returns>Resulting internal link.</returns>
+        public static String GetViewItemLink(int item_id) {
+            return GetViewItemLink(item_id, null);
+        }
+
+        ///Get link for redirecting to the item (internally).
+        /// <param name="item_id">Item ID.</param>
+        /// <param name="url_title">Normalized title (to include in the link).</param>
+        /// <returns>Resulting internal link.</returns>
         public static String GetViewItemLink(int item_id, String url_title) {
             return CAT(
                 Config.TOP_DIR,
@@ -118,8 +132,8 @@ namespace Bula.Fetcher.Controller.Pages {
         }
 
         ///Get internal link to the page.
-        /// <param name="list_no">Page no</param>
-        /// <returns>Resulting internal link to the page</returns>
+        /// <param name="list_no">Page no.</param>
+        /// <returns>Resulting internal link to the page.</returns>
         protected static String GetPageLink(int list_no) {
             var href = CAT(
                 Config.TOP_DIR,

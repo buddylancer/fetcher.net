@@ -1,9 +1,10 @@
 namespace Bula.Fetcher.Controller {
     using System;
 
+    using Bula;
     using Bula.Fetcher;
-    using System.Collections;
 
+    using System.Collections;
     using Bula.Objects;
 
     /**
@@ -95,7 +96,7 @@ namespace Bula.Fetcher.Controller {
             var content = (String)null;
             if (Helper.FileExists(CAT(Config.LocalRoot, file_name))) {
                 //Config.IncludeFile(file_name);
-                Util.CallStaticMethod(class_name, "Execute");
+                Internal.CallStaticMethod(class_name, "Execute");
                 content = GetPrintString();
             }
             else

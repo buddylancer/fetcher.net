@@ -1,6 +1,7 @@
 namespace Bula.Fetcher.Controller {
     using System;
 
+    using Bula;
     using Bula.Fetcher;
     using Bula.Objects;
     using System.Collections;
@@ -52,7 +53,7 @@ namespace Bula.Fetcher.Controller {
             }
 
             var action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["page"]);
-            Util.CallStaticMethod(action_class, "Execute");
+            Internal.CallStaticMethod(action_class, "Execute");
 
             if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();

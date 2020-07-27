@@ -27,7 +27,7 @@ namespace Bula.Model {
             this.record_set = new RecordSet();
             if (this.FormQuery()) {
                 DataAccess.CallPrintDelegate(CAT("Executing selection query [", this.query, "] ..."));
-                var result = DataAccess.Query(this.link, this.query);
+                var result = DataAccess.SelectQuery(this.link, this.query);
                 if (result == null) {
                     DataAccess.CallErrorDelegate(CAT("Selection query failed [", this.query, "]"));
                     return null;
@@ -37,8 +37,10 @@ namespace Bula.Model {
                 this.record_set.SetPage(1);
                 return this.record_set;
             }
-            else
+            else {
+                DataAccess.CallErrorDelegate(CAT("Error in query: ", this.query, "<hr/>"));
                 return null;
+            }
         }
 
         ///Execute updating query.
@@ -47,7 +49,7 @@ namespace Bula.Model {
         public int ExecuteUpdate() {
             if (this.FormQuery()) {
                 DataAccess.CallPrintDelegate(CAT("Executing update query [", this.query, "] ..."));
-                var result = DataAccess.Query(this.link, this.query);
+                var result = DataAccess.UpdateQuery(this.link, this.query);
                 if (result == null) {
                     DataAccess.CallErrorDelegate(CAT("Query update failed [", this.query, "]"));
                     return -2;
@@ -55,8 +57,10 @@ namespace Bula.Model {
                 var ret = DataAccess.AffectedRows(this.link);
                 return ret;
             }
-            else
+            else {
+                DataAccess.CallErrorDelegate(CAT("Error in update query [", this.query, "]"));
                 return -1;
+            }
         }
 
         ///Get ID for just inserted record.

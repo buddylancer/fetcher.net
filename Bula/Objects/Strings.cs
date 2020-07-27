@@ -43,7 +43,7 @@ namespace Bula.Objects {
         }
 
         public static String RemoveTags(String input, String except) {
-            return input; //TODO!!!
+            return Internal.RemoveTags(input, except);
     	}
 
     	public static String AddSlashes(String input) {
@@ -97,21 +97,7 @@ namespace Bula.Objects {
         /// <param name="limit">Max number of replacements [optional].</param>
         /// <returns>Resulting string.</returns>
         public static String Replace(String from, String to, String input, int limit) {
-            var result = (String)null;
-            if (limit != 0) {
-                // Use preg_replace
-    			if (limit == 0) {
-                    result = Regex.Replace(input, from, to);
-                }
-                else {        
-                    result = (new Regex(from)).Replace(input, to, limit);
-                }
-            }
-            else {
-                // Use str_replace
-                result = (new Regex(from)).Replace(input, to);
-            }
-            return result;
+            return limit != 0 ? (new Regex(Regex.Escape(from))).Replace(input, to, limit) : input.Replace(from, to);
     	}
 
         ///Replace all substrings with another string using regular expressions.

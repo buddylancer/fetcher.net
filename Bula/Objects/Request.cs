@@ -152,7 +152,7 @@ namespace Bula.Objects {
         }
 
         public static Boolean IsInteger(String input) {
-            return Regex.IsMatch(input, "^[0-9]+$");
+            return Regex.IsMatch(input, "^[1-9]+[0-9]*$");
         }
 
         public static Hashtable GetVars(int type) {

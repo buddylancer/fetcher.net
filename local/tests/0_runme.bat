@@ -13,7 +13,7 @@ goto :END
 
 rem Set your test site (local) info:
 set site=http://www.ff.com:8000
-rem set mobile=http://m.ff.com
+set mobile=http://m.ff.com:8000
 set ext=aspx
 set index_page=index.%ext%
 set action_page=action.%ext%

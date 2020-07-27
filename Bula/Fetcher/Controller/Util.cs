@@ -49,10 +49,10 @@ namespace Bula.Fetcher.Controller {
             return ShowFromCache(cache_folder, page, null);
         }
         ///Main logic for getting/saving page from/into cache.
-        /// <param name="cache_folder">Cache folder root</param>
-        /// <param name="page">Page to process</param>
-        /// <param name="query">Query to process</param>
-        /// <returns>Resulting content</returns>
+        /// <param name="cache_folder">Cache folder root.</param>
+        /// <param name="page">Page to process.</param>
+        /// <param name="query">Query to process.</param>
+        /// <returns>Resulting content.</returns>
         public static String ShowFromCache(String cache_folder, String page, String query) {
             if (EQ(page, "bottom"))
                 query = page;
@@ -103,10 +103,10 @@ namespace Bula.Fetcher.Controller {
 
         public const int MAX_EXTRACT = 100;
         ///Extract info from a string.
-        /// <param name="source">Input string</param>
-        /// <param name="after">Substring to extract info "After"</param>
-        /// <param name="to">Substring to extract info "To"</param>
-        /// <returns>Resulting string</returns>
+        /// <param name="source">Input string.</param>
+        /// <param name="after">Substring to extract info "After".</param>
+        /// <param name="to">Substring to extract info "To".</param>
+        /// <returns>Resulting string.</returns>
         public static String ExtractInfo(String source, String after, String to = null) {
             var result = (String)null;
             if (!NUL(source)) {
@@ -131,11 +131,11 @@ namespace Bula.Fetcher.Controller {
             return result;
         }
 
-        ///Remove info from string.
-        /// <param name="source">Input string</param>
-        /// <param name="from">Substring to remove "From"</param>
-        /// <param name="to">Substring to remove "To"</param>
-        /// <returns>Resulting string</returns>
+        ///Remove info from a string.
+        /// <param name="source">Input string.</param>
+        /// <param name="from">Substring to remove "From".</param>
+        /// <param name="to">Substring to remove "To".</param>
+        /// <returns>Resulting string.</returns>
         public static String RemoveInfo(String source, String from, String to = null) {
             var result = (String)null;
             int index1 = from == null ? 0 : IXOF(source, from);
@@ -157,8 +157,8 @@ namespace Bula.Fetcher.Controller {
             return result.Trim();
         }
 
-        ///Test the chain of (sub)folder(s), create if necessary.
-        /// <param name="folder">Folder's full path</param>
+        ///Test the chain of (sub)folder(s), create them if necessary.
+        /// <param name="folder">Folder's full path.</param>
         public static void TestFolder(String folder) {
             String[] chunks = folder.Split(new char[] {'/'});
             var pathname = (String)null;
@@ -207,63 +207,6 @@ namespace Bula.Fetcher.Controller {
             for (int n = 0; n < ru_chars.Length; n++)
                 sb.Replace(ru_chars[n], en_chars[n]);
             return sb.ToString();
-        }
-
-        ///Call method of given class using provided arguments.
-        /// <param name="class_name">Class name</param>
-        /// <param name="method_name">Method name</param>
-        /// <returns>Result of method execution</returns>
-        public static Object CallStaticMethod(String class_name, String method_name) {
-            return CallMethod(class_name, method_name, null); }
-
-        ///Call static method of given class using provided arguments.
-        /// <param name="class_name">Class name</param>
-        /// <param name="method_name">Method name</param>
-        /// <param name="args">List of arguments</param>
-        /// <returns>Result of method execution</returns>
-        public static Object CallStaticMethod(String class_name, String method_name, ArrayList args) {
-            Type type = Type.GetType(class_name.Replace('/', '.'));
-            System.Reflection.MethodInfo methodInfo = type.GetMethod(method_name);
-            if (args != null && args.Count > 0)
-                return methodInfo.Invoke(null, args.ToArray());
-            else
-                return methodInfo.Invoke(null, null);
-        }
-
-        ///Call method of given class using provided arguments.
-        /// <param name="class_name">Class name</param>
-        /// <param name="method_name">Method name</param>
-        /// <param name="args">List of arguments</param>
-        /// <returns>Result of method execution</returns>
-        public static Object CallMethod(String class_name, String method_name, ArrayList args) {
-            Type type = Type.GetType(class_name.Replace('/', '.'));
-            System.Reflection.ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
-            Object doObject = constructorInfo.Invoke(new Object[] { });
-
-            Type[] types = args != null && args.Count > 0 ? new Type[args.Count] : new Type[0];
-            if (types.Length > 0) {
-                for (int n = 0; n < args.Count; n++)
-                {
-                    int result;
-                    if (int.TryParse((String)args[n], out result))
-                    {
-                        types[n] = typeof(int);
-                        args[n] = result;
-                    }
-                    else
-                        types[n] = args[n].GetType();
-                }
-            }
-
-            System.Reflection.MethodInfo methodInfo = type.GetMethod(method_name, types);
-            if (methodInfo != null) {
-                if (args != null && args.Count > 0)
-                    return methodInfo.Invoke(doObject, args.ToArray());
-                else
-                    return methodInfo.Invoke(doObject, null);
-            }
-            else
-                return null;
         }
     }
 }

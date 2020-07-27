@@ -31,14 +31,13 @@ namespace Bula.Model {
                 ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, db_admin, db_password, DBConfig.DB_NAME, DBConfig.DB_CHARSET);
             else
                 ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, db_admin, db_password, DBConfig.DB_NAME);
-            if (ret == -1) {
+            if (ret == -1)
                 oConn = null;
-                DataAccess.CallErrorDelegate("Can't open DB! Check whether it exists.");
-            }
             return oConn;
         }
 
         ///Get current connection.
+        /// <returns>Current connection.</returns>
         public Connection GetConnection() {
             return this.db_connection;
         }
@@ -99,9 +98,9 @@ namespace Bula.Model {
                 }
             }
             var oRs = oStmt.ExecuteQuery();
-            if (oRs == null) {
-                DataAccess.CallErrorDelegate(CAT("Error in query: ", query, "<hr/>"));
-            }
+            if (oRs == null)
+                return null;
+
             var ds = new DataSet();
             var total_rows = oRs.GetRows();
             ds.SetTotalPages(INT((total_rows - 1) / rows + 1));
@@ -153,8 +152,6 @@ namespace Bula.Model {
             if (ret > 0 && EQ(operation, "insert"))
                 ret = oStmt.GetInsertId();
             oStmt.Close();
-            if (ret < 0)
-                DataAccess.CallErrorDelegate(CAT("Error in update query: ", query, "<hr/>"));
             return ret;
         }
 

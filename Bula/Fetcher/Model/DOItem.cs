@@ -59,9 +59,9 @@ namespace Bula.Fetcher.Model {
         public String BuildSqlFilter(String filter) {
             String[] filter_chunks = Strings.Split("~", filter);
             String[] include_chunks = SIZE(filter_chunks) > 0 ?
-                Strings.Split("\\|", filter_chunks[0]) : null;
+                Strings.Split("|", filter_chunks[0]) : null;
             String[] exclude_chunks = SIZE(filter_chunks) > 1 ?
-                Strings.Split("\\|", filter_chunks[1]) : null;
+                Strings.Split("|", filter_chunks[1]) : null;
             var include_filter = "";
             for (int n = 0; n < SIZE(include_chunks); n++) {
                 if (include_filter.Length != 0)
@@ -162,7 +162,7 @@ namespace Bula.Fetcher.Model {
         /// <param name="source">Source name to include items from (default - all sources).</param>
         /// <param name="filter">Filter for the category (or empty - no filtering).</param>
         /// <param name="max_items">Max number of returned items.</param>
-        /// <returns>Resulting data set</returns>
+        /// <returns>Resulting data set.</returns>
         public DataSet EnumItemsFromSource(String from_date, String source, String filter, int max_items) {
     		var real_filter = BLANK(filter) ? null : this.BuildSqlFilter(filter);
     		String query1 = Strings.Concat(

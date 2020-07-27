@@ -87,6 +87,7 @@
     <Compile Include="Bula\Fetcher\Model\DOItem.cs" />
     <Compile Include="Bula\Fetcher\Model\DOSource.cs" />
     <Compile Include="Bula\Fetcher\Model\DOTime.cs" />
+    <Compile Include="Bula\Internal.cs" />
     <Compile Include="Bula\Meta.cs" />
     <Compile Include="Bula\Model\Connection.cs" />
     <Compile Include="Bula\Model\DataAccess.cs" />

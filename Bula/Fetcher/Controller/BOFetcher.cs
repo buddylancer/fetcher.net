@@ -60,7 +60,7 @@ namespace Bula.Fetcher.Controller {
                 url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", enc_url);
             }
             this.oLogger.Output(CAT("[[[", url, "]]]<br/>\r\n"));
-            var rss = Fetch_rss(url); //TODO PHP
+            var rss = Internal.FetchRss(url); //TODO PHP
             if (rss == null) {
                 this.oLogger.Output("-- problems --<br/>\r\n");
                 //problems++;
@@ -238,56 +238,6 @@ namespace Bula.Fetcher.Controller {
                     this.oLogger.Output("-- problems --<br/>\r\n");
             }
             this.oLogger.Output(CAT(" ... Done<br/>\r\n"));
-        }
-
-        private Object[] Fetch_rss(String url) {
-            var items = new ArrayList();
-
-            System.Xml.XmlDocument rssXmlDoc = new System.Xml.XmlDocument();
-
-            System.Xml.XmlNamespaceManager nsmgr = new System.Xml.XmlNamespaceManager(rssXmlDoc.NameTable);
-            nsmgr.AddNamespace("dc", "http://purl.org/dc/elements/1.1/");
-
-            // Load the RSS file from the RSS URL
-            rssXmlDoc.Load(url);
-
-            // Parse the Items in the RSS file
-            System.Xml.XmlNodeList rssNodes = rssXmlDoc.SelectNodes("rss/channel/item");
-
-            System.Text.StringBuilder rssContent = new System.Text.StringBuilder();
-
-            // Iterate through the items in the RSS file
-            foreach (System.Xml.XmlNode rssNode in rssNodes)
-            {
-                var item = new Hashtable();
-
-                System.Xml.XmlNode rssSubNode = rssNode.SelectSingleNode("title");
-                if (rssSubNode != null)
-                    item["title"] = rssSubNode.InnerText;
-
-                rssSubNode = rssNode.SelectSingleNode("link");
-                if (rssSubNode != null)
-                    item["link"] = rssSubNode.InnerText;
-
-                rssSubNode = rssNode.SelectSingleNode("description");
-                if (rssSubNode != null)
-                    item["description"] = rssSubNode.InnerText;
-
-                rssSubNode = rssNode.SelectSingleNode("pubDate");
-                if (rssSubNode != null)
-                    item["pubdate"] = rssSubNode.InnerText; //Yes, lower case
-
-                rssSubNode = rssNode.SelectSingleNode("dc:creator", nsmgr);
-                if (rssSubNode != null) {
-                    item["dc"] = new Hashtable();
-                    ((Hashtable)item["dc"])["creator"] = rssSubNode.InnerText;
-                }
-
-                items.Add(item);
-            }
-
-            // Return the string that contain the RSS items
-            return items.ToArray();
         }
     }
 }
