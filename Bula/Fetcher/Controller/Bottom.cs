@@ -6,10 +6,13 @@ namespace Bula.Fetcher.Controller {
     using Bula.Model;
     using Bula.Fetcher.Model;
 
-    /**
-     * Logic for generating Bottom block.
-     */
+    /// <summary>
+    /// Logic for generating Bottom block.
+    /// </summary>
     public class Bottom : Bula.Meta {
+        /// <summary>
+        /// Execute main logic for Bottom block.
+        /// </summary>
         public static void Execute() {
             var Prepare = new Hashtable();
 

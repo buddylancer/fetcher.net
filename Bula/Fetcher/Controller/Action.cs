@@ -7,9 +7,9 @@ namespace Bula.Fetcher.Controller {
     using System.Collections;
     using Bula.Model;
 
-    /**
-     * Logic for executing actions.
-     */
+    /// <summary>
+    /// Logic for executing actions.
+    /// </summary>
     public class Action : Bula.Meta {
         private static Object[] actions_array = null;
 
@@ -23,6 +23,9 @@ namespace Bula.Fetcher.Controller {
             );
         }
 
+        /// <summary>
+        /// Execute main logic for required action.
+        /// </summary>
         public static void Execute() {
             if (actions_array == null)
                 Initialize();

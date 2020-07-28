@@ -5,26 +5,47 @@ namespace Bula.Objects {
     using System.Collections;
     using System.Text.RegularExpressions;
 
+    /// <summary>
+    /// Helper class for processing query/form request.
+    /// </summary>
     public class Request : Bula.Meta {
         private static Hashtable Vars = null;
         private static Hashtable ServerVars = null;
+
+        /// Enum value (type) for getting POST parameters 
         public const int INPUT_POST = 0;
+        /// Enum value (type) for getting GET parameters 
         public const int INPUT_GET = 1;
+        /// Enum value (type) for getting COOKIE parameters 
         public const int INPUT_COOKIE = 2;
+        /// Enum value (type) for getting ENV parameters 
         public const int INPUT_ENV = 4;
+        /// Enum value (type) for getting SERVER parameters 
         public const int INPUT_SERVER = 5;
 
         static Request() { Initialize(); }
 
+        /// <summary>
+        /// Initialize internal variables for new request.
+        /// </summary>
         public static void Initialize() {
             Vars = Arrays.NewHashtable();
             ServerVars = Arrays.NewHashtable();
         }
 
+        /// <summary>
+        /// Check whether request contains variable.
+        /// </summary>
+        /// <param name="name">Variable name.</param>
+        /// <returns>True - variable exists, False - not exists.</returns>
         public static Boolean Contains(String name) {
             return Vars.ContainsKey(name);
         }
 
+        /// <summary>
+        /// Get variable from request.
+        /// </summary>
+        /// <param name="name">Variable name.</param>
         public static String Get(String name) {
             return (String)(Vars.ContainsKey(name) ? Vars[name] : null);
         }
@@ -33,26 +54,44 @@ namespace Bula.Objects {
             Vars[name] = value;
         }
 
+        /// <summary>
+        /// Get all variable keys from request.
+        /// </summary>
+        /// <returns>All keys enumeration.</returns>
         public static IEnumerator GetKeys() {
             return Vars.Keys.GetEnumerator();
         }
 
+        /// <summary>
+        /// Extract all POST variables into internal variables.
+        /// </summary>
         public static void ExtractPostVars() {
             var vars = GetVars(INPUT_POST);
             Vars = Arrays.MergeHashtable(Vars, vars);
         }
 
+        /// <summary>
+        /// Extract all SERVER variables into internal variables.
+        /// </summary>
         public static void ExtractServerVars() {
             var vars = GetVars(INPUT_SERVER);
             Vars = Arrays.MergeHashtable(ServerVars, vars);
         }
 
+        /// <summary>
+        /// Extract all GET and POST variables into internal variables.
+        /// </summary>
         public static void ExtractAllVars() {
             var vars = GetVars(INPUT_GET);
             Vars = Arrays.MergeHashtable(Vars, vars);
             ExtractPostVars();
         }
 
+        /// <summary>
+        /// Check that referer contains text.
+        /// </summary>
+        /// <param name="text">Text to check.</param>
+        /// <returns>True - referer contains provided text, False - not contains.</returns>
         public static Boolean CheckReferer(String text) {
             //return true; //TODO
             var http_referer = GetVar(INPUT_SERVER, "HTTP_REFERER");
@@ -68,6 +107,11 @@ namespace Bula.Objects {
             return http_tester.IndexOf("Wget") != -1;
         }
 
+        /// <summary>
+        /// Get required parameter by name (or stop execution).
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <returns>Resulting value.</returns>
         public static String GetRequiredParameter(String name) {
             var val = (String)null;
             if (Contains(name))
@@ -77,6 +121,11 @@ namespace Bula.Objects {
             return val;
         }
 
+        /// <summary>
+        /// Get optional parameter by name.
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <returns>Resulting value or null.</returns>
         public static String GetOptionalParameter(String name) {
             var val = (String)null;
             if (Contains(name))
@@ -84,6 +133,11 @@ namespace Bula.Objects {
             return val;
         }
 
+        /// <summary>
+        /// Get required integer parameter by name (or stop execution).
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <returns>Resulting value.</returns>
         public static int GetRequiredInteger(String name) {
             var str = GetRequiredParameter(name);
             if (str == "" || !IsInteger(str))
@@ -91,6 +145,11 @@ namespace Bula.Objects {
             return INT(str);
         }
 
+        /// <summary>
+        /// Get optional integer parameter by name.
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <returns>Resulting value or null.</returns>
         public static int GetOptionalInteger(String name) {
             var val = GetOptionalParameter(name);
             if (val == null)
@@ -102,11 +161,21 @@ namespace Bula.Objects {
             return INT(val);
         }
 
+        /// <summary>
+        /// Get required string parameter by name (or stop execution).
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <returns>Resulting value.</returns>
         public static String GetRequiredString(String name) {
             var val = GetRequiredParameter(name);
             return val;
         }
 
+        /// <summary>
+        /// Get optional string parameter by name.
+        /// </summary>
+        /// <param name="name">Parameter name.</param>
+        /// <returns>Resulting value or null.</returns>
         public static String GetOptionalString(String name) {
             var val = GetOptionalParameter(name);
             return val;
@@ -115,6 +184,12 @@ namespace Bula.Objects {
         public static Hashtable TestPage(Object[] pages) {
             return TestPage(pages, null); }
 
+        /// <summary>
+        /// Test (match) a page with array of allowed pages.
+        /// </summary>
+        /// <param name="pages">Array of allowed pages (and their parameters).</param>
+        /// <param name="default_page">Default page to use for testing.</param>
+        /// <returns>Resulting page parameters.</returns>
         public static Hashtable TestPage(Object[] pages, String default_page) {
             var page_info = new Hashtable();
 
@@ -147,10 +222,20 @@ namespace Bula.Objects {
             return page_info;
         }
 
+        /// <summary>
+        /// Check whether text is domain name.
+        /// </summary>
+        /// <param name="input">Input text.</param>
+        /// <returns>True - text matches domain name, False - not matches.</returns>
         public static Boolean IsDomainName(String input) {
             return Regex.IsMatch(input, "^[A-Za-z0-9\\.]+$");
         }
 
+        /// <summary>
+        /// Check whether text is positive integer.
+        /// </summary>
+        /// <param name="input">Input text.</param>
+        /// <returns>True - text matches, False - not matches.</returns>
         public static Boolean IsInteger(String input) {
             return Regex.IsMatch(input, "^[1-9]+[0-9]*$");
         }
@@ -172,11 +257,6 @@ namespace Bula.Objects {
                     break;
             }
             IEnumerator keys = vars.AllKeys.GetEnumerator();
-            //while (keys.MoveNext()) {
-            //    String key = (String)keys.Current;
-            //    if (key != null)
-            //        hash.Add(key, vars[key]);
-            //}
             for (int n = 0; n < vars.Count; n++)
             {
                 String key = vars.GetKey(n);
@@ -190,6 +270,13 @@ namespace Bula.Objects {
             }
             return hash;
         }
+
+        /// <summary>
+        /// Get a single variable of given type.
+        /// </summary>
+        /// <param name="type">Required type.</param>
+        /// <param name="name">Variable name.</param>
+        /// <returns>Requested variable.</returns>
 
         public static String GetVar(int type, String name) {
             System.Collections.Specialized.NameValueCollection vars = null;

@@ -7,52 +7,73 @@ namespace Bula.Fetcher.Controller {
     using Bula.Objects;
     using Bula.Model;
 
-    /**
-     * Manipulating with items.
-     */
+    /// <summary>
+    /// Manipulating with items.
+    /// </summary>
     public class BOItem : Bula.Meta {
         // Input fields
-        protected String source = null; // Source name
-        protected Hashtable item = null; // RSS-item info
+        /// Source name 
+        private String source = null;
+        /// RSS-item 
+        private Hashtable item = null;
 
-        public String link = null; // Link to external item.
-        public String full_title = null; // Original title
-        public String full_description = null; // Original description
+        /// Link to external item 
+        public String link = null;
+        /// Original title 
+        public String full_title = null;
+        /// Original description 
+        public String full_description = null;
 
         // Output fields
-        public String title = null; // Final title
-        public String description = null; // Final description.
-        // Custom output fields
-        public String creator = null; // Extracted creator (publisher)
-        public String category = null; // Extracted category
-        public String custom1 = null; // Extracted custom field #1
-        public String custom2 = null; // Extracted custom field #2
+        /// Final (processed) title 
+        public String title = null;
+        /// Final (processed) description 
+        public String description = null;
 
-        public BOItem (String Source, Hashtable Item) {
-            this.Initialize(Source, Item);
+        // Custom output fields
+        /// Extracted creator (publisher) 
+        public String creator = null;
+        /// Extracted category 
+        public String category = null;
+        /// Extracted custom field 1 
+        public String custom1 = null;
+        /// Extracted custom field 2 
+        public String custom2 = null;
+
+        /// <summary>
+        /// Instantiate BOItem from given source and RSS-item.
+        /// </summary>
+        /// <param name="sSource">Current processed source.</param>
+        /// <param name="item">Current processed RSS-item from given source.</param>
+        public BOItem (String source, Hashtable item) {
+            this.Initialize(source, item);
         }
 
-        ///Initialize the item.
-        /// <param name="Source">Source name.</param>
-        /// <param name="Item">Item object.</param>
-        private void Initialize(String Source, Hashtable Item) {
-            this.source = Source;
-            this.item = Item;
+        /// <summary>
+        /// Initialize this BOItem.
+        /// </summary>
+        /// <param name="source">Current processed source.</param>
+        /// <param name="item">Current processed RSS-item from given source.</param>
+        private void Initialize(String source, Hashtable item) {
+            this.source = source;
+            this.item = item;
 
-            this.link = (String)Item["link"];
+            this.link = (String)item["link"];
 
             // Pre-process full description & title
             // Trick to eliminate non-UTF-8 characters
-            this.full_title = Regex.Replace((String)Item["title"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
-            if (Item.ContainsKey("description") && !BLANK(Item["description"]))
-                this.full_description = Regex.Replace((String)Item["description"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
+            this.full_title = Regex.Replace((String)item["title"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
+            if (item.ContainsKey("description") && !BLANK(item["description"]))
+                this.full_description = Regex.Replace((String)item["description"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
 
             this.PreProcessLink();
         }
 
         protected void PreProcessLink() {}
 
-        ///Process description.
+        /// <summary>
+        /// Process description.
+        /// </summary>
         public void ProcessDescription() {
             var BR = "\n";
             var title = Strings.RemoveTags(this.full_title);
@@ -116,7 +137,9 @@ namespace Bula.Fetcher.Controller {
             this.description = description.Trim();
         }
 
-        ///Process category (if any).
+        /// <summary>
+        /// Process category (if any).
+        /// </summary>
         public void ProcessCategory() {
             // Set or fix category from item
             var category = (String)null;
@@ -131,7 +154,9 @@ namespace Bula.Fetcher.Controller {
             this.category = category;
         }
 
-        ///Pre-process category.
+        /// <summary>
+        /// Pre-process category.
+        /// </summary>
         /// <param name="category_item">Input category.</param>
         /// <returns>Pre-processed category.</returns>
         private String PreProcessCategory(String category_item) {
@@ -157,7 +182,9 @@ namespace Bula.Fetcher.Controller {
             return category;
         }
 
-        ///Extract category.
+        /// <summary>
+        /// Extract category.
+        /// </summary>
         /// <returns>Resulting category.</returns>
         private String ExtractCategory() {
             // Try to extract category from description body (if no item["category"])
@@ -171,8 +198,10 @@ namespace Bula.Fetcher.Controller {
             return category;
         }
 
-        ///Add standard categories (from DB).
-        /// <param name="dsCategories">Data set with categories (from DB).</param>
+        /// <summary>
+        /// Add standard categories (from DB) to current item.
+        /// </summary>
+        /// <param name="dsCategories">DataSet with categories (pre-loaded from DB).</param>
         /// <param name="lang">Input language.</param>
         public void AddStandardCategories(DataSet dsCategories, String lang) {
             //if (BLANK(this.description))
@@ -222,7 +251,9 @@ namespace Bula.Fetcher.Controller {
             this.category = Strings.Join(", ", category_tags);
         }
 
-        ///Process creator (publisher, company etc).
+        /// <summary>
+        /// Process creator (publisher, company etc).
+        /// </summary>
         public void ProcessCreator() {
             // Extract creator from item (if it is not set yet)
             if (this.creator == null) {
@@ -242,7 +273,9 @@ namespace Bula.Fetcher.Controller {
             //TODO -- Implement your own logic for extracting creator here
         }
 
-        ///Generate URL title from item title.
+        /// <summary>
+        /// Generate URL title from item title.
+        /// </summary>
         /// <param name="translit">Whether to apply transliteration or not.</param>
         /// <returns>Resulting URL title.</returns>
         ///

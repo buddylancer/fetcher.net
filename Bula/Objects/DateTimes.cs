@@ -4,22 +4,32 @@ namespace Bula.Objects {
     using System.Globalization;
     using Bula.Objects;
 
-    /**
-     * Helper class to manipulate with Date & Times.
-     */
+    /// <summary>
+    /// Helper class to manipulate with Date & Times.
+    /// </summary>
     public class DateTimes : Bula.Meta {
+        /// <summary>
+        /// Format of date/time in RSS-feeds.
+        /// </summary>
         public const String RSS_DTS = "ddd, dd MMM yyyy HH:mm:ss zzz";
         private static DateTime unix = new DateTime(1970, 1, 1);
 
         public static int GetTime() { return (int)DateTime.Now.Subtract(unix).TotalSeconds; }
 
-        ///Get unix timestamp.
+        /// <summary>
+        /// Get time as Unix timestamp.
+        /// </summary>
         /// <param name="time_string">Input string.</param>
-        /// <returns>Resulting timestamp.</returns>
+        /// <returns>Resulting time (Unix timestamp).</returns>
         public static int GetTime(String time_string) {
             return (int)DateTime.Parse(time_string).Subtract(unix).TotalSeconds;
         }
 
+        /// <summary>
+        /// Get Unix timestamp from date/time extracted from RSS-feed.
+        /// </summary>
+        /// <param name="time_string">Input string.</param>
+        /// <returns>Resulting timestamp.</returns>
         public static int FromRss(String time_string) {
             time_string = time_string.Replace("PDT", "-07:00");
             time_string = time_string.Replace("PST", "-08:00");
@@ -28,26 +38,37 @@ namespace Bula.Objects {
 
         }
 
-        ///Format to string presentation.
+        /// <summary>
+        /// Format to string presentation.
+        /// </summary>
         /// <param name="format_string">Format to apply.</param>
         /// <returns>Resulting string.</returns>
         public static String Format(String format_string) {
             return Format(format_string, 0); }
 
-        ///Format from unix timestamp to string presentation.
+        /// <summary>
+        /// Format time from Unix timestamp to string presentation.
+        /// </summary>
         /// <param name="format_string">Format to apply.</param>
-        /// <param name="time_value">Input unix timestamp.</param>
+        /// <param name="time_value">Input time value (Unix timestamp).</param>
         /// <returns>Resulting string.</returns>
         public static String Format(String format_string, int time_value) {
             return (time_value == 0 ? DateTime.Now : unix.AddSeconds((double)time_value)).ToString(format_string);
         }
 
+        /// <summary>
+        /// Format current time to GMT string presentation.
+        /// </summary>
+        /// <param name="format_string">Format to apply.</param>
+        /// <returns>Resulting string.</returns>
         public static String GmtFormat(String format_string) {
             return GmtFormat(format_string, 0); }
 
-        ///Format from timestamp to GMT string presentation.
+        /// <summary>
+        /// Format time from timestamp to GMT string presentation.
+        /// </summary>
         /// <param name="format_string">Format to apply.</param>
-        /// <param name="time_value">Input timestamp.</param>
+        /// <param name="time_value">Input time value (Unix timestamp).</param>
         /// <returns>Resulting string.</returns>
         public static String GmtFormat(String format_string, int time_value) {
             return (time_value == 0 ? DateTime.UtcNow : unix.AddSeconds((double)time_value)).ToString(format_string);

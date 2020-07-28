@@ -6,9 +6,9 @@ namespace Bula.Fetcher.Model {
     using Bula.Objects;
     using Bula.Model;
 
-    /**
-     * Manipulating with categories.
-     */
+    /// <summary>
+    /// Manipulating with categories.
+    /// </summary>
     public class DOCategory : DOBase {
 
         public DOCategory (): base() {
@@ -16,7 +16,9 @@ namespace Bula.Fetcher.Model {
             this.id_field = "s_CatId";
         }
 
-        ///Get category by ID.
+        /// <summary>
+        /// Get category by ID.
+        /// </summary>
         /// <param name="catid">Category ID.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet GetCategoryById(String catid) {
@@ -29,7 +31,9 @@ namespace Bula.Fetcher.Model {
             return this.GetDataSet(query, pars);
         }
 
-        ///Get category by name.
+        /// <summary>
+        /// Get category by name.
+        /// </summary>
         /// <param name="catname">Category name.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet GetCategoryByName(String catname) {
@@ -42,25 +46,33 @@ namespace Bula.Fetcher.Model {
             return this.GetDataSet(query, pars);
         }
 
-        ///Enumerate categories.
+        /// <summary>
+        /// Enumerate categories.
+        /// </summary>
         /// <returns>Resulting data set.</returns>
         public DataSet EnumCategories() {
             return this.EnumCategories(null, 0, 0); }
 
-        ///Enumerate categories.
+        /// <summary>
+        /// Enumerate categories.
+        /// </summary>
         /// <param name="order">Field name to sort result by (default = null).</param>
         /// <returns>Resulting data set.</returns>
         public DataSet EnumCategories(String order) {
             return this.EnumCategories(order, 0, 0); }
 
-        ///Enumerate categories.
+        /// <summary>
+        /// Enumerate categories.
+        /// </summary>
         /// <param name="order">Field name to sort result by (default = null).</param>
         /// <param name="min_count">Include categories with Counter >= min_count.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet EnumCategories(String order, int min_count) {
             return this.EnumCategories(order, min_count, 0); }
 
-        ///Enumerate categories.
+        /// <summary>
+        /// Enumerate categories.
+        /// </summary>
         /// <param name="order">Field name to sort result by (default = null).</param>
         /// <param name="min_count">Include categories with Counter >= min_count.</param>
         /// <param name="limit">Include not more than "limit" records (default = no limit).</param>
@@ -78,7 +90,9 @@ namespace Bula.Fetcher.Model {
             return this.GetDataSet(query, pars);
         }
 
-        ///Check whether category (filter) exists.
+        /// <summary>
+        /// Check whether category (filter) exists.
+        /// </summary>
         /// <param name="filter_name">Category ID.</param>
         /// <param name="category">Category object (if found) copied to element 0 of object array.</param>
         /// <returns>True if exists.</returns>

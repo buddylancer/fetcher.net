@@ -6,9 +6,9 @@ namespace Bula.Fetcher.Controller.Actions {
     using System.Collections;
     using Bula.Fetcher.Model;
 
-    /**
-     * Redirection to external source.
-     */
+    /// <summary>
+    /// Redirection to external source.
+    /// </summary>
     public class DoRedirectSource : Bula.Meta {
         public static void Execute() {
             var error_message = (String)null;

@@ -7,9 +7,9 @@ namespace Bula.Fetcher.Controller {
     using System.Collections;
     using Bula.Objects;
 
-    /**
-     * Engine for processing templates.
-     */
+    /// <summary>
+    /// Engine for processing templates.
+    /// </summary>
     public class Engine : Bula.Meta {
         private static ArrayList engine_instances = null;
         private static int current_index = -1;
@@ -24,7 +24,9 @@ namespace Bula.Fetcher.Controller {
             this.print_string = "";
         }
 
-        ///Push engine.
+        /// <summary>
+        /// Push engine.
+        /// </summary>
         /// <param name="print_flag">Whether to print content immediately (true) or save it for further processing (false).</param>
         public static void Push(Boolean print_flag) {
             var engine = new Engine();
@@ -38,7 +40,9 @@ namespace Bula.Fetcher.Controller {
                 engine_instances[current_index] = engine;
         }
 
-        ///Pop engine back.
+        /// <summary>
+        /// Pop engine back.
+        /// </summary>
         public static void Pop() {
             SetPrintString(null);
             current_index--;
@@ -84,7 +88,9 @@ namespace Bula.Fetcher.Controller {
             return IncludeTemplate(class_name, null);
         }
 
-        ///Include file with class and generate content by calling method Execute().
+        /// <summary>
+        /// Include file with class and generate content by calling method Execute().
+        /// </summary>
         /// <param name="class_name">Class name to include.</param>
         /// <param name="args">Arguments [optional].</param>
         /// <returns>Resulting content.</returns>
@@ -108,7 +114,9 @@ namespace Bula.Fetcher.Controller {
         public static String ShowTemplate(String filename) {
             return ShowTemplate(filename, null); }
 
-        ///Show content by merging template and data.
+        /// <summary>
+        /// Show content by merging template and data.
+        /// </summary>
         /// <param name="filename">Template file to use for merging.</param>
         /// <param name="hash">Data in the form of Hashtable to use for merging.</param>
         /// <returns>Resulting content.</returns>
@@ -122,7 +130,9 @@ namespace Bula.Fetcher.Controller {
             return content;
         }
 
-        ///Get template as the list of lines.
+        /// <summary>
+        /// Get template as the list of lines.
+        /// </summary>
         /// <param name="filename">File name.</param>
         /// <returns>Resulting array with lines.</returns>
         private static ArrayList GetTemplate(String filename) {
@@ -137,7 +147,9 @@ namespace Bula.Fetcher.Controller {
             }
         }
 
-        ///Do actual merging of template and data.
+        /// <summary>
+        /// Do actual merging of template and data.
+        /// </summary>
         /// <param name="template">Template content.</param>
         /// <param name="hash">Data for merging with template.</param>
         /// <returns>Resulting content.</returns>
@@ -148,7 +160,9 @@ namespace Bula.Fetcher.Controller {
             return Strings.ReplaceInTemplate(content, Config.GlobalConstants);
         }
 
-        ///Trim comments from input string.
+        /// <summary>
+        /// Trim comments from input string.
+        /// </summary>
         /// <param name="str">Input string.</param>
         /// <returns>Resulting string.</returns>
         private static String TrimComments(String str) {
@@ -167,7 +181,9 @@ namespace Bula.Fetcher.Controller {
             return line;
         }
 
-        ///Execute template processing.
+        /// <summary>
+        /// Execute template processing.
+        /// </summary>
         /// <param name="template">Template in form of the list of lines.</param>
         /// <param name="hash">Data for merging with template.</param>
         /// <returns>Resulting content.</returns>

@@ -5,8 +5,17 @@
     using System.Collections;
     using System.Text.RegularExpressions;
 
+    /// <summary>
+    /// Various operations specific to C# version.
+    /// </summary>
     public class Internal : Bula.Meta {
 
+        /// <summary>
+        /// Remove tags from a string.
+        /// </summary>
+        /// <param name="input">Input string</param>
+        /// <param name="except">Allowed tags</param>
+        /// <returns>Resulting string</returns>
         public static String RemoveTags(String input, String except)
         {
             Boolean has_open = Regex.IsMatch(input, "<[a-z]+[^>]*>");
@@ -53,8 +62,9 @@
             return Regex.Replace(input, CAT("~{([/]*[^}]+)}~"), "<$1>");
         }
 
-        
-        ///Call method of given class using provided arguments.
+        /// <summary>
+        /// Call method of given class using provided arguments.
+        /// </summary>
         /// <param name="class_name">Class name</param>
         /// <param name="method_name">Method name</param>
         /// <returns>Result of method execution</returns>
@@ -63,7 +73,9 @@
             return CallMethod(class_name, method_name, null);
         }
 
-        ///Call static method of given class using provided arguments.
+        /// <summary>
+        /// Call static method of given class using provided arguments.
+        /// </summary>
         /// <param name="class_name">Class name</param>
         /// <param name="method_name">Method name</param>
         /// <param name="args">List of arguments</param>
@@ -78,7 +90,9 @@
                 return methodInfo.Invoke(null, null);
         }
 
-        ///Call method of given class using provided arguments.
+        /// <summary>
+        /// Call method of given class using provided arguments.
+        /// </summary>
         /// <param name="class_name">Class name</param>
         /// <param name="method_name">Method name</param>
         /// <param name="args">List of arguments</param>
@@ -117,6 +131,11 @@
                 return null;
         }
 
+        /// <summary>
+        /// Fetch info from RSS-feed.
+        /// </summary>
+        /// <param name="url">Feed url</param>
+        /// <returns>Resulting array of items</returns>
         public static Object[] FetchRss(String url)
         {
             var items = new ArrayList();

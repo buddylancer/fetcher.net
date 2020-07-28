@@ -7,13 +7,19 @@ namespace Bula.Model {
 
     using Bula.Objects;
 
+    /// <summary>
+    /// Implement operations with record sets.
+    /// </summary>
     public class RecordSet : Bula.Meta {
+        /// Current result 
         public Object result = null;
-        public int num_rows = 0;
-        public int num_pages = 0;
-        public int page_rows = 10;
-        public int page_no = 0;
+        /// Current record 
         public Hashtable record = null;
+
+        private int num_rows = 0;
+        private int num_pages = 0;
+        private int page_rows = 10;
+        private int page_no = 0;
 
         public RecordSet () {
             this.num_rows = 0;
@@ -26,33 +32,55 @@ namespace Bula.Model {
             this.page_rows = no;
         }
 
+        /// <summary>
+        /// Set current number of rows (and pages) in the record set.
+        /// </summary>
+        /// <param name="no">Number of rows.</param>
         public void SetRows(int no) {
             this.num_rows = no;
-            this.num_pages = INT(no / this.page_rows) + 1;
+            this.num_pages = INT((no - 1) / this.page_rows) + 1;
         }
 
+        /// <summary>
+        /// Get current number of rows in the record set.
+        /// </summary>
+        /// <returns>Number of rows.</returns>
         public int GetRows() {
             return this.num_rows;
         }
 
+        /// <summary>
+        /// Get current number of pages in the record set.
+        /// </summary>
+        /// <returns>Number of pages.</returns>
         public int GetPages() {
             return this.num_pages;
         }
 
-        public void SetPage(int pNo) {
-            this.page_no = pNo;
-            if (pNo != 1) {
-                var n = (pNo - 1) * this.page_rows;
+        /// <summary>
+        /// Set current page of the record set.
+        /// </summary>
+        /// <param name="no">Current page.</param>
+        public void SetPage(int no) {
+            this.page_no = no;
+            if (no != 1) {
+                var n = (no - 1) * this.page_rows;
                 while (n-- > 0)
                     this.Next();
             }
         }
 
+        /// <summary>
+        /// Get current page of the record set.
+        /// </summary>
+        /// <returns>Current page number.</returns>
         public int GetPage() {
             return this.page_no;
         }
 
-        ///Get next record from the result of operation.
+        /// <summary>
+        /// Get next record from the result of operation.
+        /// </summary>
         /// <returns>Status of operation:</returns>
         ///   1 - next record exists.
         ///   0 - next record not exists.
@@ -67,37 +95,49 @@ namespace Bula.Model {
                 return 0;
         }
 
-        ///Get value from the record.
+        /// <summary>
+        /// Get value from the record.
+        /// </summary>
         /// <param name="par">Number of value.</param>
         public Object GetValue(int par) {
             return this.record[par];
         }
 
-        ///Get String value from the record.
+        /// <summary>
+        /// Get String value from the record.
+        /// </summary>
         /// <param name="par">Number of value.</param>
         public String GetString(int par) {
             return STR(this.record[par]);
         }
 
-        ///Get DateTime value from the record.
+        /// <summary>
+        /// Get DateTime value from the record.
+        /// </summary>
         /// <param name="par">Number of value.</param>
         public String GetDate(int par) {
             return STR(this.record[par]);
         }
 
-        ///Get integer value from the record.
+        /// <summary>
+        /// Get integer value from the record.
+        /// </summary>
         /// <param name="par">Number of value.</param>
         public int GetInt(int par) {
             return INT(this.record[par]);
         }
 
-        ///Get real value from the record.
+        /// <summary>
+        /// Get real value from the record.
+        /// </summary>
         /// <param name="par">Number of value.</param>
         public Double GetFloat(int par) {
             return FLOAT(this.record[par]);
         }
 
-        ///Close this RecordSet.
+        /// <summary>
+        /// Close this record set.
+        /// </summary>
         public void Close() {
             DataAccess.FreeResult(this.result);
         }

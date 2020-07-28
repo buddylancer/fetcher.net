@@ -8,10 +8,13 @@ namespace Bula.Fetcher.Controller.Pages {
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller;
 
-    /**
-     * Controller for Filter Items block.
-     */
+    /// <summary>
+    /// Controller for Filter Items block.
+    /// </summary>
     public class FilterItems : Bula.Meta {
+        /// <summary>
+        /// Execute main logic for Items block.
+        /// </summary>
         public static void Execute() {
             var doSource = new DOSource();
 

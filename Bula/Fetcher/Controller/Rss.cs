@@ -10,10 +10,13 @@ namespace Bula.Fetcher.Controller {
     using Bula.Fetcher.Controller;
     using Bula.Fetcher.Model;
 
-    /**
-     * Main logic for generating RSS-feeds.
-     */
+    /// <summary>
+    /// Main logic for generating RSS-feeds.
+    /// </summary>
     public class Rss : Bula.Meta {
+        /// <summary>
+        /// Execute main logic for generating RSS-feeds.
+        /// </summary>
         public static void Execute() {
             Request.Initialize();
             Request.ExtractAllVars();

@@ -4,6 +4,9 @@ namespace Bula.Fetcher {
     using Bula.Objects;
     using System.Collections;
 
+    /// <summary>
+    /// Class behind Configuration.
+    /// </summary>
     public class Common : Bula.Meta {
         static Common() { Initialize(); }
 
@@ -18,18 +21,29 @@ namespace Bula.Fetcher {
             return Values.Contains(name);
         }
 
+        /// Project root (where Bula folder is located) 
         public static String LocalRoot;
 
+        /// Host name (copied from request HOST_NAME) 
         public static String Host;
+        /// Site name (copied from Config.SITE_NAME) 
         public static String Site;
+        /// Is request for mobile version? 
         public static Boolean IsMobile;
+        /// Current language 
         public static String Lang;
 
+        /// Root cache folder for pages 
         public static String CacheFolderRoot;
+        /// Cache folder for pages 
         public static String CacheFolder;
+        /// Root cache folder for output RSS-feeds 
         public static String RssFolderRoot;
+        /// Cache folder for output RSS-feeds 
         public static String RssFolder;
+        /// Cache folder for input RSS-feeds 
         public static String FeedFolder;
+        /// Unique host ID for current request 
         public static String UniqueHostId;
 
         public static Boolean FineUrls = Config.FINE_URLS;
@@ -37,7 +51,12 @@ namespace Bula.Fetcher {
 
         public static Hashtable GlobalConstants = null;
 
+        /// Is current request from test script? 
         public static Boolean TestRun = false;
+
+        /// <summary>
+        /// Check whether current request is from test script?
+        /// </summary>
         public static void CheckTestRun() {
             var http_tester = Request.GetVar(Request.INPUT_SERVER, "HTTP_USER_AGENT");
             if (http_tester == null)
@@ -62,6 +81,9 @@ namespace Bula.Fetcher {
             }
         }
 
+        /// <summary>
+        /// Initialize all variables for current request.
+        /// </summary>
         public static void Initialize() {
             //------------------------------------------------------------------------------
             // You can change something below this line if you know what are you doing :)
@@ -91,6 +113,9 @@ namespace Bula.Fetcher {
             DefineConstants();
         }
 
+        /// <summary>
+        /// Define global constants.
+        /// </summary>
         private static void DefineConstants() {
             GlobalConstants = new Hashtable();
             GlobalConstants["[#Site_Name]"] = Config.SITE_NAME;

@@ -7,10 +7,13 @@ namespace Bula.Fetcher.Controller.Pages {
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller;
 
-    /**
-     * Controller for Sources block.
-     */
+    /// <summary>
+    /// Controller for Sources block.
+    /// </summary>
     public class Sources : ItemsBase {
+        /// <summary>
+        /// Execute main logic for Source block.
+        /// </summary>
         public static void Execute() {
             var Prepare = new Hashtable();
 

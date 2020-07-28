@@ -1,18 +1,19 @@
 namespace Bula.Fetcher.Controller {
     using System;
 
+    using Bula;
     using Bula.Fetcher;
+
     using Bula.Objects;
-
     using System.Collections;
-    using Bula.Model;
 
+    using Bula.Model;
     using Bula.Fetcher.Controller;
     using Bula.Fetcher.Model;
 
-    /**
-     * Logic for fetching data.
-     */
+    /// <summary>
+    /// Logic for fetching data.
+    /// </summary>
     public class BOFetcher : Bula.Meta {
         private Logger oLogger = null;
         private DataSet dsCategories = null;
@@ -22,7 +23,9 @@ namespace Bula.Fetcher.Controller {
             this.PreLoadCategories();
         }
 
-        ///Initialize logging.
+        /// <summary>
+        /// Initialize logging.
+        /// </summary>
         private void InitializeLog() {
             this.oLogger = new Logger();
             Config.Set("Log_Object", this.oLogger);
@@ -34,13 +37,17 @@ namespace Bula.Fetcher.Controller {
             }
         }
 
-        ///Pre-load categories into DataSet.
+        /// <summary>
+        /// Pre-load categories into DataSet.
+        /// </summary>
         private void PreLoadCategories() {
             var doCategory = new DOCategory();
             this.dsCategories = doCategory.EnumCategories();
         }
 
-        ///Fetch data from the source.
+        /// <summary>
+        /// Fetch data from the source.
+        /// </summary>
         /// <param name="oSource">Source object.</param>
         /// <returns>Resulting items.</returns>
         private Object[] FetchFromSource(Hashtable oSource) {
@@ -60,7 +67,7 @@ namespace Bula.Fetcher.Controller {
                 url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", enc_url);
             }
             this.oLogger.Output(CAT("[[[", url, "]]]<br/>\r\n"));
-            var rss = Internal.FetchRss(url); //TODO PHP
+            var rss = Internal.FetchRss(url);
             if (rss == null) {
                 this.oLogger.Output("-- problems --<br/>\r\n");
                 //problems++;
@@ -73,7 +80,9 @@ namespace Bula.Fetcher.Controller {
             return rss;
         }
 
-        ///Parse data from the item.
+        /// <summary>
+        /// Parse data from the item.
+        /// </summary>
         /// <param name="oSource">Source object.</param>
         /// <param name="item">Item object.</param>
         /// <returns>Result of executing SQL-query.</returns>
@@ -125,7 +134,9 @@ namespace Bula.Fetcher.Controller {
             return result;
         }
 
-        ///Actual cleaning of cache folder.
+        /// <summary>
+        /// Actual cleaning of cache folder.
+        /// </summary>
         /// <param name="path_name">Cache folder name (path).</param>
         /// <param name="ext">Files extension to clean.</param>
         private void CleanCacheFolder(String path_name, String ext) {
@@ -148,7 +159,9 @@ namespace Bula.Fetcher.Controller {
             }
         }
 
-        ///Clean all cached info (both for Web and RSS).
+        /// <summary>
+        /// Clean all cached info (both for Web and RSS).
+        /// </summary>
         public void CleanCache() {
             // Clean cached rss content
             this.oLogger.Output(CAT("Cleaning Rss Folder ", Config.RssFolderRoot, " ...<br/>\r\n"));
@@ -163,7 +176,9 @@ namespace Bula.Fetcher.Controller {
             this.oLogger.Output("<br/>... Done.<br/>\r\n");
         }
 
-        ///Main logic.
+        /// <summary>
+        /// Main logic.
+        /// </summary>
         public void Execute() {
             this.oLogger.Output("Start logging<br/>\r\n");
 
@@ -219,7 +234,9 @@ namespace Bula.Fetcher.Controller {
                 this.CleanCache();
         }
 
-        ///Execute re-counting of categories.
+        /// <summary>
+        /// Execute re-counting of categories.
+        /// </summary>
         private void RecountCategories() {
             this.oLogger.Output(CAT("Recount categories ... <br/>\r\n"));
             var doCategory = new DOCategory();

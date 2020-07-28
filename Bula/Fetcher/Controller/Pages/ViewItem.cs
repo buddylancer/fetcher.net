@@ -8,10 +8,13 @@ namespace Bula.Fetcher.Controller.Pages {
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller;
 
-    /**
-     * Controller for View Item block.
-     */
+    /// <summary>
+    /// Controller for View Item block.
+    /// </summary>
     public class ViewItem : Bula.Meta {
+        /// <summary>
+        /// Execute main logic for View Item block.
+        /// </summary>
         public static void Execute() {
             var Prepare = new Hashtable();
 

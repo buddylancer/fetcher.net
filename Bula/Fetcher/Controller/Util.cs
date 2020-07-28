@@ -6,10 +6,15 @@ namespace Bula.Fetcher.Controller {
 
     using Bula.Objects;
 
-    /**
-     * Various helper methods.
-     */
+    /// <summary>
+    /// Various helper methods.
+    /// </summary>
     public class Util : Bula.Meta {
+        /// <summary>
+        /// Output text safely.
+        /// </summary>
+        /// <param name="input">Text to output.</param>
+        /// <returns>Converted text.</returns>
         public static String Safe(String input) {
             var output = Strings.StripSlashes(input);
             output = output.Replace("<", "&lt;");
@@ -18,6 +23,11 @@ namespace Bula.Fetcher.Controller {
             return output;
         }
 
+        /// <summary>
+        /// Output text safely with line breaks.
+        /// </summary>
+        /// <param name="input">Text to output.</param>
+        /// <returns>Converted text.</returns>
         public static String Show(String input) {
             if (input == null)
                 return null;
@@ -30,6 +40,12 @@ namespace Bula.Fetcher.Controller {
             return DateTimes.Format(Config.GMT_DTS, DateTimes.GetTime(input));
         }
 
+        /// <summary>
+        /// Format string.
+        /// </summary>
+        /// <param name="format">Format (template).</param>
+        /// <param name="arr">Parameters.</param>
+        /// <returns>Resulting string.</returns>
         public static String FormatString(String format, Object[] arr) {
             if (BLANK(format))
                 return null;
@@ -45,10 +61,19 @@ namespace Bula.Fetcher.Controller {
             return output;
         }
 
+        /// <summary>
+        /// Logic for getting/saving page from/into cache.
+        /// </summary>
+        /// <param name="cache_folder">Cache folder root.</param>
+        /// <param name="page">Page to process.</param>
+        /// <returns>Resulting content.</returns>
         public static String ShowFromCache(String cache_folder, String page) {
             return ShowFromCache(cache_folder, page, null);
         }
-        ///Main logic for getting/saving page from/into cache.
+
+        /// <summary>
+        /// Main logic for getting/saving page from/into cache.
+        /// </summary>
         /// <param name="cache_folder">Cache folder root.</param>
         /// <param name="page">Page to process.</param>
         /// <param name="query">Query to process.</param>
@@ -101,8 +126,14 @@ namespace Bula.Fetcher.Controller {
             return content;
         }
 
+        /// <summary>
+        /// Max length to extract from string.
+        /// </summary>
         public const int MAX_EXTRACT = 100;
-        ///Extract info from a string.
+
+        /// <summary>
+        /// Extract info from a string.
+        /// </summary>
         /// <param name="source">Input string.</param>
         /// <param name="after">Substring to extract info "After".</param>
         /// <param name="to">Substring to extract info "To".</param>
@@ -131,7 +162,9 @@ namespace Bula.Fetcher.Controller {
             return result;
         }
 
-        ///Remove info from a string.
+        /// <summary>
+        /// Remove some content from a string.
+        /// </summary>
         /// <param name="source">Input string.</param>
         /// <param name="from">Substring to remove "From".</param>
         /// <param name="to">Substring to remove "To".</param>
@@ -157,7 +190,9 @@ namespace Bula.Fetcher.Controller {
             return result.Trim();
         }
 
-        ///Test the chain of (sub)folder(s), create them if necessary.
+        /// <summary>
+        /// Test the chain of (sub)folder(s), create them if necessary.
+        /// </summary>
         /// <param name="folder">Folder's full path.</param>
         public static void TestFolder(String folder) {
             String[] chunks = folder.Split(new char[] {'/'});
@@ -170,7 +205,9 @@ namespace Bula.Fetcher.Controller {
             }
         }
 
-        ///Test the chain of (sub)folder(s) and file, create if necessary.
+        /// <summary>
+        /// Test the chain of (sub)folder(s) and file, create if necessary.
+        /// </summary>
         /// <param name="filename">Filename's full path</param>
         public static void TestFileFolder(String filename) {
             String[] chunks = filename.Split(new char[] {'/'});
@@ -202,6 +239,12 @@ namespace Bula.Fetcher.Controller {
             "a", "a", "ae", "e", "o", "s",
             "A", "a", "AE", "E", "O", "S"
         };
+
+        /// <summary>
+        /// Transliterate Russian text.
+        /// </summary>
+        /// <param name="ru_text">Original Russian text.</param>
+        /// <returns>Transliterated text.</returns>
         public static String TransliterateRusToLat(String ru_text) {
             System.Text.StringBuilder sb = new System.Text.StringBuilder(ru_text);
             for (int n = 0; n < ru_chars.Length; n++)

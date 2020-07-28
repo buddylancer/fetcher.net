@@ -5,10 +5,13 @@ namespace Bula.Fetcher.Controller {
     using Bula.Fetcher;
     using Bula.Objects;
 
-    /**
-     * Logic for generating Top block.
-     */
+    /// <summary>
+    /// Logic for generating Top block.
+    /// </summary>
     public class Top : Bula.Meta {
+        /// <summary>
+        /// Execute main logic for Top block.
+        /// </summary>
         public static void Execute() {
             var Prepare = new Hashtable();
             Prepare["[#ImgWidth]"] = Config.IsMobile ? 234 : 468;

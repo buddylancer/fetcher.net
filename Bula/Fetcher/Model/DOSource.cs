@@ -6,9 +6,9 @@ namespace Bula.Fetcher.Model {
     using Bula.Objects;
     using Bula.Model;
 
-    /**
-     * Manipulations with sources.
-     */
+    /// <summary>
+    /// Manipulations with sources.
+    /// </summary>
     public class DOSource : DOBase {
 
     	public DOSource (): base() {
@@ -16,7 +16,9 @@ namespace Bula.Fetcher.Model {
     		this.id_field = "i_SourceId";
     	}
 
-        ///Enumerates all sources.
+        /// <summary>
+        /// Enumerates all sources.
+        /// </summary>
         /// <returns>Resulting data set.</returns>
         public DataSet EnumSources() {
     		var query = Strings.Concat(
@@ -28,7 +30,9 @@ namespace Bula.Fetcher.Model {
     		return this.GetDataSet(query, pars);
     	}
 
-        ///Enumerates sources, which are active for fetching.
+        /// <summary>
+        /// Enumerates sources, which are active for fetching.
+        /// </summary>
         /// <returns>Resulting data set.</returns>
     	public DataSet EnumFetchedSources() {
     		var query = Strings.Concat(
@@ -40,7 +44,9 @@ namespace Bula.Fetcher.Model {
     		return this.GetDataSet(query, pars);
     	}
 
-        ///Enumerates all sources with counters.
+        /// <summary>
+        /// Enumerates all sources with counters.
+        /// </summary>
         /// <returns>Resulting data set.</returns>
     	public DataSet EnumSourcesWithCounters() {
     		var query = Strings.Concat(
@@ -56,7 +62,9 @@ namespace Bula.Fetcher.Model {
     		return this.GetDataSet(query, pars);
     	}
 
-        ///Get source by ID.
+        /// <summary>
+        /// Get source by ID.
+        /// </summary>
         /// <param name="sourceid">Source ID.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet GetSourceById(int sourceid) {
@@ -66,7 +74,9 @@ namespace Bula.Fetcher.Model {
     		return this.GetDataSet(query, pars);
     	}
 
-    	///Get source by name.
+    	/// <summary>
+    	/// Get source by name.
+    	/// </summary>
         /// <param name="sourcename">Source name.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet GetSourceByName(String sourcename) {
@@ -76,14 +86,18 @@ namespace Bula.Fetcher.Model {
     		return this.GetDataSet(query, pars);
     	}
 
-        ///Check whether source exists.
+        /// <summary>
+        /// Check whether source exists.
+        /// </summary>
         /// <param name="sourcename">Source name.</param>
         /// <returns>True if exists.</returns>
     	public Boolean CheckSourceName(String sourcename) {
         	return CheckSourceName(sourcename, null);
         }
 
-        ///Check whether source exists.
+        /// <summary>
+        /// Check whether source exists.
+        /// </summary>
         /// <param name="sourcename">Source name.</param>
         /// <param name="source">Source object (if found) copied to element 0 of object array.</param>
         /// <returns>True if exists.</returns>

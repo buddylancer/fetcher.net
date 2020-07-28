@@ -6,17 +6,18 @@ namespace Bula.Fetcher.Model {
     using Bula.Objects;
     using Bula.Model;
 
-    /**
-     * Manipulating with items.
-     */
+    /// <summary>
+    /// Manipulating with items.
+    /// </summary>
     public class DOItem : DOBase {
-
         public DOItem (): base() {
             this.table_name = "items";
             this.id_field = "i_ItemId";
         }
 
-        ///Get item by ID.
+        /// <summary>
+        /// Get item by ID.
+        /// </summary>
         /// <param name="itemid">ID of the item.</param>
         /// <returns>Resulting data set.</returns>
         public override DataSet GetById(int itemid) { // overloaded
@@ -29,13 +30,17 @@ namespace Bula.Fetcher.Model {
             return this.GetDataSet(query, pars);
         }
 
-        ///Find item with given link.
+        /// <summary>
+        /// Find item with given link.
+        /// </summary>
         /// <param name="link">Link to find.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet FindItemByLink(String link) {
             return FindItemByLink(link, 0); }
 
-        ///Find item with given link.
+        /// <summary>
+        /// Find item with given link.
+        /// </summary>
         /// <param name="link">Link to find.</param>
         /// <param name="source_id">Source ID to find in (default = 0).</param>
         /// <returns>Resulting data set.</returns>
@@ -53,7 +58,9 @@ namespace Bula.Fetcher.Model {
             return this.GetDataSet(query, pars);
         }
 
-        ///Build SQL query from categories filter.
+        /// <summary>
+        /// Build SQL query from categories filter.
+        /// </summary>
         /// <param name="filter">Filter from the category.</param>
         /// <returns>Appropriate SQL-query.</returns>
         public String BuildSqlFilter(String filter) {
@@ -91,7 +98,9 @@ namespace Bula.Fetcher.Model {
     		return real_filter;
     	}
 
-    	///Enumerate items.
+    	/// <summary>
+    	/// Enumerate items.
+    	/// </summary>
         /// <param name="source">Source name to include items from (default - all sources).</param>
         /// <param name="search">Filter for the category (or empty).</param>
         /// <param name="list">Include the list No.</param>
@@ -138,7 +147,9 @@ namespace Bula.Fetcher.Model {
     		return ds2;
     	}
 
-        ///Enumerate items from date.
+        /// <summary>
+        /// Enumerate items from date.
+        /// </summary>
         /// <param name="fromdate">Date to include items starting from.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet EnumItemsFromDate(String fromdate) {
@@ -157,7 +168,9 @@ namespace Bula.Fetcher.Model {
             return this.EnumItemsFromSource(from_date, source, filter, 20);
         }
 
-    	///Enumerate items from date.
+    	/// <summary>
+    	/// Enumerate items from date.
+    	/// </summary>
         /// <param name="from_date">Date to include items starting from.</param>
         /// <param name="source">Source name to include items from (default - all sources).</param>
         /// <param name="filter">Filter for the category (or empty - no filtering).</param>
@@ -195,7 +208,9 @@ namespace Bula.Fetcher.Model {
     		return ds1.GetSize() > ds2.GetSize() ? ds1 : ds2;
     	}
 
-        ///Purge items.
+        /// <summary>
+        /// Purge items.
+        /// </summary>
         /// <param name="days">Remove items older than days.</param>
         /// <returns>Resulting data set.</returns>
         public int PurgeOldItems(int days) {

@@ -8,14 +8,16 @@ namespace Bula.Fetcher.Controller.Actions {
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller;
 
-    /**
-     * Testing sources for necessary fetching.
-     */
+    /// <summary>
+    /// Testing sources for necessary fetching.
+    /// </summary>
     public class DoTestItems : Bula.Meta {
         private static String TOP = null;
         private static String BOTTOM = null;
 
-        ///Initialize TOP & BOTTOM blocks.
+        /// <summary>
+        /// Initialize TOP & BOTTOM blocks.
+        /// </summary>
         private static void Initialize() {
             TOP = CAT(
                 "<!DOCTYPE html>\r\n",

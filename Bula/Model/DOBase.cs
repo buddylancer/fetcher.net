@@ -4,21 +4,32 @@ namespace Bula.Model {
     using System.Collections;
     using Bula.Objects;
 
-    /**
-     * Base class for manipulating with DB objects.
-     */
+    /// <summary>
+    /// Base class for manipulating with DB objects.
+    /// </summary>
     public class DOBase : Bula.Meta {
         private Connection db_connection = null;
+
+        /// <summary>
+        /// Name of a DB table.
+        /// </summary>
+        /// @var String
         protected String table_name;
+
+        /// <summary>
+        /// Name of a table ID field.
+        /// </summary>
+        /// @var String
         protected String id_field;
-        protected int page_no;
+
+        //protected int page_no;
 
         public DOBase () {
             if (DBConfig.Connection == null)
                 DBConfig.Connection = this.CreateConnection();
 
             this.db_connection = DBConfig.Connection;
-            this.page_no = 0;
+            //this.page_no = 0;
         }
 
         // Create connection to the database given parameters from DBConfig.
@@ -36,18 +47,24 @@ namespace Bula.Model {
             return oConn;
         }
 
-        ///Get current connection.
+        /// <summary>
+        /// Get current connection.
+        /// </summary>
         /// <returns>Current connection.</returns>
         public Connection GetConnection() {
             return this.db_connection;
         }
 
-        ///Get current ID field name.
+        /// <summary>
+        /// Get current ID field name.
+        /// </summary>
         public String GetIdField() {
             return this.id_field;
         }
 
-        ///Get DataSet based on query & parameters (all records).
+        /// <summary>
+        /// Get DataSet based on query and parameters (all records).
+        /// </summary>
         /// <param name="query">SQL-query to execute.</param>
         /// <param name="pars">Query parameters.</param>
         /// <returns>Resulting data set.</returns>
@@ -77,7 +94,9 @@ namespace Bula.Model {
             return ds;
         }
 
-        ///Get DataSet based on query & parameters (only records of the list with rows length).
+        /// <summary>
+        /// Get DataSet based on query and parameters (only records of the list with rows length).
+        /// </summary>
         /// <param name="query">SQL-query to execute.</param>
         /// <param name="pars">Query parameters.</param>
         /// <param name="list">List number.</param>
@@ -129,10 +148,18 @@ namespace Bula.Model {
             return ds;
         }
 
-        protected int UpdateInternal(String query, Object[] Pars) {
-            return UpdateInternal(query, Pars, "update");}
+        /// <summary>
+        /// Update database using query and parameters
+        /// </summary>
+        /// <param name="query">SQL-query to execute.</param>
+        /// <param name="pars">Query parameters.</param>
+        /// <returns>Update status.</returns>
+        protected int UpdateInternal(String query, Object[] pars) {
+            return UpdateInternal(query, pars, "update");}
 
-        ///Update database using query and parameters
+        /// <summary>
+        /// Update database using query and parameters
+        /// </summary>
         /// <param name="query">SQL-query to execute.</param>
         /// <param name="pars">Query parameters.</param>
         /// <param name="operation">Operation - "update" (default) or "insert".</param>
@@ -155,7 +182,9 @@ namespace Bula.Model {
             return ret;
         }
 
-        ///Get DataSet based on record ID.
+        /// <summary>
+        /// Get DataSet based on record ID.
+        /// </summary>
         /// <param name="id">Unique ID.</param>
         /// <returns>Resulting data set.</returns>
         public virtual DataSet GetById(int id) {
@@ -167,10 +196,24 @@ namespace Bula.Model {
             return this.GetDataSet(query, pars);
         }
 
-        public DataSet EnumIds() { return EnumIds(null, null); }
-        public DataSet EnumIds(String where) { return EnumIds(where, null); }
+        /// <summary>
+        /// Get DataSet containing IDs only.
+        /// </summary>
+        /// <returns>Resulting data set.</returns>
+        public DataSet EnumIds() {
+            return EnumIds(null, null); }
 
-        ///Get DataSet containing IDs only.
+        /// <summary>
+        /// Get DataSet containing IDs only.
+        /// </summary>
+        /// <param name="where">Where condition.</param>
+        /// <returns>Resulting data set.</returns>
+        public DataSet EnumIds(String where) {
+            return EnumIds(where, null); }
+
+        /// <summary>
+        /// Get DataSet containing IDs only.
+        /// </summary>
         /// <param name="where">Where condition [optional].</param>
         /// <param name="order">Field to order by [optional].</param>
         /// <returns>Resulting data set.</returns>
@@ -188,7 +231,9 @@ namespace Bula.Model {
         public DataSet EnumAll() { return EnumAll(null, null); }
         public DataSet EnumAll(String where) { return EnumAll(where, null); }
 
-        ///Get DataSet with all records enumerated.
+        /// <summary>
+        /// Get DataSet with all records enumerated.
+        /// </summary>
         /// <param name="where">Where condition [optional].</param>
         /// <param name="order">Field to order by [optional].</param>
         /// <returns>Resulting data set.</returns>
@@ -202,10 +247,26 @@ namespace Bula.Model {
             return this.GetDataSet(query, pars);
         }
 
-        public DataSet EnumFields(String fields) { return EnumFields(fields, null, null); }
-        public DataSet EnumFields(String fields, String where) { return EnumFields(fields, where, null); }
+        /// <summary>
+        /// Get DataSet containing only required fields.
+        /// </summary>
+        /// <param name="fields">Fields to include (divided by ',').</param>
+        /// <returns>Resulting data set.</returns>
+        public DataSet EnumFields(String fields) {
+            return EnumFields(fields, null, null); }
 
-        ///Get DataSet containing only required fields.
+        /// <summary>
+        /// Get DataSet containing only required fields.
+        /// </summary>
+        /// <param name="fields">Fields to include (divided by ',').</param>
+        /// <param name="where">Where condition [optional].</param>
+        /// <returns>Resulting data set.</returns>
+        public DataSet EnumFields(String fields, String where) {
+            return EnumFields(fields, where, null); }
+
+        /// <summary>
+        /// Get DataSet containing only required fields.
+        /// </summary>
         /// <param name="fields">Fields to include (divided by ',').</param>
         /// <param name="where">Where condition [optional].</param>
         /// <param name="order">Field to order by [optional].</param>
@@ -220,11 +281,33 @@ namespace Bula.Model {
             return this.GetDataSet(query, pars);
         }
 
-        public DataSet Select() { return Select(null, null, null); }
-        public DataSet Select(String fields) { return Select(fields, null, null); }
-        public DataSet Select(String fields, String where) { return Select(fields, where, null); }
+        /// <summary>
+        /// Get DataSet containing all fields.
+        /// </summary>
+        /// <returns>Resulting data set.</returns>
+        public DataSet Select() {
+            return Select(null, null, null); }
 
-        ///Get DataSet containing only required fields or all fields [default].
+        /// <summary>
+        /// Get DataSet containing only required fields.
+        /// </summary>
+        /// <param name="fields">Fields to include (divided by ',').</param>
+        /// <returns>Resulting data set.</returns>
+        public DataSet Select(String fields) {
+            return Select(fields, null, null); }
+
+        /// <summary>
+        /// Get DataSet containing only required fields.
+        /// </summary>
+        /// <param name="fields">Fields to include (divided by ',').</param>
+        /// <param name="where">Where condition.</param>
+        /// <returns>Resulting data set.</returns>
+        public DataSet Select(String fields, String where) {
+            return Select(fields, where, null); }
+
+        /// <summary>
+        /// Get DataSet containing only required fields or all fields [default].
+        /// </summary>
         /// <param name="fields">Fields to include (divided by ',').</param>
         /// <param name="where">Where condition [optional].</param>
         /// <param name="order">Field to order by [optional].</param>
@@ -243,15 +326,39 @@ namespace Bula.Model {
             return this.GetDataSet(query, pars);
         }
 
-        // Get DataSet containing only required fields (only records of the list with list_size length)
-        public DataSet SelectList(int list, int list_size) {
-            return SelectList(list, list_size, null, null, null); }
-        public DataSet SelectList(int list, int list_size, String fields) {
-            return SelectList(list, list_size, fields, null, null); }
-        public DataSet SelectList(int list, int list_size, String fields, String where) {
-            return SelectList(list, list_size, fields, where, null); }
+        /// <summary>
+        /// Get DataSet containing only the given list of rows.
+        /// </summary>
+        /// <param name="list">List number.</param>
+        /// <param name="rows">Number of rows in a list.</param>
+        /// <returns>Resulting data set.</returns>
+        public DataSet SelectList(int list, int rows) {
+            return SelectList(list, rows, null, null, null); }
 
-        ///Get DataSet containing only required fields or all fields.
+        /// <summary>
+        /// Get DataSet containing only the given list of rows (with required fields).
+        /// </summary>
+        /// <param name="list">List number.</param>
+        /// <param name="rows">Number of rows in a list.</param>
+        /// <param name="fields">Fields to include (divided by ',').</param>
+        /// <returns>Resulting data set.</returns>
+        public DataSet SelectList(int list, int rows, String fields) {
+            return SelectList(list, rows, fields, null, null); }
+
+        /// <summary>
+        /// Get DataSet containing only the given list of rows (with required fields).
+        /// </summary>
+        /// <param name="list">List number.</param>
+        /// <param name="rows">Number of rows in a list.</param>
+        /// <param name="fields">Fields to include (divided by ',').</param>
+        /// <param name="where">Where condition [optional].</param>
+        /// <returns>Resulting data set.</returns>
+        public DataSet SelectList(int list, int rows, String fields, String where) {
+            return SelectList(list, rows, fields, where, null); }
+
+        /// <summary>
+        /// Get DataSet containing only the given list of rows (with required fields or all fields).
+        /// </summary>
         /// <param name="list">List number.</param>
         /// <param name="rows">Number of rows in a list.</param>
         /// <param name="fields">Fields to include (divided by ',').</param>
@@ -273,7 +380,9 @@ namespace Bula.Model {
             return ds;
         }
 
-        ///Delete record by ID.
+        /// <summary>
+        /// Delete record by ID.
+        /// </summary>
         /// <param name="id">Unique ID.</param>
         /// <returns>Result of operation.</returns>
         public int DeleteById(int id) {
@@ -285,7 +394,11 @@ namespace Bula.Model {
             return this.UpdateInternal(query, pars, "update");
         }
 
-        // Insert new record based on fields array.
+        /// <summary>
+        /// Insert new record based on given fields.
+        /// </summary>
+        /// <param name="fields">The set of fields.</param>
+        /// <returns>Result of SQL-query execution.</returns>
         public int Insert(Hashtable fields) {
             var keys = fields.Keys.GetEnumerator();
             var field_names = "";
@@ -309,7 +422,12 @@ namespace Bula.Model {
             return this.UpdateInternal(query, pars, "insert");
         }
 
-        // Update existing record by ID based on fields array.
+        /// <summary>
+        /// Update existing record by ID based on given fields.
+        /// </summary>
+        /// <param name="id">Unique record ID.</param>
+        /// <param name="fields">The set of fields.</param>
+        /// <returns>Result of SQL-query execution.</returns>
         public int UpdateById(Object id, Hashtable fields) {
             var keys = fields.Keys.GetEnumerator();
             var set_values = "";
@@ -333,7 +451,11 @@ namespace Bula.Model {
             return this.UpdateInternal(query, pars, "update");
         }
 
-        // Map for setting parameters.
+        /// <summary>
+        /// Map for setting parameters.
+        /// </summary>
+        /// <param name="key"> Field name.</param>
+        /// <returns>Function name for setting that field.</returns>
         private String SetFunction(String key) {
             var prefix = key.Substring(0, 2);
             var func = "SetString";

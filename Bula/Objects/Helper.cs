@@ -5,23 +5,29 @@ namespace Bula.Objects {
     using Bula.Objects;
     using System.Collections;
 
-    /**
-     * Helper class for manipulation with Files & Directories.
-     */
+    /// <summary>
+    /// Helper class for manipulation with Files and Directories.
+    /// </summary>
     public class Helper : Bula.Meta {
-    	///Check whether file exists.
+    	/// <summary>
+    	/// Check whether file exists.
+    	/// </summary>
         /// <param name="path">File name.</param>
         public static Boolean FileExists(String path) {
             return File.Exists(path);
     	}
 
-    	///Check whether file exists.
+    	/// <summary>
+    	/// Check whether file exists.
+    	/// </summary>
         /// <param name="path">File name.</param>
     	public static Boolean DirExists(String path) {
             return Directory.Exists(path);
     	}
 
-        ///Create directory.
+        /// <summary>
+        /// Create directory.
+        /// </summary>
         /// <param name="path">Directory path to create.</param>
         /// <returns>True - created OK, False - error.</returns>
         public static Boolean CreateDir(String path) {
@@ -34,7 +40,9 @@ namespace Bula.Objects {
             return true;
     	}
 
-    	///Delete file.
+    	/// <summary>
+    	/// Delete file.
+    	/// </summary>
         /// <param name="path">File name.</param>
         /// <returns>True - OK, False - error.</returns>
         public static Boolean DeleteFile(String path) {
@@ -47,7 +55,9 @@ namespace Bula.Objects {
             return true;
     	}
 
-    	///Delete directory.
+    	/// <summary>
+    	/// Delete directory (recursively).
+    	/// </summary>
         /// <param name="path">Directory name.</param>
         /// <returns>True - OK, False - error.</returns>
     	public static Boolean DeleteDir(String path) {
@@ -67,6 +77,11 @@ namespace Bula.Objects {
     		return RemoveDir(path);
     	}
 
+    	/// <summary>
+    	/// Remove directory.
+    	/// </summary>
+        /// <param name="path">Directory name.</param>
+        /// <returns>True - OK, False - error.</returns>
         public static Boolean RemoveDir(String path) {
             try {
                 Directory.Delete(path);
@@ -77,10 +92,17 @@ namespace Bula.Objects {
             return true;
         }
 
+    	/// <summary>
+    	/// Read all content of text file.
+    	/// </summary>
+        /// <param name="filename">File name.</param>
+        /// <returns>Resulting content.</returns>
         public static String ReadAllText(String filename) {
             return ReadAllText(filename, null); }
 
-    	///Read all content of text file.
+    	/// <summary>
+    	/// Read all content of text file.
+    	/// </summary>
         /// <param name="filename">File name.</param>
         /// <param name="encoding">Encoding name [optional].</param>
         /// <returns>Resulting content.</returns>
@@ -88,13 +110,20 @@ namespace Bula.Objects {
             return File.ReadAllText(filename, System.Text.Encoding.GetEncoding(encoding));
     	}
 
+      	/// <summary>
+      	/// Read all content of text file as list of lines.
+      	/// </summary>
+        /// <param name="filename">File name.</param>
+        /// <returns>Resulting content (lines).</returns>
         public static Object[] ReadAllLines(String filename) {
             return ReadAllLines(filename, null); }
 
-      	///Read all content of text file as list of lines.
+      	/// <summary>
+      	/// Read all content of text file as list of lines.
+      	/// </summary>
         /// <param name="filename">File name.</param>
         /// <param name="encoding">Encoding name [optional].</param>
-        /// <returns>Resulting content.</returns>
+        /// <returns>Resulting content (lines).</returns>
         public static Object[] ReadAllLines(String filename, String encoding) {
             if (encoding == null)
                 return File.ReadAllLines(filename);
@@ -102,28 +131,49 @@ namespace Bula.Objects {
                 return File.ReadAllLines(filename, System.Text.Encoding.GetEncoding(encoding));
     	}
 
+    	/// <summary>
+    	/// Write content to text file.
+    	/// </summary>
+        /// <param name="filename">File name.</param>
+        /// <param name="text">Content to write.</param>
+        /// <returns>Result of operation (true - OK, false - error).</returns>
         public static Boolean WriteText(String filename, String text) {
             File.WriteAllText(filename, text); /*, encoding); */ return true;
         }
 
+    	/// <summary>
+    	/// Append content to text file.
+    	/// </summary>
+        /// <param name="filename">File name.</param>
+        /// <param name="text">Content to append.</param>
+        /// <returns>Result of operation (true - OK, false - error).</returns>
         public static Boolean AppendText(String filename, String text) {
             File.AppendAllText(filename, text); /*, encoding); */ return true;
         }
 
-        ///Check whether given path is a file.
+        /// <summary>
+        /// Check whether given path is a file.
+        /// </summary>
         /// <param name="path">Path of an object.</param>
         /// <returns>True - is a file.</returns>
         public static Boolean IsFile(String path) {
             return File.Exists(path) && (File.GetAttributes(path) & FileAttributes.Directory) == 0;
         }
 
-        ///Check whether given path is a directory.
+        /// <summary>
+        /// Check whether given path is a directory.
+        /// </summary>
         /// <param name="path">Path of an object.</param>
         /// <returns>True - is a directory.</returns>
         public static Boolean IsDir(String path) {
             return Directory.Exists(path) && (File.GetAttributes(path) & FileAttributes.Directory) != 0;
         }
 
+        /// <summary>
+        /// List (enumerate) entries of a given path.
+        /// </summary>
+        /// <param name="path">Path of a directory.</param>
+        /// <returns>Enumerated entries.</returns>
         public static IEnumerator ListDirEntries(String path) {
             String[] entries = Directory.GetDirectories(path);
             String[] files = Directory.GetFiles(path);

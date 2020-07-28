@@ -5,10 +5,13 @@ namespace Bula.Fetcher.Controller {
     using Bula.Objects;
     using System.Collections;
 
-    /**
-     * Logic for generating Menu block.
-     */
+    /// <summary>
+    /// Logic for generating Menu block.
+    /// </summary>
     public class Menu : Bula.Meta {
+        /// <summary>
+        /// Execute main logic for Menu block.
+        /// </summary>
         public static void Execute() {
             var public_pages = new ArrayList();
 

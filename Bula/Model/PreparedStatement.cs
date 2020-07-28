@@ -13,7 +13,9 @@ namespace Bula.Model {
         private ArrayList pars; // List of parameters
         private String query; // Formed SQL-query
 
-        ///Resulting record set of the last operation.
+        /// <summary>
+        /// Resulting record set of the last operation.
+        /// </summary>
         /// @var RecordSet
         public RecordSet record_set;
 
@@ -22,7 +24,9 @@ namespace Bula.Model {
             this.pars.Add("dummy"); // Parameter number will start from 1.
         }
 
-        ///Execute selection query.
+        /// <summary>
+        /// Execute selection query.
+        /// </summary>
         public RecordSet ExecuteQuery() {
             this.record_set = new RecordSet();
             if (this.FormQuery()) {
@@ -43,7 +47,9 @@ namespace Bula.Model {
             }
         }
 
-        ///Execute updating query.
+        /// <summary>
+        /// Execute updating query.
+        /// </summary>
         ///   -1 - error during form query.
         ///   -2 - error during execution.
         public int ExecuteUpdate() {
@@ -63,12 +69,16 @@ namespace Bula.Model {
             }
         }
 
-        ///Get ID for just inserted record.
+        /// <summary>
+        /// Get ID for just inserted record.
+        /// </summary>
         public int GetInsertId() {
             return DataAccess.InsertId(this.link);
         }
 
-        ///Form query (replace '?' marks with real parameters).
+        /// <summary>
+        /// Form query (replace '?' marks with real parameters).
+        /// </summary>
         private Boolean FormQuery() {
             var question_index = -1;
             var start_from = 0;
@@ -94,46 +104,60 @@ namespace Bula.Model {
                 this.pars[n] = val;
         }
 
-        ///Set int parameter.
+        /// <summary>
+        /// Set int parameter.
+        /// </summary>
         /// <param name="n">Parameter number.</param>
         /// <param name="val">Parameter value.</param>
         public void SetInt(int n, int val) {
             SetValue(n, CAT(val));
         }
 
-        ///Set String parameter.
+        /// <summary>
+        /// Set String parameter.
+        /// </summary>
         /// <param name="n">Parameter number.</param>
         /// <param name="val">Parameter value.</param>
         public void SetString(int n, String val) {
             SetValue(n, CAT("'", Strings.AddSlashes(val), "'"));
         }
 
-        ///Set DateTime parameter.
+        /// <summary>
+        /// Set DateTime parameter.
+        /// </summary>
         /// <param name="n">Parameter number.</param>
         /// <param name="val">Parameter value.</param>
         public void SetDate(int n, String val) {
             SetValue(n, CAT("'", DateTimes.Format(DBConfig.SQL_DTS, DateTimes.GetTime(val)), "'"));
         }
 
-        ///Set Float parameter.
+        /// <summary>
+        /// Set Float parameter.
+        /// </summary>
         /// <param name="n">Parameter number.</param>
         /// <param name="val">Parameter value.</param>
         public void SetFloat(int n, Double val) {
             SetValue(n, CAT(val));
         }
 
-        ///Close.
+        /// <summary>
+        /// Close.
+        /// </summary>
         public void Close() {
             this.link = null;
         }
 
-        ///Set DB link.
+        /// <summary>
+        /// Set DB link.
+        /// </summary>
         /// @param Object link
         public void SetLink(Object link) {
             this.link = link;
         }
 
-        ///Set SQL-query,
+        /// <summary>
+        /// Set SQL-query,
+        /// </summary>
         /// @param String sql
         public void SetSql(String sql) {
             this.sql = sql;

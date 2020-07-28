@@ -10,10 +10,13 @@ namespace Bula.Fetcher.Controller.Pages {
     using Bula.Fetcher.Controller;
     using Bula.Fetcher.Model;
 
-    /**
-     * Controller for Items block.
-     */
+    /// <summary>
+    /// Controller for Items block.
+    /// </summary>
     public class Items : ItemsBase {
+        /// <summary>
+        /// Execute main logic for Items block.
+        /// </summary>
         public static void Execute() {
             if (CheckList() == false)
                 return;

@@ -16,26 +16,34 @@ namespace Bula.Model {
     		this.total_pages = 0;
     	}
 
-        ///Get the size (number of rows) of the DataSet.
+        /// <summary>
+        /// Get the size (number of rows) of the DataSet.
+        /// </summary>
         /// @return int 
     	public int GetSize() {
             return this.rows.Count;
         }
 
-    	///Get a row from the DataSet.
+    	/// <summary>
+    	/// Get a row from the DataSet.
+    	/// </summary>
         /// <param name="n">Number of the row.</param>
         /// <returns>Required row or null.</returns>
         public Hashtable GetRow(int n) {
             return (Hashtable) this.rows[n];
         }
 
-    	///Add new row into the DataSet.
+    	/// <summary>
+    	/// Add new row into the DataSet.
+    	/// </summary>
         /// <param name="row">New row to add.</param>
         public void AddRow(Hashtable row) {
             this.rows.Add(row);
         }
 
-    	///Get page size of the DataSet.
+    	/// <summary>
+    	/// Get page size of the DataSet.
+    	/// </summary>
         /// <returns>Current page size.</returns>
         public int GetPageSize() {
             return this.page_size;
@@ -58,7 +66,9 @@ namespace Bula.Model {
             return spaces;
         }
 
-        ///Get serialized (XML) representation of the DataSet.
+        /// <summary>
+        /// Get serialized (XML) representation of the DataSet.
+        /// </summary>
         /// <returns>Resulting representation.</returns>
         public String Serialize() {
             var level = 0;

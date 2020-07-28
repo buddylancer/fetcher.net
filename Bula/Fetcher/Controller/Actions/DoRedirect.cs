@@ -6,9 +6,9 @@ namespace Bula.Fetcher.Controller.Actions {
     using System.Collections;
     using Bula.Fetcher.Controller;
 
-    /**
-     * Base class for redirecting from the web-site.
-     */
+    /// <summary>
+    /// Base class for redirecting from the web-site.
+    /// </summary>
     public class DoRedirect : Bula.Meta {
         public static void Execute(String link_to_redirect, String error_message) {
             var Prepare = new Hashtable();

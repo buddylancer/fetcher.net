@@ -8,9 +8,9 @@ namespace Bula.Fetcher.Controller {
     using Bula.Model;
     using Bula.Fetcher.Controller;
 
-    /**
-     * Controller for main Index page.
-     */
+    /// <summary>
+    /// Controller for main Index page.
+    /// </summary>
     public class Index : Bula.Meta {
         private static Object[] pages_array = null;
 
@@ -24,6 +24,9 @@ namespace Bula.Fetcher.Controller {
             );
         }
 
+        /// <summary>
+        /// Execute main logic for Index page.
+        /// </summary>
         public static void Execute() {
             if (pages_array == null)
                 Initialize();

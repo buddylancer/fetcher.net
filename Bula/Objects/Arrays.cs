@@ -3,15 +3,17 @@ namespace Bula.Objects {
 
     using System.Collections;
 
-    /**
-     * Helper class for manipulating with arrays.
-     */
+    /// <summary>
+    /// Helper class for manipulating with arrays.
+    /// </summary>
     public class Arrays : Bula.Meta {
         public static ArrayList NewArrayList() {
             return new ArrayList();
         }
 
-        ///Create new Hashtable.
+        /// <summary>
+        /// Create new Hashtable.
+        /// </summary>
         /// <param name="input">Optional array to build Hashtable from.</param>
         /// <returns>Resulting Hashtable.</returns>
         public static Hashtable NewHashtable() {
@@ -20,14 +22,18 @@ namespace Bula.Objects {
 
         public static Object[] NewArray() { return NewArray(0); }
 
-        ///Create new array of objects.
+        /// <summary>
+        /// Create new array of objects.
+        /// </summary>
         /// <param name="size">Size of array.</param>
         /// <returns>Resulting array.</returns>
         public static Object[] NewArray(int size) {
             return new Object[size];
         }
 
-        ///Merge Hashtables.
+        /// <summary>
+        /// Merge Hashtables.
+        /// </summary>
         /// <param name="input">Original Hashtable.</param>
         /// <param name="extra">Hashtable to merge with original Hashtable.</param>
         /// <returns>Merged Hashtable.</returns>
@@ -46,7 +52,9 @@ namespace Bula.Objects {
             return output;
         }
 
-        ///Merge ArrayLists.
+        /// <summary>
+        /// Merge ArrayLists.
+        /// </summary>
         /// <param name="input">Original ArrayList.</param>
         /// <param name="extra">ArrayList to merge with original ArrayList.</param>
         /// <returns>Resulting ArrayList.</returns>
@@ -64,7 +72,9 @@ namespace Bula.Objects {
             return output;
         }
 
-        ///Merge Arrays.
+        /// <summary>
+        /// Merge Arrays.
+        /// </summary>
         /// <param name="input">Original Array.</param>
         /// <param name="extra">ArrayList to merge with original Array.</param>
         /// <returns>Resulting Array.</returns>
@@ -85,7 +95,9 @@ namespace Bula.Objects {
             return output;
         }
 
-        ///Extend Array with additional element.
+        /// <summary>
+        /// Extend Array with additional element.
+        /// </summary>
         /// <param name="input">Original Array.</param>
         /// <param name="extra">Object to add to original Array.</param>
         /// <returns>Resulting Array.</returns>

@@ -3,9 +3,9 @@ namespace Bula.Fetcher.Controller.Actions {
 
     using Bula.Fetcher.Controller;
 
-    /**
-     * Action for cleaning cache.
-     */
+    /// <summary>
+    /// Action for cleaning cache.
+    /// </summary>
     public class DoCleanCache : Bula.Meta {
         public void Execute() {
             var boFetcher = new BOFetcher();

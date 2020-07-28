@@ -3,9 +3,9 @@ namespace Bula.Fetcher.Model {
 
     using Bula.Model;
 
-    /**
-     * Manipulating with times.
-     */
+    /// <summary>
+    /// Manipulating with times.
+    /// </summary>
     public class DOTime : DOBase {
 
     	public DOTime (): base() {

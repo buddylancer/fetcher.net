@@ -7,22 +7,30 @@ namespace Bula.Objects {
     using Bula.Fetcher;
     using Bula.Objects;
 
-    /**
-     * Helper class for manipulations with strings.
-     */
+    /// <summary>
+    /// Helper class for manipulations with strings.
+    /// </summary>
     public class Strings : Bula.Meta {
+        /// <summary>
+        /// Provide empty array.
+        /// </summary>
+        /// <returns>Empty array of strings.</returns>
         public static String[] EmptyArray() {
             return new String[0];
         }
 
-    	///Convert first char of a string to upper case.
+    	/// <summary>
+    	/// Convert first char of a string to upper case.
+    	/// </summary>
         /// <param name="input">Input string.</param>
         /// <returns>Resulting string.</returns>
         public static String FirstCharToUpper(String input) {
             return Concat(input.Substring(0, 1).ToUpper(), input.Substring(1));
     	}
 
-    	///Join an array of strings using divider,
+    	/// <summary>
+    	/// Join an array of strings using divider,
+    	/// </summary>
         /// <param name="divider">Divider (yes, may be empty).</param>
         /// <param name="strings">Array of strings.</param>
         /// <returns>Resulting string.</returns>
@@ -38,29 +46,61 @@ namespace Bula.Objects {
             return output;
     	}
 
+        /// <summary>
+        /// Remove all HTML tags from string.
+        /// </summary>
+        /// <param name="input">Input string.</param>
+        /// <returns>Resulting string.</returns>
     	public static String RemoveTags(String input) {
             return RemoveTags(input, null);
         }
 
+        /// <summary>
+        /// Remove HTML tags from string except allowed ones.
+        /// </summary>
+        /// <param name="input">Input string.</param>
+        /// <param name="except">List of allowed tags (do not remove).</param>
+        /// <returns>Resulting string.</returns>
         public static String RemoveTags(String input, String except) {
             return Internal.RemoveTags(input, except);
     	}
 
-    	public static String AddSlashes(String input) {
+    	/// <summary>
+    	/// Add slashes to the string.
+    	/// </summary>
+        /// <param name="input">Input string.</param>
+        /// <returns>Resulting string.</returns>
+        public static String AddSlashes(String input) {
             return input.Replace("'", "\\'"); //TODO!!!
     	}
 
+    	/// <summary>
+    	/// remove slashes from the string.
+    	/// </summary>
+        /// <param name="input">Input string.</param>
+        /// <returns>Resulting string.</returns>
     	public static String StripSlashes(String input) {
             return input.Replace("\\'", "'"); //TODO!!!
     	}
 
-    	public static int CountSubstrings(String input, String chunk) {
+    	/// <summary>
+    	/// Count substrings in the string.
+    	/// </summary>
+        /// <param name="input">Input string.</param>
+        /// <param name="chunk">String to count.</param>
+        /// <returns>Number of substrings.</returns>
+        public static int CountSubstrings(String input, String chunk) {
     		if (input.Length == 0)
     			return 0;
     		var replaced = input.Replace(chunk, "");
     		return input.Length - replaced.Length;
     	}
 
+    	/// <summary>
+    	/// Concatenate a number of strings to a single one.
+    	/// </summary>
+        /// <param name="Array">of strings.</param>
+        /// <returns>Resulting string.</returns>
         public static String Concat(params object[] args) {
     		var output = "";
     		if (SIZE(args) != 0) {
@@ -77,7 +117,13 @@ namespace Bula.Objects {
             return DateTimes.GmtFormat(Config.SQL_DTS, BLANK(pubdate) ? 0 : DateTimes.GetTime(pubdate));
         }
 
-    	public static String[] Split(String divider, String input) {
+    	/// <summary>
+    	/// Split a string using divider/separator.
+    	/// </summary>
+        /// <param name="divider">Divider/separator.</param>
+        /// <param name="input">Input string.</param>
+        /// <returns>Array of resulting strings.</returns>
+        public static String[] Split(String divider, String input) {
     		String[] chunks = 
                 Regex.Split(input, Regex.Escape(divider));
     		var result = new ArrayList();
@@ -86,11 +132,20 @@ namespace Bula.Objects {
     		return (String[])result.ToArray(typeof(String));
     	}
 
+    	/// <summary>
+    	/// Replace all Substring(s) from a string.
+    	/// </summary>
+        /// <param name="from">Substring to replace.</param>
+        /// <param name="to">Replacement string.</param>
+        /// <param name="input">Input string.</param>
+        /// <returns>Resulting string.</returns>
     	public static String Replace(String from, String to, String input) {
             return Replace(from, to, input, 0);
         }
 
-    	///Replace Substring(s).
+    	/// <summary>
+    	/// Replace a number of Substring(s) from a string.
+    	/// </summary>
         /// <param name="from">Substring to replace.</param>
         /// <param name="to">Replacement string.</param>
         /// <param name="input">Input string.</param>
@@ -100,7 +155,9 @@ namespace Bula.Objects {
             return limit != 0 ? (new Regex(Regex.Escape(from))).Replace(input, to, limit) : input.Replace(from, to);
     	}
 
-        ///Replace all substrings with another string using regular expressions.
+        /// <summary>
+        /// Replace all substrings using regular expressions.
+        /// </summary>
         /// <param name="regex">Regular expression to match Substring(s).</param>
         /// <param name="to">Replacement string.</param>
         /// <returns>Resulting string.</returns>
@@ -108,7 +165,9 @@ namespace Bula.Objects {
             return Replace(regex, to, input);
         }
 
-        ///Replace first substring with another string using regular expressions.
+        /// <summary>
+        /// Replace first substring using regular expressions.
+        /// </summary>
         /// <param name="regex">Regular expression to match substring.</param>
         /// <param name="to">Replacement string.</param>
         /// <returns>Resulting string.</returns>
@@ -116,6 +175,12 @@ namespace Bula.Objects {
             return Replace(regex, to, input, 1);
         }
 
+        /// <summary>
+        /// Replace "keys by values" in a string.
+        /// </summary>
+        /// <param name="template">Input template.</param>
+        /// <param name="hash">Set of key/value pairs.</param>
+        /// <returns>Resulting string.</returns>
         public static String ReplaceInTemplate(String template, Hashtable hash){
             System.Text.StringBuilder sb = new System.Text.StringBuilder(template);
             IEnumerator keys = hash.Keys.GetEnumerator();

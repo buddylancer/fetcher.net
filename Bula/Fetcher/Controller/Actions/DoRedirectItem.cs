@@ -7,9 +7,9 @@ namespace Bula.Fetcher.Controller.Actions {
     using Bula.Model;
     using Bula.Fetcher.Model;
 
-    /**
-     * Redirecting to the external item.
-     */
+    /// <summary>
+    /// Redirecting to the external item.
+    /// </summary>
     public class DoRedirectItem : Bula.Meta {
         public static void Execute() {
             var error_message = (String)null;

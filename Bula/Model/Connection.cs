@@ -5,9 +5,9 @@ namespace Bula.Model {
     using Bula.Model;
     using Bula.Objects;
 
-    /**
-     * Implement operations with connection to the database.
-     */
+    /// <summary>
+    /// Implement operations with connection to the database.
+    /// </summary>
     public class Connection : Bula.Meta {
         private MySqlConnection link;
         private PreparedStatement stmt; // Prepared statement to use with connection
@@ -15,7 +15,9 @@ namespace Bula.Model {
         public int Open(String host, int port, String admin, String password, String db) {
             return Open(host, port, admin, password, null); }
 
-        ///Open connection to the database.
+        /// <summary>
+        /// Open connection to the database.
+        /// </summary>
         /// <param name="host">Host name.</param>
         /// <param name="port">Port number.</param>
         /// <param name="admin">Admin name.</param>
@@ -34,13 +36,17 @@ namespace Bula.Model {
             return 1;
         }
 
-        ///Close connection to the database.
+        /// <summary>
+        /// Close connection to the database.
+        /// </summary>
         public void Close() {
             DataAccess.Close(this.link);
             this.link = null;
         }
 
-        ///Prepare statement.
+        /// <summary>
+        /// Prepare statement.
+        /// </summary>
         /// <param name="sql">SQL-query.</param>
         /// <returns>statement.</returns>
         public PreparedStatement PrepareStatement(String sql) {

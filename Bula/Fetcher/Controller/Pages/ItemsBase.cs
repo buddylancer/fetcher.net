@@ -8,10 +8,14 @@ namespace Bula.Fetcher.Controller.Pages {
     using Bula.Objects;
     using Bula.Fetcher.Controller;
 
-    /**
-     * Base controller for Items block.
-     */
+    /// <summary>
+    /// Base controller for Items block.
+    /// </summary>
     public class ItemsBase : Bula.Meta {
+        /// <summary>
+        /// Check list from current query.
+        /// </summary>
+        /// <returns>True - checked OK, False - error.</returns>
         public static Boolean CheckList() {
             if (Request.Contains("list")) {
                 if (!Request.IsInteger(Request.Get("list"))) {
@@ -26,7 +30,9 @@ namespace Bula.Fetcher.Controller.Pages {
             return true;
         }
 
-        ///Check source name from current query.
+        /// <summary>
+        /// Check source name from current query.
+        /// </summary>
         /// <returns>True - source exists, False - error.</returns>
         public static Boolean CheckSource() {
             var err_message = "";
@@ -46,7 +52,9 @@ namespace Bula.Fetcher.Controller.Pages {
             return false;
         }
 
-        ///Fill Row from Item.
+        /// <summary>
+        /// Fill Row from Item.
+        /// </summary>
         /// <param name="oItem">Original Item.</param>
         /// <param name="id_field">Name of ID field.</param>
         /// <param name="count">The number of inserted Row in HTML table.</param>
@@ -93,14 +101,18 @@ namespace Bula.Fetcher.Controller.Pages {
             return Row;
         }
 
-        ///Get link for redirecting to external item.
+        /// <summary>
+        /// Get link for redirecting to external item.
+        /// </summary>
         /// <param name="item_id">Item ID.</param>
         /// <returns>Resulting external link.</returns>
         public static String GetRedirectItemLink(int item_id) {
             return GetRedirectItemLink(item_id, null);
         }
 
-        ///Get link for redirecting to external item.
+        /// <summary>
+        /// Get link for redirecting to external item.
+        /// </summary>
         /// <param name="item_id">Item ID.</param>
         /// <param name="url_title">Normalized title (to include in the link).</param>
         /// <returns>Resulting external link.</returns>
@@ -112,14 +124,18 @@ namespace Bula.Fetcher.Controller.Pages {
             );
         }
 
-        ///Get link for redirecting to the item (internally).
+        /// <summary>
+        /// Get link for redirecting to the item (internally).
+        /// </summary>
         /// <param name="item_id">Item ID.</param>
         /// <returns>Resulting internal link.</returns>
         public static String GetViewItemLink(int item_id) {
             return GetViewItemLink(item_id, null);
         }
 
-        ///Get link for redirecting to the item (internally).
+        /// <summary>
+        /// Get link for redirecting to the item (internally).
+        /// </summary>
         /// <param name="item_id">Item ID.</param>
         /// <param name="url_title">Normalized title (to include in the link).</param>
         /// <returns>Resulting internal link.</returns>
@@ -131,7 +147,9 @@ namespace Bula.Fetcher.Controller.Pages {
             );
         }
 
-        ///Get internal link to the page.
+        /// <summary>
+        /// Get internal link to the page.
+        /// </summary>
         /// <param name="list_no">Page no.</param>
         /// <returns>Resulting internal link to the page.</returns>
         protected static String GetPageLink(int list_no) {
