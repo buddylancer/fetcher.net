@@ -11,9 +11,24 @@ namespace Bula.Model {
     /// </summary>
     public class DataAccess
     {
+        /// <summary>
+        /// Define error messaging delegate function.
+        /// </summary>
+        /// <param name="str">Error message</param>
         public delegate void ErrorDelegateType(String str);
+        /// <summary>
+        /// Define debug printing delegate function.
+        /// </summary>
+        /// <param name="str">Debug message</param>
         public delegate void PrintDelegateType(String str);
+        
+        /// <summary>
+        /// Instance of error messaging function.
+        /// </summary>
         private static ErrorDelegateType error_delegate = null;
+        /// <summary>
+        /// Instance of debug printing function.
+        /// </summary>
         private static PrintDelegateType print_delegate = null;
 
         /// <summary>
@@ -89,8 +104,13 @@ namespace Bula.Model {
             return ((System.Data.DataSet)((Object[])result)[1]).Tables[0].Rows.Count;
         }
 
+        /// <summary>
+        /// Get number of affected rows in current update query.
+        /// </summary>
+        /// <param name="link">DB connection</param>
+        /// <returns>Number of rows</returns>
         public static int AffectedRows(Object link) {
-            return 0; //TODO
+            return 1; //TODO
         }
 
         /// <summary>
@@ -100,7 +120,7 @@ namespace Bula.Model {
         /// <returns>ID of inserted row</returns>
         public static int InsertId(Object link) {
             Object result = MySqlHelper.ExecuteScalar((MySqlConnection)link, "select last_insert_id()");
-            return 0; //TODO;
+            return (int)(UInt64)result; //TODO;
         }
 
         /// <summary>

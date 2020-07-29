@@ -7,11 +7,18 @@ namespace Bula.Model {
 
     using Bula.Objects;
 
+    /// <summary>
+    /// Implement operations with prepared statement.
+    /// </summary>
     public class PreparedStatement : Bula.Meta {
-        private Object link; // Link to database instance
-        private String sql; // Initial SQL-query
-        private ArrayList pars; // List of parameters
-        private String query; // Formed SQL-query
+        /// Link to database instance 
+        private Object link;
+        /// Initial SQL-query 
+        private String sql;
+        /// List of parameters 
+        private ArrayList pars;
+        /// Formed (prepared) SQL-query 
+        private String query;
 
         /// <summary>
         /// Resulting record set of the last operation.
@@ -19,6 +26,7 @@ namespace Bula.Model {
         /// @var RecordSet
         public RecordSet record_set;
 
+    	/// Default public constructor 
         public PreparedStatement () {
             this.pars = new ArrayList();
             this.pars.Add("dummy"); // Parameter number will start from 1.

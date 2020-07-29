@@ -1,4 +1,4 @@
-namespace Bula {
+﻿namespace Bula {
     using System;
     using System.Xml;
 

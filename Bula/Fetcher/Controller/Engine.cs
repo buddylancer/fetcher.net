@@ -95,6 +95,11 @@ namespace Bula.Fetcher.Controller {
         //    return content;
         //}
 
+        /// <summary>
+        /// Include file with class and generate content by calling method Execute().
+        /// </summary>
+        /// <param name="class_name">Class name to include.</param>
+        /// <returns>Resulting content.</returns>
         public static String IncludeTemplate(String class_name) {
             return IncludeTemplate(class_name, null);
         }

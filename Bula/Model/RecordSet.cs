@@ -21,6 +21,7 @@ namespace Bula.Model {
         private int page_rows = 10;
         private int page_no = 0;
 
+        /// Public constructor 
         public RecordSet () {
             this.num_rows = 0;
             this.num_pages = 0;
@@ -28,6 +29,10 @@ namespace Bula.Model {
             this.page_no = 0;
         }
 
+        /// <summary>
+        /// Set number of page rows in record set.
+        /// </summary>
+        /// <param name="no">Number of rows.</param>
         public void SetPageRows(int no) {
             this.page_rows = no;
         }

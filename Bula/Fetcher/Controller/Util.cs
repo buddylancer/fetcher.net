@@ -36,6 +36,11 @@ namespace Bula.Fetcher.Controller {
             return output;
         }
 
+        /// <summary>
+        /// Format date/time to GMT presentation.
+        /// </summary>
+        /// <param name="input">Input date/time.</param>
+        /// <returns>Resulting date/time.</returns>
         public static String ShowTime(String input) {
             return DateTimes.Format(Config.GMT_DTS, DateTimes.GetTime(input));
         }

@@ -87,7 +87,7 @@ namespace Bula.Model {
         /// Get serialized (XML) representation of the DataSet.
         /// </summary>
         /// <returns>Resulting representation.</returns>
-        public String Serialize() {
+        public String ToXml() {
             var level = 0;
             var spaces = (String)null;
             var output = "";

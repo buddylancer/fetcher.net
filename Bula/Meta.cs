@@ -97,6 +97,11 @@ namespace Bula {
 	        return (arg.ToString() == "");
         }
 
+        /// <summary>
+        /// Get the length of an object (processed as string).
+        /// </summary>
+        /// <param name="str">Input object</param>
+        /// <returns>Length of resulting string</returns>
         public static int LEN(object str) {
             return BLANK(str) ? 0 : str.ToString().Length;
         }
@@ -113,19 +118,42 @@ namespace Bula {
 	        return result;
         }
 
+        /// <summary>
+        /// Get index of first substring occurence.
+        /// </summary>
+        /// <param name="str">Input string to search in</param>
+        /// <param name="what">Substring to search for</param>
+        /// <param name="off">Optional offset from input string beginning</param>
+        /// <returns>Index of the substring (or -1)</returns>
         public static int IXOF(string str, string what, int off = 0) {
 	        return str.IndexOf(what, off);
         }
 
-        public static object[] ARR(params object[] args) {
-            return args;
+        /// <summary>
+        /// Instantiate array of objects.
+        /// </summary>
+        /// <param name="args">Variable length array of parameters</param>
+        /// <returns>Resulting array</returns>
+        public static Object[] ARR(params Object[] args) {
+            return (Object[])args.Clone();
         }
 
+        /// <summary>
+        /// Instantiate empty array of required size.
+        /// </summary>
+        /// <param name="size">Size of array</param>
+        /// <returns>Resulting empty array</returns>
         public static object[] ARR(int size)
         {
             return new Object[size];
         }
 
+        /// <summary>
+        /// Merge arrays.
+        /// </summary>
+        /// <param name="input">Input array</param>
+        /// <param name="args">Variable length array of parameters</param>
+        /// <returns>Merged array</returns>
         public static object[] ADD(object[] input, params object[] args) {
             object[] output = new object[input.Length + args.Length];
             input.CopyTo(output, 0);

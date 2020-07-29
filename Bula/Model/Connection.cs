@@ -12,6 +12,15 @@ namespace Bula.Model {
         private MySqlConnection link;
         private PreparedStatement stmt; // Prepared statement to use with connection
 
+        /// <summary>
+        /// Open connection to the database.
+        /// </summary>
+        /// <param name="host">Host name.</param>
+        /// <param name="port">Port number.</param>
+        /// <param name="admin">Admin name.</param>
+        /// <param name="password">Admin password.</param>
+        /// <param name="db">DB name.</param>
+        /// <returns>Result of operation (1 - OK, -1 - error).</returns>
         public int Open(String host, int port, String admin, String password, String db) {
             return Open(host, port, admin, password, null); }
 

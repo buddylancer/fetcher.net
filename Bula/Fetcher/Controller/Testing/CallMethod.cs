@@ -63,15 +63,20 @@ namespace Bula.Fetcher.Controller.Testing {
     		}
 
             var buffer = (String)null;
-            var result = (DataSet)null;
+            var result = (Object)null;
 
             var full_class = CAT(package, "/", className);
 
     		full_class = Strings.Replace("/", ".", full_class);
             method = Strings.FirstCharToUpper(method);
-            result = (DataSet)Internal.CallMethod(full_class, method, pars);
+            result = Internal.CallMethod(full_class, method, pars);
 
-            buffer = result == null ? "NULL" : result.Serialize();
+            if (result == null)
+                buffer = "NULL";
+            else if (result is DataSet)
+                buffer = ((DataSet)result).ToXml();
+            else
+                buffer = STR(result);
             Response.Write(buffer);
     	}
     }

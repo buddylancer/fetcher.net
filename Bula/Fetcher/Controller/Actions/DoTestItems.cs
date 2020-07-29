@@ -15,9 +15,7 @@ namespace Bula.Fetcher.Controller.Actions {
         private static String TOP = null;
         private static String BOTTOM = null;
 
-        /// <summary>
-        /// Initialize TOP & BOTTOM blocks.
-        /// </summary>
+        /// Initialize TOP and BOTTOM blocks. 
         private static void Initialize() {
             TOP = CAT(
                 "<!DOCTYPE html>\r\n",
@@ -36,6 +34,7 @@ namespace Bula.Fetcher.Controller.Actions {
             );
         }
 
+        /// Execute main logic for this action 
         public static void Execute() {
             var insert_required = false;
             var update_required = false;

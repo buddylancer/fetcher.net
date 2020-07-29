@@ -9,9 +9,19 @@ namespace Bula.Objects {
     /// Helper class for manipulation with Files and Directories.
     /// </summary>
     public class Helper : Bula.Meta {
+        private static String last_error = null;
+
     	/// <summary>
-    	/// Check whether file exists.
+    	/// Get last error (if any).
     	/// </summary>
+        /// <returns>Last error message.</returns>
+        public static String LastError() {
+            return last_error;
+        }
+
+        /// <summary>
+        /// Check whether file exists.
+        /// </summary>
         /// <param name="path">File name.</param>
         public static Boolean FileExists(String path) {
             return File.Exists(path);
@@ -35,6 +45,7 @@ namespace Bula.Objects {
                 DirectoryInfo dirInfo = Directory.CreateDirectory(path);
             }
             catch (Exception ex) {
+                last_error = ex.Message.ToString();
                 return false;
             }
             return true;
@@ -50,6 +61,7 @@ namespace Bula.Objects {
                 File.Delete(path);
             }
             catch (Exception ex) {
+                last_error = ex.Message.ToString();
                 return false;
             }
             return true;
@@ -87,6 +99,7 @@ namespace Bula.Objects {
                 Directory.Delete(path);
             }
             catch (Exception ex) {
+                last_error = ex.Message.ToString();
                 return false;
             }
             return true;

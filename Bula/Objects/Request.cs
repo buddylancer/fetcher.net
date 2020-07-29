@@ -251,6 +251,11 @@ namespace Bula.Objects {
             return Regex.IsMatch(input, "^[1-9]+[0-9]*$");
         }
 
+        /// <summary>
+        /// Get all variables of given type.
+        /// </summary>
+        /// <param name="type">Required type.</param>
+        /// <returns>Requested variables.</returns>
         public static Hashtable GetVars(int type) {
             Hashtable hash = new Hashtable();
             System.Collections.Specialized.NameValueCollection vars = null;
@@ -288,7 +293,6 @@ namespace Bula.Objects {
         /// <param name="type">Required type.</param>
         /// <param name="name">Variable name.</param>
         /// <returns>Requested variable.</returns>
-
         public static String GetVar(int type, String name) {
             System.Collections.Specialized.NameValueCollection vars = null;
             switch (type)

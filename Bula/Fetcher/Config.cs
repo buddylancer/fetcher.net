@@ -17,13 +17,14 @@ namespace Bula.Fetcher {
         /// Security code 
         public const String SECURITY_CODE = "1234";
 
-        ///  Use fine or full URLs 
+        /// Use fine or full URLs 
         public const Boolean FINE_URLS = false;
 
         /// Cache Web-pages 
         public const Boolean CACHE_PAGES = false;
         /// Cache RSS-feeds 
         public const Boolean CACHE_RSS = false;
+        /// Show what source an item is originally from 
         public const Boolean SHOW_FROM = false;
         /// Show an item or immediately redirect to external source item 
         public const Boolean IMMEDIATE_REDIRECT = false;

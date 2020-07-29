@@ -11,6 +11,7 @@ namespace Bula.Fetcher.Controller.Actions {
     /// Redirecting to the external item.
     /// </summary>
     public class DoRedirectItem : Bula.Meta {
+        /// Execute main logic for this action 
         public static void Execute() {
             var error_message = (String)null;
             var link_to_redirect = (String)null;

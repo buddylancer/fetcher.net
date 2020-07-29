@@ -99,7 +99,7 @@ namespace Bula.Objects {
     	/// <summary>
     	/// Concatenate a number of strings to a single one.
     	/// </summary>
-        /// <param name="Array">of strings.</param>
+        /// <param name="args">Array of strings.</param>
         /// <returns>Resulting string.</returns>
         public static String Concat(params object[] args) {
     		var output = "";
@@ -113,6 +113,11 @@ namespace Bula.Objects {
     		return output;
     	}
 
+        /// <summary>
+        /// Format date/time to DB/GMT presentation.
+        /// </summary>
+        /// <param name="pubdate">Input date/time.</param>
+        /// <returns>Resulting date/time.</returns>
         public static String GetSqlDate(String pubdate) {
             return DateTimes.GmtFormat(Config.SQL_DTS, BLANK(pubdate) ? 0 : DateTimes.GetTime(pubdate));
         }
@@ -160,6 +165,7 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="regex">Regular expression to match Substring(s).</param>
         /// <param name="to">Replacement string.</param>
+        /// <param name="input">Input string.</param>
         /// <returns>Resulting string.</returns>
         public static String ReplaceAll(String regex, String to, String input) {
             return Replace(regex, to, input);
@@ -170,6 +176,7 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="regex">Regular expression to match substring.</param>
         /// <param name="to">Replacement string.</param>
+        /// <param name="input">Input string.</param>
         /// <returns>Resulting string.</returns>
         public static String ReplaceFirst(String regex , String to, String input) {
             return Replace(regex, to, input, 1);

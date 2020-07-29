@@ -66,9 +66,12 @@ namespace Bula.Fetcher {
         /// Unique host ID for current request 
         public static String UniqueHostId;
 
+        /// Use fine or full URLs 
         public static Boolean FineUrls = Config.FINE_URLS;
+        /// Show an item or immediately redirect to external source item 
         public static Boolean ImmediateRedirect = Config.IMMEDIATE_REDIRECT;
 
+        /// Storage for global constants 
         public static Hashtable GlobalConstants = null;
 
         /// Is current request from test script? 
