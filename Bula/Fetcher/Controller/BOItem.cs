@@ -43,7 +43,7 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Instantiate BOItem from given source and RSS-item.
         /// </summary>
-        /// <param name="sSource">Current processed source.</param>
+        /// <param name="source">Current processed source.</param>
         /// <param name="item">Current processed RSS-item from given source.</param>
         public BOItem (String source, Hashtable item) {
             this.Initialize(source, item);
@@ -69,6 +69,9 @@ namespace Bula.Fetcher.Controller {
             this.PreProcessLink();
         }
 
+        /// <summary>
+        /// Pre-process link (just placeholder for now)
+        /// </summary>
         protected void PreProcessLink() {}
 
         /// <summary>

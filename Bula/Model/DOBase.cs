@@ -22,14 +22,12 @@ namespace Bula.Model {
         /// @var String
         protected String id_field;
 
-        //protected int page_no;
-
+        /// Public constructor 
         public DOBase () {
             if (DBConfig.Connection == null)
                 DBConfig.Connection = this.CreateConnection();
 
             this.db_connection = DBConfig.Connection;
-            //this.page_no = 0;
         }
 
         // Create connection to the database given parameters from DBConfig.
@@ -228,7 +226,17 @@ namespace Bula.Model {
             return this.GetDataSet(query, pars);
         }
 
+        /// <summary>
+        /// Get DataSet with all records enumerated.
+        /// </summary>
+        /// <returns>Resulting data set.</returns>
         public DataSet EnumAll() { return EnumAll(null, null); }
+
+        /// <summary>
+        /// Get DataSet with all records enumerated.
+        /// </summary>
+        /// <param name="where">Where condition.</param>
+        /// <returns>Resulting data set.</returns>
         public DataSet EnumAll(String where) { return EnumAll(where, null); }
 
         /// <summary>

@@ -10,13 +10,33 @@ namespace Bula.Fetcher {
     public class Common : Bula.Meta {
         static Common() { Initialize(); }
 
+        /// Storage for internal variables 
         protected static Hashtable Values = new Hashtable();
+
+        /// <summary>
+        /// Get internal variable.
+        /// </summary>
+        /// <param name="name">Name of internal variable.</param>
+        /// <returns>Value of variable.</returns>
         public static String Get(String name) {
             return (String)Values[name];
         }
+
+        /// <summary>
+        /// Set internal variable.
+        /// </summary>
+        /// <param name="name">Name of internal variable.</param>
+        /// <param name="value">Value of internal variable to set.</param>
         public static void Set(String name, Object value) {
             Values[name] = value;
         }
+
+        ///  
+        /// <summary>
+        /// Check whether variable is contained in internal storage.
+        /// </summary>
+        /// <param name="name">Name of internal variable.</param>
+        /// <returns>True - variable exists, False - not exists.</returns>
         public static Boolean Contains(String name) {
             return Values.Contains(name);
         }

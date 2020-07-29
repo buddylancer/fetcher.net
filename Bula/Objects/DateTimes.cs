@@ -5,7 +5,7 @@ namespace Bula.Objects {
     using Bula.Objects;
 
     /// <summary>
-    /// Helper class to manipulate with Date & Times.
+    /// Helper class to manipulate with Date and Times.
     /// </summary>
     public class DateTimes : Bula.Meta {
         /// <summary>
@@ -14,7 +14,12 @@ namespace Bula.Objects {
         public const String RSS_DTS = "ddd, dd MMM yyyy HH:mm:ss zzz";
         private static DateTime unix = new DateTime(1970, 1, 1);
 
-        public static int GetTime() { return (int)DateTime.Now.Subtract(unix).TotalSeconds; }
+        /// <summary>
+        /// Get current time as Unix timestamp.
+        /// </summary>
+        /// <returns>Resulting time (Unix timestamp).</returns>
+        public static int GetTime() {
+            return (int)DateTime.Now.Subtract(unix).TotalSeconds; }
 
         /// <summary>
         /// Get time as Unix timestamp.

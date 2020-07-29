@@ -17,6 +17,7 @@ namespace Bula.Fetcher.Controller {
         private Boolean print_flag = false;
         private String print_string = "";
 
+        /// Public default constructor 
         public Engine () {
             if (engine_instances == null)
                 engine_instances = new ArrayList();
@@ -40,24 +41,34 @@ namespace Bula.Fetcher.Controller {
                 engine_instances[current_index] = engine;
         }
 
-        /// <summary>
-        /// Pop engine back.
-        /// </summary>
+        /// Pop engine back. 
         public static void Pop() {
             SetPrintString(null);
             current_index--;
         }
 
+        /// <summary>
+        /// Set print string for current engine instance.
+        /// </summary>
+        /// <param name="val">Print string to set.</param>
         private static void SetPrintString(String val) {
             var engine = (Engine)engine_instances[current_index];
             engine.print_string = val;
         }
 
+        /// <summary>
+        /// Get print string for current engine instance.
+        /// </summary>
+        /// <returns>Current print string.</returns>
         private static String GetPrintString() {
             var engine = (Engine)engine_instances[current_index];
             return engine.print_string;
         }
 
+        /// <summary>
+        /// Write string.
+        /// </summary>
+        /// <param name="val">String to write.</param>
         public static void Write(String val) {
             var engine = (Engine)engine_instances[current_index];
             if (engine.print_flag)
@@ -111,11 +122,16 @@ namespace Bula.Fetcher.Controller {
             return content;
         }
 
+        /// <summary>
+        /// Show template content.
+        /// </summary>
+        /// <param name="filename">Template file to use.</param>
+        /// <returns>Resulting content.</returns>
         public static String ShowTemplate(String filename) {
             return ShowTemplate(filename, null); }
 
         /// <summary>
-        /// Show content by merging template and data.
+        /// Show template content by merging template and data.
         /// </summary>
         /// <param name="filename">Template file to use for merging.</param>
         /// <param name="hash">Data in the form of Hashtable to use for merging.</param>

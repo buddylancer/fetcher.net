@@ -10,6 +10,7 @@ namespace Bula.Fetcher.Model {
     /// Manipulating with items.
     /// </summary>
     public class DOItem : DOBase {
+        /// Public constructor (overrides base constructor) 
         public DOItem (): base() {
             this.table_name = "items";
             this.id_field = "i_ItemId";
@@ -164,12 +165,19 @@ namespace Bula.Fetcher.Model {
 
     	}
 
+    	/// <summary>
+    	/// Enumerate items from given date.
+    	/// </summary>
+        /// <param name="from_date">Date to include items starting from.</param>
+        /// <param name="source">Source name to include items from (default - all sources).</param>
+        /// <param name="filter">Filter for the category (or empty - no filtering).</param>
+        /// <returns>Resulting data set.</returns>
     	public DataSet EnumItemsFromSource(String from_date, String source, String filter) {
             return this.EnumItemsFromSource(from_date, source, filter, 20);
         }
 
     	/// <summary>
-    	/// Enumerate items from date.
+    	/// Enumerate items from given date.
     	/// </summary>
         /// <param name="from_date">Date to include items starting from.</param>
         /// <param name="source">Source name to include items from (default - all sources).</param>

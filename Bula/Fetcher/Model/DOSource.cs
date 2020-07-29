@@ -10,7 +10,7 @@ namespace Bula.Fetcher.Model {
     /// Manipulations with sources.
     /// </summary>
     public class DOSource : DOBase {
-
+        /// Public constructor (overrides base constructor) 
     	public DOSource (): base() {
     		this.table_name = "sources";
     		this.id_field = "i_SourceId";

@@ -23,9 +23,7 @@ namespace Bula.Fetcher.Controller {
             );
         }
 
-        /// <summary>
-        /// Execute main logic for required action.
-        /// </summary>
+        /// Execute main logic for required action. 
         public static void Execute() {
             if (actions_array == null)
                 Initialize();

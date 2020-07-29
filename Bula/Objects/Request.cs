@@ -9,7 +9,9 @@ namespace Bula.Objects {
     /// Helper class for processing query/form request.
     /// </summary>
     public class Request : Bula.Meta {
+        /// Internal storage for GET/POST variables 
         private static Hashtable Vars = null;
+        /// Internal storage for SERVER variables 
         private static Hashtable ServerVars = null;
 
         /// Enum value (type) for getting POST parameters 
@@ -43,13 +45,19 @@ namespace Bula.Objects {
         }
 
         /// <summary>
-        /// Get variable from request.
+        /// Get variable from internal storage.
         /// </summary>
         /// <param name="name">Variable name.</param>
+        /// <returns>Variable value.</returns>
         public static String Get(String name) {
             return (String)(Vars.ContainsKey(name) ? Vars[name] : null);
         }
 
+        /// <summary>
+        /// Set variable into internal storage.
+        /// </summary>
+        /// <param name="name">Variable name.</param>
+        /// <param name="value">Variable value.</param>
         public static void Set(String name, String value) {
             Vars[name] = value;
         }
@@ -62,25 +70,19 @@ namespace Bula.Objects {
             return Vars.Keys.GetEnumerator();
         }
 
-        /// <summary>
-        /// Extract all POST variables into internal variables.
-        /// </summary>
+        /// Extract all POST variables into internal variables. 
         public static void ExtractPostVars() {
             var vars = GetVars(INPUT_POST);
             Vars = Arrays.MergeHashtable(Vars, vars);
         }
 
-        /// <summary>
-        /// Extract all SERVER variables into internal variables.
-        /// </summary>
+        /// Extract all SERVER variables into internal storage. 
         public static void ExtractServerVars() {
             var vars = GetVars(INPUT_SERVER);
             Vars = Arrays.MergeHashtable(ServerVars, vars);
         }
 
-        /// <summary>
-        /// Extract all GET and POST variables into internal variables.
-        /// </summary>
+        /// Extract all GET and POST variables into internal storage. 
         public static void ExtractAllVars() {
             var vars = GetVars(INPUT_GET);
             Vars = Arrays.MergeHashtable(Vars, vars);
@@ -100,6 +102,10 @@ namespace Bula.Objects {
             return http_referer.IndexOf(text) != -1;
         }
 
+        /// <summary>
+        /// Check that request was originated from test script.
+        /// </summary>
+        /// <returns>True - from test script, False - from ordinary user agent.</returns>
         public static Boolean CheckTester() {
             var http_tester = GetVar(INPUT_SERVER, "HTTP_USER_AGENT");
             if (http_tester == null)
@@ -181,11 +187,16 @@ namespace Bula.Objects {
             return val;
         }
 
+        /// <summary>
+        /// Test (match) a page request with array of allowed pages.
+        /// </summary>
+        /// <param name="pages">Array of allowed pages (and their parameters).</param>
+        /// <returns>Resulting page parameters.</returns>
         public static Hashtable TestPage(Object[] pages) {
             return TestPage(pages, null); }
 
         /// <summary>
-        /// Test (match) a page with array of allowed pages.
+        /// Test (match) a page request with array of allowed pages.
         /// </summary>
         /// <param name="pages">Array of allowed pages (and their parameters).</param>
         /// <param name="default_page">Default page to use for testing.</param>

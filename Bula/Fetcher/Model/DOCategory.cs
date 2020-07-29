@@ -10,7 +10,7 @@ namespace Bula.Fetcher.Model {
     /// Manipulating with categories.
     /// </summary>
     public class DOCategory : DOBase {
-
+        /// Public constructor (overrides base constructor) 
         public DOCategory (): base() {
             this.table_name = "categories";
             this.id_field = "s_CatId";

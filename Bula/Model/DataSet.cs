@@ -4,13 +4,16 @@ namespace Bula.Model {
     using System.Collections;
     using Bula.Objects;
 
-    // Non-typed data set
+    /// <summary>
+    /// Non-typed data set implementation.
+    /// </summary>
     public class DataSet : Bula.Meta {
     	private ArrayList rows;
     	private int page_size;
     	private int total_pages;
 
-    	public DataSet () {
+    	/// Default public constructor 
+        public DataSet () {
     		this.rows = new ArrayList();
     		this.page_size = 10;
     		this.total_pages = 0;
@@ -48,14 +51,28 @@ namespace Bula.Model {
         public int GetPageSize() {
             return this.page_size;
         }
+
+    	/// <summary>
+    	/// Set page size of the DataSet.
+    	/// </summary>
+        /// <param name="page_size">Current page size.</param>
     	public void SetPageSize(int page_size) {
             this.page_size = page_size;
         }
 
-    	public int GetTotalPages() {
+    	/// <summary>
+    	/// Get total number of pages in the DataSet.
+    	/// </summary>
+        /// <returns>Number of pages.</returns>
+        public int GetTotalPages() {
             return this.total_pages;
         }
-    	public void SetTotalPages(int total_pages) {
+
+    	/// <summary>
+    	/// Set total number of pages in the DataSet.
+    	/// </summary>
+        /// <param name="total_pages">Number of pages.</param>
+        public void SetTotalPages(int total_pages) {
             this.total_pages = total_pages;
         }
 

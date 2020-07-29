@@ -18,6 +18,7 @@ namespace Bula.Fetcher.Controller {
         private Logger oLogger = null;
         private DataSet dsCategories = null;
 
+        /// Public default constructor 
         public BOFetcher () {
             this.InitializeLog();
             this.PreLoadCategories();

@@ -60,7 +60,10 @@ namespace Bula.Fetcher.Controller {
                         Hashtable[] oCategory =
                             {new Hashtable()};
                         if (!doCategory.CheckFilterName(filter_name, oCategory))
-                            err_message += (CAT("Incorrect filter '", filter_name, "'!"));
+                            if (!any_filter)
+                                err_message += (CAT("Incorrect filter '", filter_name, "'!"));
+                            else
+                                filter = filter_name;
                         else
                             filter = STR(oCategory[0]["s_Filter"]);
                     }
