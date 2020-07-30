@@ -12,6 +12,14 @@ namespace Bula.Fetcher.Controller.Pages {
     /// </summary>
     public class Sources : ItemsBase {
         /// <summary>
+        /// Fast check of input query parameters.
+        /// </summary>
+        /// <returns>Parsed parameters (or null in case of any error).</returns>
+        public static Hashtable Check() {
+            return new Hashtable();
+        }
+
+        /// <summary>
         /// Execute main logic for Source block.
         /// </summary>
         public static void Execute() {

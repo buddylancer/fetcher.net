@@ -101,16 +101,6 @@ namespace Bula.Fetcher.Controller {
         /// <param name="class_name">Class name to include.</param>
         /// <returns>Resulting content.</returns>
         public static String IncludeTemplate(String class_name) {
-            return IncludeTemplate(class_name, null);
-        }
-
-        /// <summary>
-        /// Include file with class and generate content by calling method Execute().
-        /// </summary>
-        /// <param name="class_name">Class name to include.</param>
-        /// <param name="args">Arguments [optional].</param>
-        /// <returns>Resulting content.</returns>
-        public static String IncludeTemplate(String class_name, Hashtable args) {
             Push(false);
             var file_name = 
                 CAT(class_name, ".cs");
@@ -119,6 +109,28 @@ namespace Bula.Fetcher.Controller {
             if (Helper.FileExists(CAT(Config.LocalRoot, file_name))) {
                 //Config.IncludeFile(file_name);
                 Internal.CallStaticMethod(class_name, "Execute");
+                content = GetPrintString();
+            }
+            else
+                content = CAT("No such file: ", file_name);
+            Pop();
+            return content;
+        }
+
+        /// <summary>
+        /// Include file with class and check for errors by calling method Check().
+        /// </summary>
+        /// <param name="class_name">Class name to include.</param>
+        /// <returns>Resulting content.</returns>
+        public static String CheckForErrors(String class_name) {
+            Push(false);
+            var file_name = 
+                CAT(class_name, ".cs");
+
+            var content = (String)null;
+            if (Helper.FileExists(CAT(Config.LocalRoot, file_name))) {
+                //Config.IncludeFile(file_name);
+                Internal.CallStaticMethod(class_name, "check");
                 content = GetPrintString();
             }
             else

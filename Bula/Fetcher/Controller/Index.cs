@@ -66,15 +66,19 @@ namespace Bula.Fetcher.Controller {
             Prepare["[#ContentType]"] = "text/html; charset=UTF-8";
             Prepare["[#Top]"] = Engine.IncludeTemplate("Bula/Fetcher/Controller/Top");
             Prepare["[#Menu]"] = Engine.IncludeTemplate("Bula/Fetcher/Controller/Menu");
-            if (!page_info.ContainsKey("page"))
-                Prepare["[#Page]"] = Engine.ShowTemplate("Bula/Fetcher/View/no_such_file.html");
+
+            // Get included page either from cache or build it from the scratch
+            var error_content = Engine.CheckForErrors(CAT("Bula/Fetcher/Controller/Pages/", class_name));
+            if (!BLANK(error_content)) {
+                Prepare["[#Page]"] = error_content;
+            }
             else {
-                // Get included page either from cache or build it from the scratch
                 if (Config.CACHE_PAGES/* && !Config.DontCache.Contains(page_name)*/) //TODO!!!
                     Prepare["[#Page]"] = Util.ShowFromCache(Config.CacheFolder, page_name, class_name);
                 else
                     Prepare["[#Page]"] = Engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", class_name));
             }
+
             if (/*Config.RssAllowed != null && */Config.SHOW_BOTTOM) {
                 // Get bottom block either from cache or build it from the scratch
                 if (Config.CACHE_PAGES)

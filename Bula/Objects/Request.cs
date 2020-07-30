@@ -35,6 +35,10 @@ namespace Bula.Objects {
             ServerVars = Arrays.NewHashtable();
         }
 
+        public static Hashtable GetPrivateVars() {
+            return Vars;
+        }
+
         /// <summary>
         /// Check whether request contains variable.
         /// </summary>
@@ -235,12 +239,21 @@ namespace Bula.Objects {
         }
 
         /// <summary>
+        /// Check whether text is ordinary name.
+        /// </summary>
+        /// <param name="input">Input text.</param>
+        /// <returns>True - text matches name, False - not matches.</returns>
+        public static Boolean IsName(String input) {
+            return Regex.IsMatch(input, "^[A-Za-z_]+[A-Za-z0-9_]*$");
+        }
+
+        /// <summary>
         /// Check whether text is domain name.
         /// </summary>
         /// <param name="input">Input text.</param>
         /// <returns>True - text matches domain name, False - not matches.</returns>
         public static Boolean IsDomainName(String input) {
-            return Regex.IsMatch(input, "^[A-Za-z0-9\\.]+$");
+            return Regex.IsMatch(input, "^[A-Za-z]+[A-Za-z0-9\\.]*$");
         }
 
         /// <summary>

@@ -12,9 +12,21 @@ namespace Bula.Fetcher.Controller.Pages {
     /// </summary>
     public class Home : ItemsBase {
         /// <summary>
+        /// Fast check of input query parameters.
+        /// </summary>
+        /// <returns>Parsed parameters (or null in case of any error).</returns>
+        public static Hashtable Check() {
+            return new Hashtable();
+        }
+
+        /// <summary>
         /// Execute main logic for Home block.
         /// </summary>
         public static void Execute() {
+            var Pars = Check();
+            if (Pars == null)
+                return;
+
             var Prepare = new Hashtable();
 
             var doItem = new DOItem();

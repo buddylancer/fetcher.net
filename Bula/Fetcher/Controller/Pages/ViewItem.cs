@@ -13,32 +13,45 @@ namespace Bula.Fetcher.Controller.Pages {
     /// </summary>
     public class ViewItem : Bula.Meta {
         /// <summary>
-        /// Execute main logic for View Item block.
+        /// Fast check of input query parameters.
         /// </summary>
-        public static void Execute() {
+        /// <returns>Parsed parameters (or null in case of any error).</returns>
+        public static Hashtable Check() {
             var Prepare = new Hashtable();
-
             if (!Request.Contains("id")) {
                 Prepare["[#ErrMessage]"] = "Item ID is required!";
                 Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
-                return;
+                return null;
             }
             var id = Request.Get("id");
             if (!Request.IsInteger(id)) {
                 Prepare["[#ErrMessage]"] = "Item ID must be positive integer!";
                 Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
-                return;
+                return null;
             }
 
+            var Pars = new Hashtable();
+            Pars["id"] = id;
+            return Pars;
+        }
+
+        /// <summary>
+        /// Execute main logic for View Item block.
+        /// </summary>
+        public static void Execute() {
+            var Pars = Check();
+            if (Pars == null)
+                return;
+
+            var id = (String)Pars["id"];
+
+            var Prepare = new Hashtable();
+
             var doItem = new DOItem();
-            var dsItems = doItem.GetById(INT(Request.Get("id")));
+            var dsItems = doItem.GetById(INT(id));
             if (dsItems == null || dsItems.GetSize() == 0) {
                 Prepare["[#ErrMessage]"] = "Wrong item ID!";
                 Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
-                //if (Config.CACHE_PAGES)
-                //    Print(Util.ShowFromCache("home", "p=home&from_view_item=1"));
-                //else
-                //    Print(Engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/Home"));
                 return;
             }
 
