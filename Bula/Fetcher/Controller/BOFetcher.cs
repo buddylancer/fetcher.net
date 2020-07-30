@@ -32,7 +32,7 @@ namespace Bula.Fetcher.Controller {
             Config.Set("Log_Object", this.oLogger);
             var log = Request.GetOptionalInteger("log");
             if (!NUL(log) && log != -99999) { //TODO
-                var filename_template = "C:/Temp/Log_{0}_{1}.html";
+                var filename_template = (String)"C:/Temp/Log_{0}_{1}.html";
                 var filename = Util.FormatString(filename_template, ARR("fetch_items", DateTimes.Format(DBConfig.SQL_DTS)));
                 this.oLogger.Init(filename);
             }
@@ -146,7 +146,7 @@ namespace Bula.Fetcher.Controller {
 
             var entries = Helper.ListDirEntries(path_name);
             while (entries.MoveNext()) {
-                var entry = CAT(entries.Current);
+                var entry = (String)entries.Current;
 
                 if (Helper.IsFile(entry) && entry.EndsWith(ext)) {
                     this.oLogger.Output(CAT("Deleting of ", entry, " ...<br/>\r\n"));

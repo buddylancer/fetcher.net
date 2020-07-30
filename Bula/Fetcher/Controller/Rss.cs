@@ -39,7 +39,7 @@ namespace Bula.Fetcher.Controller {
 
             var any_filter = false;
             if (Request.Contains("code")) {
-                if (Request.Get("code") == Config.SECURITY_CODE)
+                if (EQ(Request.Get("code"), Config.SECURITY_CODE))
                     any_filter = true;
             }
 
@@ -59,13 +59,14 @@ namespace Bula.Fetcher.Controller {
                     else {
                         Hashtable[] oCategory =
                             {new Hashtable()};
-                        if (!doCategory.CheckFilterName(filter_name, oCategory))
-                            if (!any_filter)
-                                err_message += (CAT("Incorrect filter '", filter_name, "'!"));
-                            else
-                                filter = filter_name;
-                        else
+                        if (doCategory.CheckFilterName(filter_name, oCategory))
                             filter = STR(oCategory[0]["s_Filter"]);
+                        else {
+                            if (any_filter)
+                                filter = filter_name;
+                            else
+                                err_message += (CAT("Incorrect filter '", filter_name, "'!"));
+                        }
                     }
                 }
             }
@@ -116,7 +117,8 @@ namespace Bula.Fetcher.Controller {
                 if (Helper.FileExists(cached_file)) {
                     Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
                     var temp_content = Helper.ReadAllText(cached_file);
-                    Response.Write(temp_content.Substring(3)); //TODO -- BOM?
+                    //Response.Write(temp_content.Substring(3)); //TODO -- BOM?
+                    Response.Write(temp_content); //TODO -- BOM?
                     return;
                 }
             }
@@ -252,7 +254,8 @@ namespace Bula.Fetcher.Controller {
             if (Config.CACHE_RSS && !count_set)
             {
                 Util.TestFileFolder(cached_file);
-                Helper.WriteText(cached_file, Strings.Concat("\xEF\xBB\xBF", xml_content));
+                //Helper.WriteText(cached_file, Strings.Concat("\xEF\xBB\xBF", xml_content));
+                Helper.WriteText(cached_file, xml_content);
             }
 
             Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");

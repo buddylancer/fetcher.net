@@ -84,7 +84,7 @@ namespace Bula.Fetcher.Controller.Pages {
                         s_Creator = s_Creator.Replace("(", "<br/>(");
                 }
                 else
-                    s_Creator = " "; //TODO -- "" doesn't works somehow, need to investigate
+                    s_Creator = (String)" "; //TODO -- "" doesn't works somehow, need to investigate
                 Row["[#Creator]"] = s_Creator;
             }
             if (Config.Contains("Name_Custom1") && oItem.Contains("s_Custom1") && STR(oItem["s_Custom1"]) != "")

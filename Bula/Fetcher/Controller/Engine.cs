@@ -187,7 +187,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="str">Input string.</param>
         /// <returns>Resulting string.</returns>
         private static String TrimComments(String str) {
-            var line = str;
+            var line = (String)str;
             var trimmed = false;
             if (line.IndexOf("<!--#") != -1) {
                 line = line.Replace("<!--", "");

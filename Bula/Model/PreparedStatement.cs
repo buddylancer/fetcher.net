@@ -91,7 +91,7 @@ namespace Bula.Model {
             var question_index = -1;
             var start_from = 0;
             var n = 1;
-            var str = this.sql;
+            var str = (String)this.sql;
             while ((question_index = str.IndexOf("?", start_from)) != -1) {
                 var value = (String)this.pars[n];
                 var before = str.Substring(0, question_index);

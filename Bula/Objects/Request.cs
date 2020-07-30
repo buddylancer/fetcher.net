@@ -224,7 +224,8 @@ namespace Bula.Objects {
             page_info.Remove("page");
             for (int n = 0; n < SIZE(pages); n += 4) {
                 if (EQ(pages[n], page)) {
-                    page_info["page"] = pages[n+1];
+                    page_info["page"] = pages[n+0];
+                    page_info["class"] = pages[n+1];
                     page_info["post_required"] = pages[n+2];
                     page_info["code_required"] = pages[n+3];
                     break;

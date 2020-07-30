@@ -21,9 +21,9 @@ namespace Bula.Fetcher {
         public const Boolean FINE_URLS = false;
 
         /// Cache Web-pages 
-        public const Boolean CACHE_PAGES = false;
+        public const Boolean CACHE_PAGES = true;
         /// Cache RSS-feeds 
-        public const Boolean CACHE_RSS = false;
+        public const Boolean CACHE_RSS = true;
         /// Show what source an item is originally from 
         public const Boolean SHOW_FROM = false;
         /// Show an item or immediately redirect to external source item 

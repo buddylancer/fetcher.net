@@ -70,22 +70,24 @@ namespace Bula.Fetcher.Controller {
         /// Logic for getting/saving page from/into cache.
         /// </summary>
         /// <param name="cache_folder">Cache folder root.</param>
-        /// <param name="page">Page to process.</param>
+        /// <param name="page_name">Page to process.</param>
+        /// <param name="class_name">Appropriate class name.</param>
         /// <returns>Resulting content.</returns>
-        public static String ShowFromCache(String cache_folder, String page) {
-            return ShowFromCache(cache_folder, page, null);
+        public static String ShowFromCache(String cache_folder, String page_name, String class_name) {
+            return ShowFromCache(cache_folder, page_name, class_name, null);
         }
 
         /// <summary>
         /// Main logic for getting/saving page from/into cache.
         /// </summary>
         /// <param name="cache_folder">Cache folder root.</param>
-        /// <param name="page">Page to process.</param>
+        /// <param name="page_name">Page to process.</param>
+        /// <param name="class_name">Appropriate class name.</param>
         /// <param name="query">Query to process.</param>
         /// <returns>Resulting content.</returns>
-        public static String ShowFromCache(String cache_folder, String page, String query) {
-            if (EQ(page, "bottom"))
-                query = page;
+        public static String ShowFromCache(String cache_folder, String page_name, String class_name, String query) {
+            if (EQ(page_name, "bottom"))
+                query = page_name;
             else {
                 if (query == null)
                     query = Request.GetVar(Request.INPUT_SERVER, "QUERY_STRING");
@@ -95,19 +97,10 @@ namespace Bula.Fetcher.Controller {
 
             var content = (String)null;
 
-            // Clean twitter-added parameters -- &utm_source=twitterfeed&utm_medium=twitter
-            if (EQ(page, "view_item")) {
-                if (!Request.Contains("id") || !Request.IsInteger(Request.Get("id"))) {
-                    var Prepare = new Hashtable();
-                    Prepare["[#ErrMessage]"] = "Incorrect Item ID, or not set ID!";
-                    content = Engine.ShowTemplate("Bula/Fetcher/View/index.html", Prepare);
-                    return content;
-                }
-                //TODO -- cut off "&title=some-title-of-the-item
+            if (EQ(page_name, "view_item")) {
                 var title_pos = query.IndexOf("&title=");
                 if (title_pos != -1)
                     query = query.Substring(0, title_pos);
-                //query = Str_replace("&utm_source=twitterfeed&utm_medium=twitter", "", query);
             }
 
             var hash = query;
@@ -120,9 +113,8 @@ namespace Bula.Fetcher.Controller {
                 //content = CAT("*** Got from cache ", Str_replace("/", " /", file_name), "***<br/>", content);
             }
             else {
-                var prefix = EQ(page, "bottom") ? null : "pages/";
-                var bottom_flag = EQ(page, "bottom") ? 1 : 0;
-                content = Engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/", prefix, page));
+                var prefix = EQ(page_name, "bottom") ? null : "Pages/";
+                content = Engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/", prefix, class_name));
 
                 TestFileFolder(file_name);
                 Helper.WriteText(file_name, content);

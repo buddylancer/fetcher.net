@@ -79,7 +79,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 Prepare["[#Share]"] = 1;
 
             if (Config.CACHE_PAGES)
-                Prepare["[#Home]"] = Util.ShowFromCache(Config.CacheFolder, "home", "p=home&from_view_item=1");
+                Prepare["[#Home]"] = Util.ShowFromCache(Config.CacheFolder, "home", "Home", "p=home&from_view_item=1");
             else
                 Prepare["[#Home]"] = Engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/Home");
 

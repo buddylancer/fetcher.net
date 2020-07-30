@@ -39,12 +39,15 @@ namespace Bula.Fetcher.Controller {
             if (!page_info.ContainsKey("page"))
                 Response.End("Error in parameters -- no page");
 
+            var page_name = (String)page_info["page"];
+            var class_name = (String)page_info["class"];
+
             Request.Initialize();
             if (INT(page_info["post_required"]) == 1)
                 Request.ExtractPostVars();
             else
                 Request.ExtractAllVars();
-            Config.Set("Page", page_info["page"]);
+            Config.Set("Page", page_name);
 
             var Prepare = new Hashtable();
             Prepare["[#Site_Name]"] = Config.SITE_NAME;
@@ -67,15 +70,15 @@ namespace Bula.Fetcher.Controller {
                 Prepare["[#Page]"] = Engine.ShowTemplate("Bula/Fetcher/View/no_such_file.html");
             else {
                 // Get included page either from cache or build it from the scratch
-                if (Config.CACHE_PAGES/* && !Config.DontCache.Contains(page_info["page"])*/) //TODO!!!
-                    Prepare["[#Page]"] = Util.ShowFromCache(Config.CacheFolder, STR(page_info["page"]));
+                if (Config.CACHE_PAGES/* && !Config.DontCache.Contains(page_name)*/) //TODO!!!
+                    Prepare["[#Page]"] = Util.ShowFromCache(Config.CacheFolder, page_name, class_name);
                 else
-                    Prepare["[#Page]"] = Engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", page_info["page"]));
+                    Prepare["[#Page]"] = Engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", class_name));
             }
             if (/*Config.RssAllowed != null && */Config.SHOW_BOTTOM) {
                 // Get bottom block either from cache or build it from the scratch
                 if (Config.CACHE_PAGES)
-                    Prepare["[#Bottom]"] = Util.ShowFromCache(Config.CacheFolder, "bottom");
+                    Prepare["[#Bottom]"] = Util.ShowFromCache(Config.CacheFolder, "bottom", "Bottom");
                 else
                     Prepare["[#Bottom]"] = Engine.IncludeTemplate("Bula/Fetcher/Controller/Bottom");
             }

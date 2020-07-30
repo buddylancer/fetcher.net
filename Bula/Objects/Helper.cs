@@ -120,8 +120,11 @@ namespace Bula.Objects {
         /// <param name="encoding">Encoding name [optional].</param>
         /// <returns>Resulting content.</returns>
         public static String ReadAllText(String filename, String encoding) {
-            return File.ReadAllText(filename, System.Text.Encoding.GetEncoding(encoding));
-    	}
+            if (encoding == null)
+                return File.ReadAllText(filename);
+            else
+                return File.ReadAllText(filename, System.Text.Encoding.GetEncoding(encoding));
+        }
 
       	/// <summary>
       	/// Read all content of text file as list of lines.
@@ -190,8 +193,12 @@ namespace Bula.Objects {
         public static IEnumerator ListDirEntries(String path) {
             String[] entries = Directory.GetDirectories(path);
             String[] files = Directory.GetFiles(path);
-            entries = (String[])Arrays.MergeArray(entries, files);
-            return entries.GetEnumerator();
+
+            ArrayList allEntries = Arrays.CreateArrayList(entries);
+            ArrayList fileEntries = Arrays.CreateArrayList(files);
+            allEntries = Arrays.MergeArrayList(allEntries, fileEntries);
+
+            return allEntries.ToArray(typeof(String)).GetEnumerator();
         }
     }
 }

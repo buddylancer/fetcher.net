@@ -53,7 +53,7 @@ namespace Bula.Fetcher.Controller {
                     Response.End("No access.");
             }
 
-            var action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["page"]);
+            var action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["class"]);
             Internal.CallStaticMethod(action_class, "Execute");
 
             if (DBConfig.Connection != null) {
