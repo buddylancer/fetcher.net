@@ -1,10 +1,15 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher {
     using System;
 
     /// <summary>
     /// Main class for configuring data.
     /// </summary>
-    public class Config : Common {
+    public class Config : Bula.Meta {
         /// Exactly the same as RewriteBase in .htaccess 
         public const String TOP_DIR = "/";
         /// Index page name 
@@ -74,7 +79,7 @@ namespace Bula.Fetcher {
         /// Name of custom field 2 (comment when not extracted) 
         //const String NAME_CUSTOM2 = "Custom2";
 
-        /// Show bottom blocks (Filtering and Rss) 
+        /// Show bottom blocks (Filtering and RSS) 
         public const Boolean SHOW_BOTTOM = true;
     } 
 }

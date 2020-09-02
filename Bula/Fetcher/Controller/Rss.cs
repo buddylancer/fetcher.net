@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller {
     using System;
 
@@ -7,17 +12,20 @@ namespace Bula.Fetcher.Controller {
     using Bula.Objects;
 
     using Bula.Model;
-    using Bula.Fetcher.Controller;
     using Bula.Fetcher.Model;
+
+    using Bula.Fetcher.Controller;
 
     /// <summary>
     /// Main logic for generating RSS-feeds.
     /// </summary>
-    public class Rss : Bula.Meta {
+    public class Rss : Page {
+        public Rss(Context context) : base(context) { }
+
         /// <summary>
         /// Execute main logic for generating RSS-feeds.
         /// </summary>
-        public static void Execute() {
+        public override void Execute() {
             Request.Initialize();
             Request.ExtractAllVars();
 
@@ -45,10 +53,11 @@ namespace Bula.Fetcher.Controller {
 
             // Check filter
             var filter = (String)null;
+            var filter_name = (String)null;
             var doCategory = new DOCategory();
             var dsCategories = doCategory.EnumCategories();
             if (dsCategories.GetSize() > 0) {
-                var filter_name = Request.Get("filter");
+                filter_name = Request.Get("filter");
                 if (!NUL(filter_name)) {
                     if (BLANK(filter_name)) {
                         if (error_message.Length > 0)
@@ -109,7 +118,7 @@ namespace Bula.Fetcher.Controller {
             var cached_file = "";
             if (Config.CACHE_RSS && !count_set) {
                 cached_file = Strings.Concat(
-                    Config.RssFolder, "/rss",
+                    this.context.RssFolder, "/rss",
                     (BLANK(source) ? null : CAT("-s=", source)),
                     (BLANK(filter_name) ? null : CAT("-f=", filter_name)),
                     (full_title ? "-full" : null), ".xml");
@@ -147,10 +156,10 @@ namespace Bula.Fetcher.Controller {
                 if (current == 0)
                     pubDate = DateTimes.Format(Config.XML_DTS, DateTimes.GetTime(date));
 
-                var category = Config.Contains("Name_Category") ? STR(oItem["s_Category"]) : null;
-                var creator = Config.Contains("Name_Creator") ? STR(oItem["s_Creator"]) : null;
-                String custom1 = Config.Contains("Name_Custom1") ? STR(oItem["s_Custom1"]) : null;
-                String custom2 = Config.Contains("Name_Custom2") ? STR(oItem["s_Custom2"]) : null;
+                var category = this.context.Contains("Name_Category") ? STR(oItem["s_Category"]) : null;
+                var creator = this.context.Contains("Name_Creator") ? STR(oItem["s_Creator"]) : null;
+                String custom1 = this.context.Contains("Name_Custom1") ? STR(oItem["s_Custom1"]) : null;
+                String custom2 = this.context.Contains("Name_Custom2") ? STR(oItem["s_Custom2"]) : null;
 
                 var source_name = STR(oItem["s_SourceName"]);
                 var description = STR(oItem["t_Description"]);
@@ -174,30 +183,30 @@ namespace Bula.Fetcher.Controller {
                 );
 
                 var link = (String)null;
-                if (Config.ImmediateRedirect)
+                if (this.context.ImmediateRedirect)
                     link = STR(oItem["s_Link"]);
                 else {
                     var url = STR(oItem["s_Url"]);
                     var id_field = doItem.GetIdField();
                     link = CAT(
-                        Config.Site, Config.TOP_DIR,
-                        (Config.FineUrls ? "item/" : CAT(Config.INDEX_PAGE, "?p=view_item&amp;id=")),
+                        this.context.Site, Config.TOP_DIR,
+                        (this.context.FineUrls ? "item/" : CAT(Config.INDEX_PAGE, "?p=view_item&amp;id=")),
                         oItem[id_field],
-                        (BLANK(url) ? null : CAT((Config.FineUrls ? "/" : "&amp;title="), url))
+                        (BLANK(url) ? null : CAT((this.context.FineUrls ? "/" : "&amp;title="), url))
                     );
                 }
 
                 Object[] args = ARR(7);
                 args[0] = link;
                 args[1] = item_title;
-                args[2] = CAT(Config.Site, Config.TOP_DIR, Config.ACTION_PAGE, "?p=do_redirect_source&amp;source=", source_name);
+                args[2] = CAT(this.context.Site, Config.TOP_DIR, Config.ACTION_PAGE, "?p=do_redirect_source&amp;source=", source_name);
                 args[3] = source_name;
                 args[4] = DateTimes.Format(Config.XML_DTS, DateTimes.GetTime(date));
                 var additional = CAT(
-                    (BLANK(creator) ? null : CAT(Config.Get("Name_Creator"), ": ", creator, "<br/>")),
-                    (BLANK(category) ? null : CAT(Config.Get("Name_Categories"), ": ", category, "<br/>")),
-                    (BLANK(custom2) ? null : CAT(Config.Get("Name_Custom2"), ": ", custom2, "<br/>")),
-                    (BLANK(custom1) ? null : CAT(Config.Get("Name_Custom1"), ": ", custom1, "<br/>"))
+                    (BLANK(creator) ? null : CAT(this.context["Name_Creator"], ": ", creator, "<br/>")),
+                    (BLANK(category) ? null : CAT(this.context["Name_Categories"], ": ", category, "<br/>")),
+                    (BLANK(custom2) ? null : CAT(this.context["Name_Custom2"], ": ", custom2, "<br/>")),
+                    (BLANK(custom1) ? null : CAT(this.context["Name_Custom1"], ": ", custom1, "<br/>"))
                 );
                 var extended_description = (String)null;
                 if (!BLANK(description)) {
@@ -235,9 +244,9 @@ namespace Bula.Fetcher.Controller {
                 "<channel>\r\n",
                 //"<title>" . Config.SITE_NAME . "</title>\r\n",
                 "<title>", rss_title, "</title>\r\n",
-                "<link>", Config.Site, Config.TOP_DIR, "</link>\r\n",
+                "<link>", this.context.Site, Config.TOP_DIR, "</link>\r\n",
                 "<description>", rss_title, "</description>\r\n",
-                (Config.Lang == "ru" ? "<language>ru-RU</language>\r\n" : "<language>en-US</language>\r\n"),
+                (this.context.Lang == "ru" ? "<language>ru-RU</language>\r\n" : "<language>en-US</language>\r\n"),
                 "<pubDate>", pubDate, "</pubDate>\r\n",
                 "<lastBuildDate>", pubDate, "</lastBuildDate>\r\n",
                 "<generator>", Config.SITE_NAME, "</generator>\r\n"

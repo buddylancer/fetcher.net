@@ -56,10 +56,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bula\Fetcher\Common.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Bula\Fetcher\Config.cs" />
+    <Compile Include="Bula\Fetcher\Context.cs" />
     <Compile Include="Bula\Fetcher\Controller\Action.cs" />
     <Compile Include="Bula\Fetcher\Controller\Actions\DoCleanCache.cs" />
     <Compile Include="Bula\Fetcher\Controller\Actions\DoRedirect.cs" />
@@ -73,6 +71,7 @@
     <Compile Include="Bula\Fetcher\Controller\Index.cs" />
     <Compile Include="Bula\Fetcher\Controller\Logger.cs" />
     <Compile Include="Bula\Fetcher\Controller\Menu.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Page.cs" />
     <Compile Include="Bula\Fetcher\Controller\Pages\FilterItems.cs" />
     <Compile Include="Bula\Fetcher\Controller\Pages\Home.cs" />
     <Compile Include="Bula\Fetcher\Controller\Pages\Items.cs" />
@@ -118,16 +117,11 @@
     <Content Include="Bula\Fetcher\View\Pages\view_item.html" />
     <Content Include="Bula\Fetcher\View\redirect.html" />
     <Content Include="Bula\Fetcher\View\top.html" />
-    <Content Include="Bula\Fetcher\Web\page404.html" />
-    <Content Include="Bula\Fetcher\Web\styles.css" />
-    <Content Include="Bula\Fetcher\Web\styles2.css" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Bula\Fetcher\Web\Testing\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

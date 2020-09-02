@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller {
     using System;
 
@@ -9,15 +14,14 @@ namespace Bula.Fetcher.Controller {
     /// <summary>
     /// Logic for generating Bottom block.
     /// </summary>
-    public class Bottom : Bula.Meta {
-        /// <summary>
-        /// Execute main logic for Bottom block.
-        /// </summary>
-        public static void Execute() {
+    public class Bottom : Page {
+        public Bottom(Context context) : base(context) { }
+
+        public override void Execute() {
             var Prepare = new Hashtable();
 
             var filter_link = CAT(Config.TOP_DIR,
-                (Config.FineUrls ? "items/filter/" : CAT(Config.INDEX_PAGE, "?p=items&filter=")));
+                (context.FineUrls ? "items/filter/" : CAT(Config.INDEX_PAGE, "?p=items&filter=")));
 
             var doCategory = new DOCategory();
             var dsCategory = doCategory.EnumAll("_this.i_Counter <> 0");
@@ -50,9 +54,9 @@ namespace Bula.Fetcher.Controller {
             }
             Prepare["[#FilterBlocks]"] = FilterBlocks;
 
-            if (!Config.IsMobile) {
+            if (!context.IsMobile) {
                 filter_link = CAT(Config.TOP_DIR,
-                    (Config.FineUrls ? "rss/" : CAT(Config.RSS_PAGE, "?filter=")));
+                    (context.FineUrls ? "rss/" : CAT(Config.RSS_PAGE, "?filter=")));
                 dsCategory = doCategory.EnumAll();
                 size = dsCategory.GetSize(); //50
                 size3 = size % 3; //2
@@ -69,7 +73,7 @@ namespace Bula.Fetcher.Controller {
                         var name = STR(oCategory["s_Name"]);
                         //counter = INT(oCategory["i_Counter"]);
                         var Row = new Hashtable();
-                        var href = CAT(filter_link, key, (Config.FineUrls ? ".xml" : null));
+                        var href = CAT(filter_link, key, (context.FineUrls ? ".xml" : null));
                         Row["[#Link]"] = href;
                         Row["[#LinkText]"] = name;
                         Rows.Add(Row);
@@ -79,7 +83,7 @@ namespace Bula.Fetcher.Controller {
                 }
                 Prepare["[#RssBlocks]"] = RssBlocks;
             }
-            Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/bottom.html", Prepare));
+            this.Write("Bula/Fetcher/View/bottom.html", Prepare);
         }
     }
 }

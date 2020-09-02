@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller {
     using System;
 
@@ -10,7 +15,7 @@ namespace Bula.Fetcher.Controller {
     /// <summary>
     /// Logic for executing actions.
     /// </summary>
-    public class Action : Bula.Meta {
+    public class Action : Page {
         private static Object[] actions_array = null;
 
         private static void Initialize() {
@@ -23,8 +28,10 @@ namespace Bula.Fetcher.Controller {
             );
         }
 
+        public Action(Context context) : base(context) { }
+
         /// Execute main logic for required action. 
-        public static void Execute() {
+        public override void Execute() {
             if (actions_array == null)
                 Initialize();
 
@@ -54,7 +61,9 @@ namespace Bula.Fetcher.Controller {
             }
 
             var action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["class"]);
-            Internal.CallStaticMethod(action_class, "Execute");
+            //Internal.CallStaticMethod(action_class, "Execute");
+            var args0 = new ArrayList(); args0.Add(this.context);
+            Internal.CallMethod(action_class, args0, "Execute", null);
 
             if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();

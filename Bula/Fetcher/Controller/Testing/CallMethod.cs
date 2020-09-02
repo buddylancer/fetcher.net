@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller.Testing {
     using System;
 
@@ -9,9 +14,11 @@ namespace Bula.Fetcher.Controller.Testing {
     /// <summary>
     /// Logic for remote method invocation.
     /// </summary>
-    public class CallMethod : Bula.Meta {
+    public class CallMethod : Page {
+        public CallMethod(Context context) : base(context) { }
+
         /// Execute method using parameters from request. 
-        public static void Execute() {
+        public override void Execute() {
             Request.Initialize();
     		Request.ExtractAllVars();
 
@@ -69,7 +76,7 @@ namespace Bula.Fetcher.Controller.Testing {
 
     		full_class = Strings.Replace("/", ".", full_class);
             method = Strings.FirstCharToUpper(method);
-            result = Internal.CallMethod(full_class, method, pars);
+            result = Internal.CallMethod(full_class, null, method, pars); //TODO
 
             if (result == null)
                 buffer = "NULL";

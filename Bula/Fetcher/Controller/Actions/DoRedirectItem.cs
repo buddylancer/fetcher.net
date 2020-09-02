@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller.Actions {
     using System;
 
@@ -10,9 +15,11 @@ namespace Bula.Fetcher.Controller.Actions {
     /// <summary>
     /// Redirecting to the external item.
     /// </summary>
-    public class DoRedirectItem : Bula.Meta {
+    public class DoRedirectItem : DoRedirect {
+        public DoRedirectItem(Context context) : base(context) { }
+
         /// Execute main logic for this action 
-        public static void Execute() {
+        public override void Execute() {
             var error_message = (String)null;
             var link_to_redirect = (String)null;
             if (!Request.Contains("id"))
@@ -32,7 +39,7 @@ namespace Bula.Fetcher.Controller.Actions {
                     }
                 }
             }
-            DoRedirect.Execute(link_to_redirect, error_message);
+            this.ExecuteRedirect(link_to_redirect, error_message);
         }
     }
 }

@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller {
     using System;
 
@@ -11,7 +16,7 @@ namespace Bula.Fetcher.Controller {
     /// <summary>
     /// Controller for main Index page.
     /// </summary>
-    public class Index : Bula.Meta {
+    public class Index : Page {
         private static Object[] pages_array = null;
 
         private static void Initialize() {
@@ -24,10 +29,9 @@ namespace Bula.Fetcher.Controller {
             );
         }
 
-        /// <summary>
-        /// Execute main logic for Index page.
-        /// </summary>
-        public static void Execute() {
+        public Index(Context context) : base(context) { }
+
+        public override void Execute() {
             if (pages_array == null)
                 Initialize();
 
@@ -47,7 +51,10 @@ namespace Bula.Fetcher.Controller {
                 Request.ExtractPostVars();
             else
                 Request.ExtractAllVars();
-            Config.Set("Page", page_name);
+            //echo "In Index -- " . Print_r(this, true);
+            this.context["Page"] = page_name;
+
+            var engine = this.context.PushEngine(true);
 
             var Prepare = new Hashtable();
             Prepare["[#Site_Name]"] = Config.SITE_NAME;
@@ -61,35 +68,33 @@ namespace Bula.Fetcher.Controller {
             Prepare["[#Keywords]"] = Config.SITE_KEYWORDS;
             Prepare["[#Description]"] = Config.SITE_DESCRIPTION;
             Prepare["[#Styles]"] = CAT(
-                    (Config.TestRun ? null : Config.TOP_DIR),
-                    Config.IsMobile ? "styles2" : "styles");
+                    (this.context.TestRun ? null : Config.TOP_DIR),
+                    this.context.IsMobile ? "styles2" : "styles");
             Prepare["[#ContentType]"] = "text/html; charset=UTF-8";
-            Prepare["[#Top]"] = Engine.IncludeTemplate("Bula/Fetcher/Controller/Top");
-            Prepare["[#Menu]"] = Engine.IncludeTemplate("Bula/Fetcher/Controller/Menu");
+            Prepare["[#Top]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Top");
+            Prepare["[#Menu]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Menu");
 
             // Get included page either from cache or build it from the scratch
-            var error_content = Engine.CheckForErrors(CAT("Bula/Fetcher/Controller/Pages/", class_name));
+            var error_content = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", class_name), "check");
             if (!BLANK(error_content)) {
                 Prepare["[#Page]"] = error_content;
             }
             else {
                 if (Config.CACHE_PAGES/* && !Config.DontCache.Contains(page_name)*/) //TODO!!!
-                    Prepare["[#Page]"] = Util.ShowFromCache(Config.CacheFolder, page_name, class_name);
+                    Prepare["[#Page]"] = Util.ShowFromCache(engine, this.context.CacheFolder, page_name, class_name);
                 else
-                    Prepare["[#Page]"] = Engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", class_name));
+                    Prepare["[#Page]"] = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", class_name));
             }
 
             if (/*Config.RssAllowed != null && */Config.SHOW_BOTTOM) {
                 // Get bottom block either from cache or build it from the scratch
                 if (Config.CACHE_PAGES)
-                    Prepare["[#Bottom]"] = Util.ShowFromCache(Config.CacheFolder, "bottom", "Bottom");
+                    Prepare["[#Bottom]"] = Util.ShowFromCache(engine, this.context.CacheFolder, "bottom", "Bottom");
                 else
-                    Prepare["[#Bottom]"] = Engine.IncludeTemplate("Bula/Fetcher/Controller/Bottom");
+                    Prepare["[#Bottom]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Bottom");
             }
 
-            // All is ready - apply template
-            Engine.Push(true);
-            var content = Engine.ShowTemplate("Bula/Fetcher/View/index.html", Prepare);
+            this.Write("Bula/Fetcher/View/index.html", Prepare);
 
             // Fix <title>
             //TODO -- comment for now
@@ -97,7 +102,8 @@ namespace Bula.Fetcher.Controller {
             //if (!BLANK(new_title))
             //    content = Regex.Replace(content, "<title>(.*?)</title>", CAT("<title>", Config.SITE_NAME, " -- ", new_title, "</title>"), RegexOptions.IgnoreCase);
 
-            Response.Write(content);
+            Response.Write(engine.GetPrintString());
+
             if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();
                 DBConfig.Connection = null;

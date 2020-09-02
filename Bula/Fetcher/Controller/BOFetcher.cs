@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller {
     using System;
 
@@ -10,16 +15,19 @@ namespace Bula.Fetcher.Controller {
     using Bula.Model;
     using Bula.Fetcher.Controller;
     using Bula.Fetcher.Model;
+    using Bula.Fetcher.Controller.Actions;
 
     /// <summary>
     /// Logic for fetching data.
     /// </summary>
     public class BOFetcher : Bula.Meta {
+        private Context context = null;
         private Logger oLogger = null;
         private DataSet dsCategories = null;
 
         /// Public default constructor 
-        public BOFetcher () {
+        public BOFetcher (Context context) {
+            this.context = context;
             this.InitializeLog();
             this.PreLoadCategories();
         }
@@ -29,7 +37,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         private void InitializeLog() {
             this.oLogger = new Logger();
-            Config.Set("Log_Object", this.oLogger);
+            this.context["Log_Object"] = this.oLogger;
             var log = Request.GetOptionalInteger("log");
             if (!NUL(log) && log != -99999) { //TODO
                 var filename_template = (String)"C:/Temp/Log_{0}_{1}.html";
@@ -62,11 +70,11 @@ namespace Bula.Fetcher.Controller {
 
             this.oLogger.Output("<br/>\r\nStarted ");
 
-            if (url.IndexOf("https") != -1) {
-                var enc_url = url.Replace("?", "%3F");
-                enc_url = enc_url.Replace("&", "%26");
-                url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", enc_url);
-            }
+            //if (url.IndexOf("https") != -1) {
+            //    String enc_url = url.Replace("?", "%3F");
+            //    enc_url = enc_url.Replace("&", "%26");
+            //    url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", enc_url);
+            //}
             this.oLogger.Output(CAT("[[[", url, "]]]<br/>\r\n"));
             var rss = Internal.FetchRss(url);
             if (rss == null) {
@@ -108,7 +116,7 @@ namespace Bula.Fetcher.Controller {
             boItem.ProcessCreator();
 
             // Try to add/embed standard categories from description
-            boItem.AddStandardCategories(this.dsCategories, Config.Lang);
+            boItem.AddStandardCategories(this.dsCategories, this.context.Lang);
 
             var url = boItem.GetUrlTitle(true); //TODO -- Need to pass true if transliteration is required
             var fields = new Hashtable();
@@ -136,51 +144,9 @@ namespace Bula.Fetcher.Controller {
         }
 
         /// <summary>
-        /// Actual cleaning of cache folder.
-        /// </summary>
-        /// <param name="path_name">Cache folder name (path).</param>
-        /// <param name="ext">Files extension to clean.</param>
-        private void CleanCacheFolder(String path_name, String ext) {
-            if (!Helper.DirExists(path_name))
-                return;
-
-            var entries = Helper.ListDirEntries(path_name);
-            while (entries.MoveNext()) {
-                var entry = (String)entries.Current;
-
-                if (Helper.IsFile(entry) && entry.EndsWith(ext)) {
-                    this.oLogger.Output(CAT("Deleting of ", entry, " ...<br/>\r\n"));
-                    Helper.DeleteFile(entry);
-                }
-                else if (Helper.IsDir(entry)) {
-                    this.oLogger.Output(CAT("Drilling to ", entry, " ...<br/>\r\n"));
-                    CleanCacheFolder(entry, ext);
-                }
-                //unlink(path_name); //Comment for now -- dangerous operation!!!
-            }
-        }
-
-        /// <summary>
-        /// Clean all cached info (both for Web and RSS).
-        /// </summary>
-        public void CleanCache() {
-            // Clean cached rss content
-            this.oLogger.Output(CAT("Cleaning Rss Folder ", Config.RssFolderRoot, " ...<br/>\r\n"));
-            var rssFolder = Strings.Concat(Config.RssFolderRoot);
-            CleanCacheFolder(rssFolder, ".xml");
-
-            // Clean cached pages content
-            this.oLogger.Output(CAT("Cleaning Cache Folder ", Config.CacheFolderRoot,  "...<br/>\r\n"));
-            var cacheFolder = Strings.Concat(Config.CacheFolderRoot);
-            CleanCacheFolder(cacheFolder, ".cache");
-
-            this.oLogger.Output("<br/>... Done.<br/>\r\n");
-        }
-
-        /// <summary>
         /// Main logic.
         /// </summary>
-        public void Execute() {
+        public void FetchFromSources() {
             this.oLogger.Output("Start logging<br/>\r\n");
 
             //TODO -- Purge old items
@@ -231,8 +197,10 @@ namespace Bula.Fetcher.Controller {
 
             this.oLogger.Output(CAT("<hr/>Total items added - ", total_counter, "<br/>\r\n"));
 
-            if (Config.CACHE_PAGES && total_counter > 0)
-                this.CleanCache();
+            if (Config.CACHE_PAGES && total_counter > 0) {
+                var doCleanCache = new DoCleanCache(context);
+                doCleanCache.CleanCache(this.oLogger);
+            }
         }
 
         /// <summary>

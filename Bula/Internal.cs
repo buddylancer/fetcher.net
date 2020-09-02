@@ -70,7 +70,7 @@
         /// <returns>Result of method execution</returns>
         public static Object CallStaticMethod(String class_name, String method_name)
         {
-            return CallMethod(class_name, method_name, null);
+            return CallMethod(class_name, null, method_name, null);
         }
 
         /// <summary>
@@ -90,6 +90,27 @@
                 return methodInfo.Invoke(null, null);
         }
 
+        private static Type[] GetTypes(ArrayList args) {
+            Type[] types = args != null && args.Count > 0 ? new Type[args.Count] : new Type[0];
+            if (types.Length > 0)
+            {
+                for (int n = 0; n < args.Count; n++)
+                {
+                    types[n] = args[n].GetType();
+                    if (args[n] is String)
+                    {
+                        int result;
+                        if (int.TryParse((String)args[n], out result))
+                        {
+                            types[n] = typeof(int);
+                            args[n] = result;
+                        }
+                    }
+                }
+            }
+            return types;
+        }
+
         /// <summary>
         /// Call method of given class using provided arguments.
         /// </summary>
@@ -97,28 +118,15 @@
         /// <param name="method_name">Method name</param>
         /// <param name="args">List of arguments</param>
         /// <returns>Result of method execution</returns>
-        public static Object CallMethod(String class_name, String method_name, ArrayList args)
+        public static Object CallMethod(String class_name, ArrayList args0, String method_name, ArrayList args)
         {
             Type type = Type.GetType(class_name.Replace('/', '.'));
-            System.Reflection.ConstructorInfo constructorInfo = type.GetConstructor(new Type[] { });
-            Object doObject = constructorInfo.Invoke(new Object[] { });
 
-            Type[] types = args != null && args.Count > 0 ? new Type[args.Count] : new Type[0];
-            if (types.Length > 0)
-            {
-                for (int n = 0; n < args.Count; n++)
-                {
-                    int result;
-                    if (int.TryParse((String)args[n], out result))
-                    {
-                        types[n] = typeof(int);
-                        args[n] = result;
-                    }
-                    else
-                        types[n] = args[n].GetType();
-                }
-            }
+            Type[] types0 = GetTypes(args0);
+            System.Reflection.ConstructorInfo constructorInfo = type.GetConstructor(types0);
+            Object doObject = constructorInfo.Invoke(args0.ToArray());
 
+            Type[] types = GetTypes(args);
             System.Reflection.MethodInfo methodInfo = type.GetMethod(method_name, types);
             if (methodInfo != null)
             {

@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller.Pages {
     using System;
 
@@ -11,18 +16,20 @@ namespace Bula.Fetcher.Controller.Pages {
     /// Controller for Sources block.
     /// </summary>
     public class Sources : ItemsBase {
+        public Sources(Context context) : base(context) { }
+
         /// <summary>
         /// Fast check of input query parameters.
         /// </summary>
         /// <returns>Parsed parameters (or null in case of any error).</returns>
-        public static Hashtable Check() {
+        public Hashtable Check() {
             return new Hashtable();
         }
 
         /// <summary>
         /// Execute main logic for Source block.
         /// </summary>
-        public static void Execute() {
+        public override void Execute() {
             var Prepare = new Hashtable();
 
             var doSource = new DOSource();
@@ -41,7 +48,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 //    (Config.FINE_URLS ? "redirect/source/" : "action.php?p=do_redirect_source&source=") .
                 //        oSource["s_SourceName"];
                 SourceRow["[#RedirectSource]"] = CAT(Config.TOP_DIR,
-                    (Config.FineUrls ? "items/source/" : CAT(Config.INDEX_PAGE, "?p=items&source=")), source_name);
+                    (this.context.FineUrls ? "items/source/" : CAT(Config.INDEX_PAGE, "?p=items&source=")), source_name);
 
                 var dsItems = doItem.EnumItemsFromSource(null, source_name, null, 3);
                 var Items = new ArrayList();
@@ -57,7 +64,8 @@ namespace Bula.Fetcher.Controller.Pages {
                 count++;
             }
             Prepare["[#Sources]"] = Sources;
-            Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/Pages/sources.html", Prepare));
+
+            this.Write("Bula/Fetcher/View/Pages/sources.html", Prepare);
         }
     }
 }

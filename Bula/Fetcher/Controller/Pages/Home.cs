@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller.Pages {
     using System;
 
@@ -11,19 +16,21 @@ namespace Bula.Fetcher.Controller.Pages {
     /// Controller for Home block.
     /// </summary>
     public class Home : ItemsBase {
+        public Home(Context context) : base(context) { }
+
         /// <summary>
         /// Fast check of input query parameters.
         /// </summary>
         /// <returns>Parsed parameters (or null in case of any error).</returns>
-        public static Hashtable Check() {
+        public Hashtable Check() {
             return new Hashtable();
         }
 
         /// <summary>
         /// Execute main logic for Home block.
         /// </summary>
-        public static void Execute() {
-            var Pars = Check();
+        public override void Execute() {
+            var Pars = this.Check();
             if (Pars == null)
                 return;
 
@@ -32,7 +39,7 @@ namespace Bula.Fetcher.Controller.Pages {
             var doItem = new DOItem();
 
             var all_items_href =
-                CAT(Config.TOP_DIR, (Config.FineUrls ? null : CAT(Config.INDEX_PAGE, "?p=")), "items");
+                CAT(Config.TOP_DIR, (this.context.FineUrls ? null : CAT(Config.INDEX_PAGE, "?p=")), "items");
             Prepare["[#BrowseItemsLink]"] = all_items_href;
 
             var source = (String)null;
@@ -48,7 +55,8 @@ namespace Bula.Fetcher.Controller.Pages {
                 row_count++;
             }
             Prepare["[#Items]"] = Items;
-            Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/Pages/home.html", Prepare));
+
+            this.Write("Bula/Fetcher/View/Pages/home.html", Prepare);
         }
     }
 }

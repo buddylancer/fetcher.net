@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller.Pages {
     using System;
 
@@ -14,11 +19,13 @@ namespace Bula.Fetcher.Controller.Pages {
     /// Controller for Items block.
     /// </summary>
     public class Items : ItemsBase {
+        public Items(Context context) : base(context) { }
+
         /// <summary>
         /// Fast check of input query parameters.
         /// </summary>
         /// <returns>Parsed parameters (or null in case of any error).</returns>
-        public static Hashtable Check() {
+        public Hashtable Check() {
             var error_message = "";
 
             var list = Request.Get("list");
@@ -60,7 +67,7 @@ namespace Bula.Fetcher.Controller.Pages {
             if (error_message.Length > 0) {
                 var Prepare = new Hashtable();
                 Prepare["[#ErrMessage]"] = error_message;
-                Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
+                this.Write("Bula/Fetcher/View/error.html", Prepare);
                 return null;
             }
 
@@ -77,8 +84,8 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <summary>
         /// Execute main logic for Items block.
         /// </summary>
-        public static void Execute() {
-            var Pars = Check();
+        public override void Execute() {
+            var Pars = this.Check();
             if (Pars == null)
                 return;
 
@@ -111,20 +118,22 @@ namespace Bula.Fetcher.Controller.Pages {
                 }
             }
 
+            var engine = this.context.GetEngine();
+
             var Prepare = new Hashtable();
             if (error_message.Length > 0) {
                 Prepare["[#ErrMessage]"] = error_message;
-                Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
+                this.Write("Bula/Fetcher/View/error.html", Prepare);
                 return;
             }
 
             // Uncomment to enable filtering by source and/or category
-            Prepare["[#FilterItems]"] = Engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/FilterItems");
+            Prepare["[#FilterItems]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/FilterItems");
 
             var s_Title = CAT(
                 "Browse ",
                 Config.NAME_ITEMS,
-                (Config.IsMobile ? "<br/>" : null),
+                (this.context.IsMobile ? "<br/>" : null),
                 (!BLANK(source_name) ? CAT(" ... from '", source_name, "'") : null),
                 (!BLANK(filter) ? CAT(" ... for '", filter_name, "'") : null)
             );
@@ -139,7 +148,7 @@ namespace Bula.Fetcher.Controller.Pages {
             var list_total = dsItems.GetTotalPages();
             if (list_number > list_total) {
                 Prepare["[#ErrMessage]"] = "List number is too large!";
-                Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/error.html", Prepare));
+                this.Write("Bula/Fetcher/View/error.html", Prepare);
                 return;
             }
             if (list_total > 1) {
@@ -208,7 +217,8 @@ namespace Bula.Fetcher.Controller.Pages {
                 }
                 Prepare["[#Pages]"] = Pages;
             }
-            Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/Pages/items.html", Prepare));
+
+            this.Write("Bula/Fetcher/View/Pages/items.html", Prepare);
         }
     }
 }

@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller {
     using System;
 
@@ -73,8 +78,8 @@ namespace Bula.Fetcher.Controller {
         /// <param name="page_name">Page to process.</param>
         /// <param name="class_name">Appropriate class name.</param>
         /// <returns>Resulting content.</returns>
-        public static String ShowFromCache(String cache_folder, String page_name, String class_name) {
-            return ShowFromCache(cache_folder, page_name, class_name, null);
+        public static String ShowFromCache(Engine engine, String cache_folder, String page_name, String class_name) {
+            return ShowFromCache(engine, cache_folder, page_name, class_name, null);
         }
 
         /// <summary>
@@ -85,7 +90,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="class_name">Appropriate class name.</param>
         /// <param name="query">Query to process.</param>
         /// <returns>Resulting content.</returns>
-        public static String ShowFromCache(String cache_folder, String page_name, String class_name, String query) {
+        public static String ShowFromCache(Engine engine, String cache_folder, String page_name, String class_name, String query) {
             if (EQ(page_name, "bottom"))
                 query = page_name;
             else {
@@ -114,7 +119,7 @@ namespace Bula.Fetcher.Controller {
             }
             else {
                 var prefix = EQ(page_name, "bottom") ? null : "Pages/";
-                content = Engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/", prefix, class_name));
+                content = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/", prefix, class_name));
 
                 TestFileFolder(file_name);
                 Helper.WriteText(file_name, content);

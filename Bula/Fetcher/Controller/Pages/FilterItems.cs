@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller.Pages {
     using System;
 
@@ -11,11 +16,13 @@ namespace Bula.Fetcher.Controller.Pages {
     /// <summary>
     /// Controller for Filter Items block.
     /// </summary>
-    public class FilterItems : Bula.Meta {
+    public class FilterItems : Page {
+        public FilterItems(Context context) : base(context) { }
+
         /// <summary>
         /// Execute main logic for Items block.
         /// </summary>
-        public static void Execute() {
+        public override void Execute() {
             var doSource = new DOSource();
 
             var source = (String)null;
@@ -23,7 +30,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 source = Request.Get("source");
 
             var Prepare = new Hashtable();
-            if (Config.FineUrls)
+            if (this.context.FineUrls)
                 Prepare["[#Fine_Urls]"] = 1;
             Prepare["[#Selected]"] = BLANK(source) ? " selected=\"selected\" " : null;
             var dsSources = (DataSet)null;
@@ -45,7 +52,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 Options.Add(Option);
             }
             Prepare["[#Options]"] = Options;
-            Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/Pages/filter_items.html", Prepare));
+            this.Write("Bula/Fetcher/View/Pages/filter_items.html", Prepare);
         }
     }
 }

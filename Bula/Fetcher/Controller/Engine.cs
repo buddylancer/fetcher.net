@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller {
     using System;
 
@@ -11,131 +16,79 @@ namespace Bula.Fetcher.Controller {
     /// Engine for processing templates.
     /// </summary>
     public class Engine : Bula.Meta {
-        private static ArrayList engine_instances = null;
-        private static int current_index = -1;
-
+        private Context context = null;
         private Boolean print_flag = false;
         private String print_string = "";
 
         /// Public default constructor 
-        public Engine () {
-            if (engine_instances == null)
-                engine_instances = new ArrayList();
+        public Engine (Context context) {
+            this.context = context;
             this.print_flag = false;
             this.print_string = "";
-        }
-
-        /// <summary>
-        /// Push engine.
-        /// </summary>
-        /// <param name="print_flag">Whether to print content immediately (true) or save it for further processing (false).</param>
-        public static void Push(Boolean print_flag) {
-            var engine = new Engine();
-            engine.print_flag = print_flag;
-            current_index++;
-            if (engine_instances == null)
-                engine_instances = new ArrayList();
-            if (engine_instances.Count <= current_index)
-                engine_instances.Add(engine);
-            else
-                engine_instances[current_index] = engine;
-        }
-
-        /// Pop engine back. 
-        public static void Pop() {
-            SetPrintString(null);
-            current_index--;
         }
 
         /// <summary>
         /// Set print string for current engine instance.
         /// </summary>
         /// <param name="val">Print string to set.</param>
-        private static void SetPrintString(String val) {
-            var engine = (Engine)engine_instances[current_index];
-            engine.print_string = val;
+        public void SetPrintString(String val) {
+            this.print_string = val;
         }
 
         /// <summary>
         /// Get print string for current engine instance.
         /// </summary>
         /// <returns>Current print string.</returns>
-        private static String GetPrintString() {
-            var engine = (Engine)engine_instances[current_index];
-            return engine.print_string;
+        public String GetPrintString() {
+            return this.print_string;
+        }
+
+        /// <summary>
+        /// Set print flag for current engine instance.
+        /// </summary>
+        /// <param name="val">Print flag to set.</param>
+        public void SetPrintFlag(Boolean val) {
+            this.print_flag = val;
+        }
+
+        /// <summary>
+        /// Get print flag for current engine instance.
+        /// </summary>
+        /// <returns>Current print flag.</returns>
+        public Boolean GetPrintFlag() {
+            return this.print_flag;
         }
 
         /// <summary>
         /// Write string.
         /// </summary>
         /// <param name="val">String to write.</param>
-        public static void Write(String val) {
-            var engine = (Engine)engine_instances[current_index];
-            if (engine.print_flag)
+        public void Write(String val) {
+            if (this.print_flag)
                 Response.Write(val);
             else
-                engine.print_string += val;
+                this.print_string += val;
         }
-
-        //TODO!!!
-        //public String ReadCachedFile(String id) {
-        //    String content = GetFile("_cache", id);
-        //}
-
-        //public int WriteCachedFile(String id, String content) {
-        //    String filename = CachedFileName(id);
-        //}
-
-        //public String IncludeCashedTemplate(String id, String filename, Hashtable args = null) {
-        //    String content = ReadCachedFile(id);
-        //    if (content == null) {
-        //        content = IncludeTemplate(filename, args);
-        //        WriteCachedFile(id, content);
-        //    }
-        //    return content;
-        //}
 
         /// <summary>
         /// Include file with class and generate content by calling method Execute().
         /// </summary>
         /// <param name="class_name">Class name to include.</param>
         /// <returns>Resulting content.</returns>
-        public static String IncludeTemplate(String class_name) {
-            Push(false);
+        public String IncludeTemplate(String class_name, String default_method = "Execute") {
+            var engine = this.context.PushEngine(false);
             var file_name = 
                 CAT(class_name, ".cs");
 
             var content = (String)null;
-            if (Helper.FileExists(CAT(Config.LocalRoot, file_name))) {
-                //Config.IncludeFile(file_name);
-                Internal.CallStaticMethod(class_name, "Execute");
-                content = GetPrintString();
+            if (Helper.FileExists(CAT(this.context.LocalRoot, file_name))) {
+                var args0 = new ArrayList(); args0.Add(this.context);
+                Internal.CallMethod(class_name, args0, "Execute", null);
+                content = engine.GetPrintString();
             }
             else
                 content = CAT("No such file: ", file_name);
-            Pop();
-            return content;
-        }
-
-        /// <summary>
-        /// Include file with class and check for errors by calling method Check().
-        /// </summary>
-        /// <param name="class_name">Class name to include.</param>
-        /// <returns>Resulting content.</returns>
-        public static String CheckForErrors(String class_name) {
-            Push(false);
-            var file_name = 
-                CAT(class_name, ".cs");
-
-            var content = (String)null;
-            if (Helper.FileExists(CAT(Config.LocalRoot, file_name))) {
-                //Config.IncludeFile(file_name);
-                Internal.CallStaticMethod(class_name, "check");
-                content = GetPrintString();
-            }
-            else
-                content = CAT("No such file: ", file_name);
-            Pop();
+            this.context.PopEngine();
             return content;
         }
 
@@ -144,7 +97,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="filename">Template file to use.</param>
         /// <returns>Resulting content.</returns>
-        public static String ShowTemplate(String filename) {
+        public String ShowTemplate(String filename) {
             return ShowTemplate(filename, null); }
 
         /// <summary>
@@ -153,12 +106,12 @@ namespace Bula.Fetcher.Controller {
         /// <param name="filename">Template file to use for merging.</param>
         /// <param name="hash">Data in the form of Hashtable to use for merging.</param>
         /// <returns>Resulting content.</returns>
-        public static String ShowTemplate(String filename, Hashtable hash) {
-            var template = GetTemplate(filename);
+        public String ShowTemplate(String filename, Hashtable hash) {
+            var template = this.GetTemplate(filename);
 
             var content = "";
             content += (CAT("\n<!-- BEGIN ", Strings.Replace("Bula/Fetcher/", "", filename), " -->\n"));
-            content += (ProcessTemplate(template, hash));
+            content += (this.ProcessTemplate(template, hash));
             content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/", "", filename), " -->\n"));
             return content;
         }
@@ -168,9 +121,9 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="filename">File name.</param>
         /// <returns>Resulting array with lines.</returns>
-        private static ArrayList GetTemplate(String filename) {
-            if (Helper.FileExists(CAT(Config.LocalRoot, filename))) {
-                Object[] lines = Helper.ReadAllLines(CAT(Config.LocalRoot, filename));
+        private ArrayList GetTemplate(String filename) {
+            if (Helper.FileExists(CAT(this.context.LocalRoot, filename))) {
+                Object[] lines = Helper.ReadAllLines(CAT(this.context.LocalRoot, filename));
                 return Arrays.CreateArrayList(lines);
             }
             else {
@@ -186,11 +139,11 @@ namespace Bula.Fetcher.Controller {
         /// <param name="template">Template content.</param>
         /// <param name="hash">Data for merging with template.</param>
         /// <returns>Resulting content.</returns>
-        public static String FormatTemplate(String template, Hashtable hash) {
+        public String FormatTemplate(String template, Hashtable hash) {
             if (hash == null)
                 hash = new Hashtable();
             var content = Strings.ReplaceInTemplate(template, hash);
-            return Strings.ReplaceInTemplate(content, Config.GlobalConstants);
+            return Strings.ReplaceInTemplate(content, this.context.GlobalConstants);
         }
 
         /// <summary>
@@ -220,10 +173,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="template">Template in form of the list of lines.</param>
         /// <param name="hash">Data for merging with template.</param>
         /// <returns>Resulting content.</returns>
-        private static String ProcessTemplate(ArrayList template, Hashtable hash) {
-            if (Config.IsMobile)
-                hash["[#Is_Mobile]"] = "1";
-
+        private String ProcessTemplate(ArrayList template, Hashtable hash) {
             var trim_line = true;
             var trim_end = "\n";
             var if_mode = 0;

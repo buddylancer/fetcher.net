@@ -6,7 +6,6 @@ public partial class _Action : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Bula.Fetcher.Common.Initialize();
-        Action.Execute();
+        (new Action(new Bula.Fetcher.Context())).Execute();
     }
 }

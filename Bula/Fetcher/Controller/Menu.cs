@@ -1,3 +1,8 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
 namespace Bula.Fetcher.Controller {
     using System;
 
@@ -8,19 +13,18 @@ namespace Bula.Fetcher.Controller {
     /// <summary>
     /// Logic for generating Menu block.
     /// </summary>
-    public class Menu : Bula.Meta {
-        /// <summary>
-        /// Execute main logic for Menu block.
-        /// </summary>
-        public static void Execute() {
+    public class Menu : Page {
+        public Menu(Context context) : base(context) { }
+
+        public override void Execute() {
             var public_pages = new ArrayList();
 
             public_pages.Add("Home");
             public_pages.Add("home");
-            if (Config.IsMobile) {
+            if (this.context.IsMobile) {
                 public_pages.Add(Config.NAME_ITEMS); public_pages.Add("items");
-                if (Config.SHOW_BOTTOM && Config.Contains("Name_Categories")) {
-                    public_pages.Add(CAT("By ", Config.Get("Name_Categories")));
+                if (Config.SHOW_BOTTOM && this.context.Contains("Name_Categories")) {
+                    public_pages.Add(CAT("By ", this.context["Name_Categories"]));
                     public_pages.Add("#items_by_skills");
                     //public_pages.Add("RSS Feeds");
                     //public_pages.Add("#read_rss_feeds");
@@ -31,8 +35,8 @@ namespace Bula.Fetcher.Controller {
             else {
                 public_pages.Add(CAT("Browse ", Config.NAME_ITEMS));
                 public_pages.Add("items");
-                if (Config.SHOW_BOTTOM && Config.Contains("Name_Categories")) {
-                    public_pages.Add(CAT(Config.NAME_ITEMS, " by ", Config.Get("Name_Categories")));
+                if (Config.SHOW_BOTTOM && this.context.Contains("Name_Categories")) {
+                    public_pages.Add(CAT(Config.NAME_ITEMS, " by ", this.context["Name_Categories"]));
                     public_pages.Add("#items_by_skills");
 
                     public_pages.Add("Read RSS Feeds");
@@ -55,7 +59,7 @@ namespace Bula.Fetcher.Controller {
                         href = page;
                     else {
                         href = CAT(Config.TOP_DIR, Config.INDEX_PAGE, "?p=", page);
-                        if (Config.FineUrls)
+                        if (this.context.FineUrls)
                             href = CAT(Config.TOP_DIR, page);
                     }
                 }
@@ -67,7 +71,7 @@ namespace Bula.Fetcher.Controller {
 
             var Prepare = new Hashtable();
             Prepare["[#MenuItems]"] = MenuItems;
-            Engine.Write(Engine.ShowTemplate("Bula/Fetcher/View/menu.html", Prepare));
+            this.Write("Bula/Fetcher/View/menu.html", Prepare);
         }
     }
 

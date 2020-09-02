@@ -6,7 +6,6 @@ public partial class _CallMethod : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        Bula.Fetcher.Common.Initialize();
-        CallMethod.Execute();
+        (new CallMethod(new Bula.Fetcher.Context())).Execute();
     }
 }
