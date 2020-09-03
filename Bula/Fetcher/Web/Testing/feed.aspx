@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="feed.aspx.cs"  Inherits="_Feed" %>
+﻿<%@ Page Language="C#" %><% (new Bula.Fetcher.Controller.Testing.GetFeed(new Bula.Fetcher.Context())).Execute(); %>

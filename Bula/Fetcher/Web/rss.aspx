@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="rss.aspx.cs"  Inherits="_Rss" %>
+﻿<%@ Page Language="C#" %><% (new Bula.Fetcher.Controller.Rss(new Bula.Fetcher.Context())).Execute(); %>

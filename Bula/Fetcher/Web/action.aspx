@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="action.aspx.cs"  Inherits="_Action" %>
+﻿<%@ Page Language="C#" %><% (new Bula.Fetcher.Controller.Action(new Bula.Fetcher.Context())).Execute(); %>

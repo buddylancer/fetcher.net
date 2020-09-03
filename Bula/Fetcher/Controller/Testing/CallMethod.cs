@@ -88,5 +88,4 @@ namespace Bula.Fetcher.Controller.Testing {
             Response.Write(buffer);
     	}
     }
-
 }

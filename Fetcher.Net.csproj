@@ -80,6 +80,7 @@
     <Compile Include="Bula\Fetcher\Controller\Pages\ViewItem.cs" />
     <Compile Include="Bula\Fetcher\Controller\Rss.cs" />
     <Compile Include="Bula\Fetcher\Controller\Testing\CallMethod.cs" />
+    <Compile Include="Bula\Fetcher\Controller\Testing\GetFeed.cs" />
     <Compile Include="Bula\Fetcher\Controller\Top.cs" />
     <Compile Include="Bula\Fetcher\Controller\Util.cs" />
     <Compile Include="Bula\Fetcher\Model\DOCategory.cs" />
