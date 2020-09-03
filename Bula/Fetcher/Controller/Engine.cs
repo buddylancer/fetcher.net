@@ -82,7 +82,7 @@ namespace Bula.Fetcher.Controller {
 
             var content = (String)null;
             if (Helper.FileExists(CAT(this.context.LocalRoot, file_name))) {
-                var args0 = new ArrayList(); args0.Add(this.context);
+                ArrayList args0 = new ArrayList(); args0.Add(this.context);
                 Internal.CallMethod(class_name, args0, "Execute", null);
                 content = engine.GetPrintString();
             }
@@ -174,6 +174,11 @@ namespace Bula.Fetcher.Controller {
         /// <param name="hash">Data for merging with template.</param>
         /// <returns>Resulting content.</returns>
         private String ProcessTemplate(ArrayList template, Hashtable hash) {
+            if (this.context.IsMobile) {
+                if (hash == null)
+                    hash = new Hashtable();
+                hash["[#Is_Mobile]"] = 1;
+            }
             var trim_line = true;
             var trim_end = "\n";
             var if_mode = 0;
@@ -209,8 +214,8 @@ namespace Bula.Fetcher.Controller {
                                 }
                                 else if (neq) {
                                     String[] if_what_array = Strings.Split("!=", if_what);
-                                    String if_what_1 = if_what_array[0].Trim();
-                                    String if_what_2 = if_what_array[1].Trim();
+                                    String if_what_1 = if_what_array[0];
+                                    String if_what_2 = if_what_array[1];
                                     if (hash.ContainsKey(if_what_1) && !EQ(hash[if_what_1], if_what_2))
                                         process_flag = true;
                                 }

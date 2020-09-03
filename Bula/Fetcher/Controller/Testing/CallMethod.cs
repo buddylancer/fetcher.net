@@ -7,6 +7,7 @@ namespace Bula.Fetcher.Controller.Testing {
     using System;
 
     using Bula.Fetcher;
+    using Bula.Fetcher.Controller;
     using System.Collections;
     using Bula.Objects;
     using Bula.Model;
@@ -76,7 +77,7 @@ namespace Bula.Fetcher.Controller.Testing {
 
     		full_class = Strings.Replace("/", ".", full_class);
             method = Strings.FirstCharToUpper(method);
-            result = Internal.CallMethod(full_class, null, method, pars); //TODO
+            result = Internal.CallMethod(full_class, new ArrayList(), method, pars);
 
             if (result == null)
                 buffer = "NULL";

@@ -21,7 +21,7 @@ namespace Bula.Fetcher.Controller {
             var Prepare = new Hashtable();
 
             var filter_link = CAT(Config.TOP_DIR,
-                (context.FineUrls ? "items/filter/" : CAT(Config.INDEX_PAGE, "?p=items&filter=")));
+                (this.context.FineUrls ? "items/filter/" : CAT(Config.INDEX_PAGE, "?p=items&filter=")));
 
             var doCategory = new DOCategory();
             var dsCategory = doCategory.EnumAll("_this.i_Counter <> 0");
@@ -54,9 +54,9 @@ namespace Bula.Fetcher.Controller {
             }
             Prepare["[#FilterBlocks]"] = FilterBlocks;
 
-            if (!context.IsMobile) {
+            if (!this.context.IsMobile) {
                 filter_link = CAT(Config.TOP_DIR,
-                    (context.FineUrls ? "rss/" : CAT(Config.RSS_PAGE, "?filter=")));
+                    (this.context.FineUrls ? "rss/" : CAT(Config.RSS_PAGE, "?filter=")));
                 dsCategory = doCategory.EnumAll();
                 size = dsCategory.GetSize(); //50
                 size3 = size % 3; //2
@@ -73,7 +73,7 @@ namespace Bula.Fetcher.Controller {
                         var name = STR(oCategory["s_Name"]);
                         //counter = INT(oCategory["i_Counter"]);
                         var Row = new Hashtable();
-                        var href = CAT(filter_link, key, (context.FineUrls ? ".xml" : null));
+                        var href = CAT(filter_link, key, (this.context.FineUrls ? ".xml" : null));
                         Row["[#Link]"] = href;
                         Row["[#LinkText]"] = name;
                         Rows.Add(Row);

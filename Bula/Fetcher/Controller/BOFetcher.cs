@@ -13,7 +13,7 @@ namespace Bula.Fetcher.Controller {
     using System.Collections;
 
     using Bula.Model;
-    using Bula.Fetcher.Controller;
+    using Bula.Objects;
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller.Actions;
 
@@ -198,7 +198,7 @@ namespace Bula.Fetcher.Controller {
             this.oLogger.Output(CAT("<hr/>Total items added - ", total_counter, "<br/>\r\n"));
 
             if (Config.CACHE_PAGES && total_counter > 0) {
-                var doCleanCache = new DoCleanCache(context);
+                var doCleanCache = new DoCleanCache(this.context);
                 doCleanCache.CleanCache(this.oLogger);
             }
         }

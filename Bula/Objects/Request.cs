@@ -59,7 +59,13 @@ namespace Bula.Objects {
         /// <param name="name">Variable name.</param>
         /// <returns>Variable value.</returns>
         public static String Get(String name) {
-            return (String)(Vars.ContainsKey(name) ? Vars[name] : null);
+            //return (String)(Vars.ContainsKey(name) ? Vars[name] : null);
+            if (!Vars.ContainsKey(name))
+                return null;
+            var value = (String)Vars[name];
+            if (NUL(value))
+                value = "";
+            return value;
         }
 
         /// <summary>
