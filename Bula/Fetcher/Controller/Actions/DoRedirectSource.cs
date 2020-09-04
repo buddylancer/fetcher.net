@@ -15,9 +15,13 @@ namespace Bula.Fetcher.Controller.Actions {
     /// Redirection to external source.
     /// </summary>
     public class DoRedirectSource : DoRedirect {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public DoRedirectSource(Context context) : base(context) { }
 
-        /// Execute main logic for this action 
+        /// Execute main logic for DoRedirectSource action 
         public override void Execute() {
             var error_message = (String)null;
             var link_to_redirect = (String)null;

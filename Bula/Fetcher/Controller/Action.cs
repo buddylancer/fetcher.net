@@ -28,6 +28,10 @@ namespace Bula.Fetcher.Controller {
             );
         }
 
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public Action(Context context) : base(context) { }
 
         /// Execute main logic for required action. 
@@ -61,8 +65,7 @@ namespace Bula.Fetcher.Controller {
             }
 
             var action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["class"]);
-            //Internal.CallStaticMethod(action_class, "Execute");
-            var args0 = new ArrayList(); args0.Add(this.context);
+            ArrayList args0 = new ArrayList(); args0.Add(this.context);
             Internal.CallMethod(action_class, args0, "Execute", null);
 
             if (DBConfig.Connection != null) {

@@ -16,6 +16,10 @@ namespace Bula.Fetcher.Controller.Testing {
     /// Logic for remote method invocation.
     /// </summary>
     public class CallMethod : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public CallMethod(Context context) : base(context) { }
 
         /// Execute method using parameters from request. 

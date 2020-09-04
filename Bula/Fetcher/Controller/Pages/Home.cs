@@ -16,6 +16,10 @@ namespace Bula.Fetcher.Controller.Pages {
     /// Controller for Home block.
     /// </summary>
     public class Home : ItemsBase {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public Home(Context context) : base(context) { }
 
         /// <summary>
@@ -26,9 +30,7 @@ namespace Bula.Fetcher.Controller.Pages {
             return new Hashtable();
         }
 
-        /// <summary>
-        /// Execute main logic for Home block.
-        /// </summary>
+        /// Execute main logic for Home block. 
         public override void Execute() {
             var Pars = this.Check();
             if (Pars == null)

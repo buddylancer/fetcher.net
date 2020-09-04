@@ -13,6 +13,10 @@ namespace Bula.Fetcher.Controller.Testing {
     /// Logic for getting test feed.
     /// </summary>
     public class GetFeed : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public GetFeed(Context context) : base(context) { }
 
         /// Get test feed using parameters from request. 

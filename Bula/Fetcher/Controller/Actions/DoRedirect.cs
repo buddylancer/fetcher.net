@@ -15,6 +15,10 @@ namespace Bula.Fetcher.Controller.Actions {
     /// Base class for redirecting from the web-site.
     /// </summary>
     public abstract class DoRedirect : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public DoRedirect(Context context) : base(context) { }
 
         /// <summary>

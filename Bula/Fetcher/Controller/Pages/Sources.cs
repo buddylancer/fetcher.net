@@ -16,6 +16,10 @@ namespace Bula.Fetcher.Controller.Pages {
     /// Controller for Sources block.
     /// </summary>
     public class Sources : ItemsBase {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public Sources(Context context) : base(context) { }
 
         /// <summary>
@@ -26,9 +30,7 @@ namespace Bula.Fetcher.Controller.Pages {
             return new Hashtable();
         }
 
-        /// <summary>
-        /// Execute main logic for Source block.
-        /// </summary>
+        /// Execute main logic for Source block. 
         public override void Execute() {
             var Prepare = new Hashtable();
 

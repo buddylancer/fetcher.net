@@ -14,8 +14,13 @@ namespace Bula.Fetcher.Controller {
     /// Basic logic for generating Page block.
     /// </summary>
     public abstract class Page : Bula.Meta {
+        /// Current context 
         protected Context context = null;
 
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public Page (Context context) {
             this.context = context;
             //echo "In Page constructor -- " . Print_r(context, true);

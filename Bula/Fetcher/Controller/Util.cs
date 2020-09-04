@@ -74,6 +74,7 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Logic for getting/saving page from/into cache.
         /// </summary>
+        /// <param name="engine">Engine instance.</param>
         /// <param name="cache_folder">Cache folder root.</param>
         /// <param name="page_name">Page to process.</param>
         /// <param name="class_name">Appropriate class name.</param>
@@ -85,6 +86,7 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Main logic for getting/saving page from/into cache.
         /// </summary>
+        /// <param name="engine">Engine instance.</param>
         /// <param name="cache_folder">Cache folder root.</param>
         /// <param name="page_name">Page to process.</param>
         /// <param name="class_name">Appropriate class name.</param>

@@ -13,9 +13,13 @@ namespace Bula.Fetcher.Controller.Actions {
     /// Action for cleaning cache.
     /// </summary>
     public class DoCleanCache : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public DoCleanCache(Context context) : base(context) { }
 
-        /// Execute main logic for this action 
+        /// Execute main logic for DoCleanCache action 
         public override void Execute() {
             var oLogger = new Logger();
             var log = Request.GetOptionalInteger("log");
@@ -30,6 +34,7 @@ namespace Bula.Fetcher.Controller.Actions {
         /// <summary>
         /// Actual cleaning of cache folder.
         /// </summary>
+        /// <param name="oLogger">Logger instance.</param>
         /// <param name="path_name">Cache folder name (path).</param>
         /// <param name="ext">Files extension to clean.</param>
         private void CleanCacheFolder(Logger oLogger, String path_name, String ext) {

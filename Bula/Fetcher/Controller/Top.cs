@@ -14,8 +14,13 @@ namespace Bula.Fetcher.Controller {
     /// Logic for generating Top block.
     /// </summary>
     public class Top : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public Top(Context context) : base(context) { }
 
+        /// Execute main logic for Top block 
         public override void Execute() {
             var Prepare = new Hashtable();
             Prepare["[#ImgWidth]"] = this.context.IsMobile ? 234 : 468;

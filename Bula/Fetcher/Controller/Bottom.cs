@@ -15,8 +15,13 @@ namespace Bula.Fetcher.Controller {
     /// Logic for generating Bottom block.
     /// </summary>
     public class Bottom : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public Bottom(Context context) : base(context) { }
 
+        /// Execute main logic for Bottom block 
         public override void Execute() {
             var Prepare = new Hashtable();
 

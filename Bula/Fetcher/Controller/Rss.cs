@@ -20,6 +20,10 @@ namespace Bula.Fetcher.Controller {
     /// Main logic for generating RSS-feeds.
     /// </summary>
     public class Rss : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public Rss(Context context) : base(context) { }
 
         /// <summary>

@@ -115,6 +115,7 @@ namespace Bula {
         /// Call method of given class using provided arguments.
         /// </summary>
         /// <param name="class_name">Class name</param>
+        /// <param name="args0">Constructor args</param>
         /// <param name="method_name">Method name</param>
         /// <param name="args">List of arguments</param>
         /// <returns>Result of method execution</returns>

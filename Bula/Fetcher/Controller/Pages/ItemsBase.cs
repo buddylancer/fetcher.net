@@ -17,6 +17,10 @@ namespace Bula.Fetcher.Controller.Pages {
     /// Base controller for Items block.
     /// </summary>
     public abstract class ItemsBase : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public ItemsBase(Context context) : base(context) { }
 
         /// <summary>

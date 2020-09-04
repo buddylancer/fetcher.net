@@ -14,8 +14,13 @@ namespace Bula.Fetcher.Controller {
     /// Logic for generating Menu block.
     /// </summary>
     public class Menu : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public Menu(Context context) : base(context) { }
 
+        /// Execute main logic for Menu block 
         public override void Execute() {
             var public_pages = new ArrayList();
 

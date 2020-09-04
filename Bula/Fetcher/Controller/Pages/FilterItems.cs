@@ -17,11 +17,13 @@ namespace Bula.Fetcher.Controller.Pages {
     /// Controller for Filter Items block.
     /// </summary>
     public class FilterItems : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public FilterItems(Context context) : base(context) { }
 
-        /// <summary>
-        /// Execute main logic for Items block.
-        /// </summary>
+        /// Execute main logic for FilterItems block. 
         public override void Execute() {
             var doSource = new DOSource();
 

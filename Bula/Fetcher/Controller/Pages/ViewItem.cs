@@ -17,6 +17,10 @@ namespace Bula.Fetcher.Controller.Pages {
     /// Controller for View Item block.
     /// </summary>
     public class ViewItem : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public ViewItem(Context context) : base(context) { }
 
         /// <summary>
@@ -42,9 +46,7 @@ namespace Bula.Fetcher.Controller.Pages {
             return Pars;
         }
 
-        /// <summary>
-        /// Execute main logic for View Item block.
-        /// </summary>
+        /// Execute main logic for View Item block. 
         public override void Execute() {
             var Pars = Check();
             if (Pars == null)

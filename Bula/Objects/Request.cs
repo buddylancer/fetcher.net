@@ -32,15 +32,16 @@ namespace Bula.Objects {
 
         static Request() { Initialize(); }
 
-        /// <summary>
-        /// Initialize internal variables for new request.
-        /// </summary>
+        /// Initialize internal variables for new request. 
         public static void Initialize() {
             Vars = Arrays.NewHashtable();
             ServerVars = Arrays.NewHashtable();
         }
 
-        public static Hashtable GetPrivateVars() {
+        /// <summary>
+        /// Get private variables.
+        /// </summary>
+         public static Hashtable GetPrivateVars() {
             return Vars;
         }
 

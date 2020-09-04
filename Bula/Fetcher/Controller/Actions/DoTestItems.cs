@@ -39,9 +39,13 @@ namespace Bula.Fetcher.Controller.Actions {
             );
         }
 
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public DoTestItems(Context context) : base(context) { }
 
-        /// Execute main logic for this action 
+        /// Execute main logic for DoTestItems action 
         public override void Execute() {
             var insert_required = false;
             var update_required = false;

@@ -8,8 +8,6 @@ namespace Bula.Objects {
 
     using System.Text.RegularExpressions;
     using System.Collections;
-
-    using Bula.Fetcher;
     using Bula.Objects;
 
     /// <summary>
@@ -117,15 +115,6 @@ namespace Bula.Objects {
     		}
     		return output;
     	}
-
-        /// <summary>
-        /// Format date/time to DB/GMT presentation.
-        /// </summary>
-        /// <param name="pubdate">Input date/time.</param>
-        /// <returns>Resulting date/time.</returns>
-        public static String GetSqlDate(String pubdate) {
-            return DateTimes.GmtFormat(Config.SQL_DTS, BLANK(pubdate) ? 0 : DateTimes.GetTime(pubdate));
-        }
 
     	/// <summary>
     	/// Split a string using divider/separator.

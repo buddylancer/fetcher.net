@@ -74,6 +74,7 @@ namespace Bula.Fetcher.Controller {
         /// Include file with class and generate content by calling method Execute().
         /// </summary>
         /// <param name="class_name">Class name to include.</param>
+        /// <param name="default_method">Default method to call.</param>
         /// <returns>Resulting content.</returns>
         public String IncludeTemplate(String class_name, String default_method = "Execute") {
             var engine = this.context.PushEngine(false);
@@ -83,7 +84,7 @@ namespace Bula.Fetcher.Controller {
             var content = (String)null;
             if (Helper.FileExists(CAT(this.context.LocalRoot, file_name))) {
                 ArrayList args0 = new ArrayList(); args0.Add(this.context);
-                Internal.CallMethod(class_name, args0, "Execute", null);
+                Internal.CallMethod(class_name, args0, default_method, null);
                 content = engine.GetPrintString();
             }
             else

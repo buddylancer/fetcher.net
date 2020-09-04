@@ -15,7 +15,7 @@ namespace Bula.Fetcher {
     /// Class for request context.
     /// </summary>
     public class Context : Config {
-
+        /// Default constructor. 
         public Context () {
             this.Initialize();
         }
@@ -31,7 +31,6 @@ namespace Bula.Fetcher {
         public String Get(String name) {
             return (String)this.Values[name];
         }
-        public Object this[String name] { get { return Get(name); } set { Set(name, value); }}
 
         /// <summary>
         /// Set internal variable.
@@ -42,7 +41,14 @@ namespace Bula.Fetcher {
             this.Values[name] = value;
         }
 
-        ///  
+        /// <summary>
+        /// Getter/Setter for internal variable.
+        /// </summary>
+        public Object this[String name] {
+            get { return Get(name); }
+            set { Set(name, value); }
+        }
+
         /// <summary>
         /// Check whether variable is contained in internal storage.
         /// </summary>

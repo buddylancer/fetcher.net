@@ -29,8 +29,13 @@ namespace Bula.Fetcher.Controller {
             );
         }
 
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
         public Index(Context context) : base(context) { }
 
+        /// Execute main logic for Index block 
         public override void Execute() {
             if (pages_array == null)
                 Initialize();
