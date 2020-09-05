@@ -1,5 +1,5 @@
 # fetcher.net
-Simple RSS fetcher/aggregator (NET/MySQL).
+Buddy Fetcher: Simple RSS fetcher/aggregator (NET/MySQL).
 
 Project features:
 - collecting remote items (news, jobs etc) from a number of external sites
