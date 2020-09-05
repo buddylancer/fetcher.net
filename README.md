@@ -13,7 +13,7 @@ Project features:
 - Classic MVC (Model/View/Controller) implementation
 
 Websites powered by Buddy Fetcher:
-- 1001 Freelance Projects
-- 1001 Freelance Projects (Rus)
-- 1001 Remote Jobs
-- 1001 Remote Jobs (Rus)
+- 1001 Freelance Projects (http://www.1001freelanceprojects.com)
+- 1001 Freelance Projects / Rus (http://www.1001freelanceprojects.ru)
+- 1001 Remote Jobs (http://www.1001remotejobs.com)
+- 1001 Remote Jobs / Rus (http://www.1001remotejobs.ru)
