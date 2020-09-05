@@ -25,7 +25,8 @@ Download and install WinMerge for Windows into C:\Program Files\WinMerge
 4. Configure
 4.1. Set your test (local) site info in 0_runme.bat (default is *.ff.com:8000)
 4.2. Set your database info/credentials and location of mysql.exe in 1_create.bat (default is 'dbusnews' with the same user and password)
-4.3. Set security code in 3_fetch.bat exactly the same as in bula/fetcher/Config.php (default is '1234')
+4.3. Put MySQL Connector/NET (mysql.data.dll) into Bula\Model folder
+4.4. Set security code in 3_fetch.bat exactly the same as in Bula\Fetcher\Config.cs (default is '1234')
 
 
 5. Launch tests

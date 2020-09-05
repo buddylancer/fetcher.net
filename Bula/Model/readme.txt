@@ -1,0 +1,1 @@
+Download and put MySQL Connnector/NET (mysql.data.dll) here.

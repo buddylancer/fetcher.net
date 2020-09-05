@@ -5,11 +5,6 @@ if exist %wget% goto :WGET_OK
 echo *** %wget% is required!
 goto :END
 :WGET_OK
-set replacer=bin\replacer.net.exe
-if exist %replacer% goto :REPLACER_OK
-echo *** %replacer% is required!
-goto :END
-:REPLACER_OK
 
 rem Set your test site (local) info:
 set site=http://www.ff.com:8000
