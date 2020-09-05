@@ -1,43 +1,17 @@
-This test configuration/scripts are for classic WAMP installation.
-You are welcome to implement testing for LAMP installation :)
+This test configuration/scripts are for IIS installation.
+
 
 0. Prerequisites
-Microsoft Windows, Apache httpd server, MySQL database, PHP scripting.
-
-Following PHP extensions are required (edit PHP.ini configuration file):
-extension=php_curl.dll
-extension=php_gd2.dll
-extension=php_mbstring.dll
+Microsoft Windows, NET Framework 2.0+, Microsoft IIS + ASP.NET, MySQL database.
 
 
 1. Local test website
-Configure local test website to be hosted on www.ff.com (main) and m.ff.com (mobile)
-
-Uncomment "Virtual hosts" support in httpd.conf.
-
-Add configuration section into your Apache extra/httpd-vhosts.conf:
-<VirtualHost *:80>
-    ServerAdmin webmaster@ff.com
-    DocumentRoot "[Your Directory]/fetcher.php/bula/fetcher/web/"
-    ServerName ff.com
-    ServerAlias www.ff.com
-    ServerAlias m.ff.com
-    ErrorLog "logs/ff.com-error.log"
-    CustomLog "logs/ff.com-access.log" common
-</VirtualHost>
-<Directory "[Your Directory]/fetcher.php/bula/fetcher/web/">
-    Options Indexes FollowSymLinks
-    AllowOverride All
-    Order allow,deny
-    Allow from all
-</Directory>
+Configure local test website to be hosted on www.ff.com:8000 (main) and m.ff.com:8000 (mobile)
 
 Add following hosts into C:\Windows\System32\drivers\etc\hosts
 127.0.0.1 ff.com
 127.0.0.1 www.ff.com
 127.0.0.1 m.ff.com
-
-(Re)start Apache server.
 
 
 2. Wget application
@@ -49,7 +23,7 @@ Download and install WinMerge for Windows into C:\Program Files\WinMerge
 
 
 4. Configure
-4.1. Set your test (local) site info in 0_runme.bat (default is *.ff.com)
+4.1. Set your test (local) site info in 0_runme.bat (default is *.ff.com:8000)
 4.2. Set your database info/credentials and location of mysql.exe in 1_create.bat (default is 'dbusnews' with the same user and password)
 4.3. Set security code in 3_fetch.bat exactly the same as in bula/fetcher/Config.php (default is '1234')
 

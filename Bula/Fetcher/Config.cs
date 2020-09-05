@@ -13,7 +13,7 @@ namespace Bula.Fetcher {
         /// Exactly the same as RewriteBase in .htaccess 
         public const String TOP_DIR = "/";
         /// Index page name 
-        public const String INDEX_PAGE = "index.aspx";
+        public const String INDEX_PAGE = "";
         /// Action page name 
         public const String ACTION_PAGE = "action.aspx";
         /// RSS-feeds page name 

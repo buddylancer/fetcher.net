@@ -289,7 +289,7 @@ namespace Bula.Fetcher.Controller {
         ///
         /// For example:
         /// "Officials: Fireworks Spark Utah Wildfire, Evacuations"
-        ///    will became
+        ///    will become
         /// "officials-fireworks-spark-utah-wildfire-evacuations"
         public String GetUrlTitle(Boolean translit = false) {
             var title = Strings.AddSlashes(this.title);
