@@ -105,19 +105,19 @@ namespace Bula.Fetcher {
                 this.TestRun = true;
                 this.FineUrls = false;
                 this.ImmediateRedirect = false;
-                //this.Site = "http://www.test.com";
+                this.Site = "http://www.test.com";
             }
             else if (EQ(http_tester, "TestFine")) {
                 this.TestRun = true;
                 this.FineUrls = true;
                 this.ImmediateRedirect = false;
-                //this.Site = "http://www.test.com";
+                this.Site = "http://www.test.com";
             }
             else if (EQ(http_tester, "TestDirect")) {
                 this.TestRun = true;
                 this.FineUrls = true;
                 this.ImmediateRedirect = true;
-                //this.Site = "http://www.test.com";
+                this.Site = "http://www.test.com";
             }
         }
 

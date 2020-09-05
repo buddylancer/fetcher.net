@@ -57,7 +57,7 @@ namespace Bula.Fetcher.Controller {
                 var title = STR(public_pages[n+0]);
                 var page = STR(public_pages[n+1]);
                 var href = (String)null;
-                if (page.Equals("home"))
+                if (EQ(page, "home"))
                     href = Config.TOP_DIR;
                 else {
                     if (EQ(page.Substring(0, 1), "#"))

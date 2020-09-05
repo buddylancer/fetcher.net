@@ -175,7 +175,7 @@ namespace Bula.Fetcher.Controller {
         /// <returns>Resulting string.</returns>
         public static String RemoveInfo(String source, String from, String to = null) {
             var result = (String)null;
-            int index1 = from == null ? 0 : IXOF(source, from);
+            int index1 = from == null ? 0 : source.IndexOf(from);
             if (index1 != -1) {
                 if (to == null)
                     result = source.Substring(index1);
