@@ -37,8 +37,10 @@ namespace Bula.Objects {
             }
             if (Helper.FileExists(this.file_name))
                 Helper.AppendText(this.file_name, text);
-            else
+            else {
+                Helper.TestFileFolder(this.file_name);
                 Helper.WriteText(this.file_name, text);
+            }
 
         }
 

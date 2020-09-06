@@ -265,7 +265,7 @@ namespace Bula.Fetcher.Controller {
             // Save content to cache (if applicable)
             if (Config.CACHE_RSS && !count_set)
             {
-                Util.TestFileFolder(cached_file);
+                Helper.TestFileFolder(cached_file);
                 //Helper.WriteText(cached_file, Strings.Concat("\xEF\xBB\xBF", xml_content));
                 Helper.WriteText(cached_file, xml_content);
             }

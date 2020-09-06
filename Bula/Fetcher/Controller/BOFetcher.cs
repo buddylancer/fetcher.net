@@ -40,8 +40,8 @@ namespace Bula.Fetcher.Controller {
             this.context["Log_Object"] = this.oLogger;
             var log = Request.GetOptionalInteger("log");
             if (!NUL(log) && log != -99999) { //TODO
-                var filename_template = (String)"C:/Temp/Log_{0}_{1}.html";
-                var filename = Util.FormatString(filename_template, ARR("fetch_items", DateTimes.Format(DBConfig.SQL_DTS)));
+                var filename_template = (String)CAT(this.context.LocalRoot, "local/logs/{0}_{1}.html");
+                var filename = Util.FormatString(filename_template, ARR("fetch_items", DateTimes.Format(Config.LOG_DTS)));
                 this.oLogger.Init(filename);
             }
         }

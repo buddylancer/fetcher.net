@@ -186,6 +186,40 @@ namespace Bula.Objects {
         }
 
         /// <summary>
+        /// Test the chain of (sub)folder(s), create them if necessary.
+        /// </summary>
+        /// <param name="folder">Folder's full path.</param>
+        public static void TestFolder(String folder)
+        {
+            String[] chunks = folder.Split(new char[] { '/' });
+            var pathname = (String)null;
+            for (int n = 0; n < SIZE(chunks); n++)
+            {
+                pathname = CAT(pathname, chunks[n]);
+                if (!Helper.DirExists(pathname))
+                    Helper.CreateDir(pathname);
+                pathname = CAT(pathname, "/");
+            }
+        }
+
+        /// <summary>
+        /// Test the chain of (sub)folder(s) and file, create if necessary.
+        /// </summary>
+        /// <param name="filename">Filename's full path</param>
+        public static void TestFileFolder(String filename)
+        {
+            String[] chunks = filename.Split(new char[] { '/' });
+            var pathname = (String)null;
+            for (int n = 0; n < SIZE(chunks) - 1; n++)
+            {
+                pathname = CAT(pathname, chunks[n]);
+                if (!Helper.DirExists(pathname))
+                    Helper.CreateDir(pathname);
+                pathname = CAT(pathname, "/");
+            }
+        }
+
+        /// <summary>
         /// List (enumerate) entries of a given path.
         /// </summary>
         /// <param name="path">Path of a directory.</param>

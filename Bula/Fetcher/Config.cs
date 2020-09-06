@@ -52,6 +52,7 @@ namespace Bula.Fetcher {
         public const String XML_DTS = "ddd, dd MMM yyyy HH:mm:ss \\G\\M\\T";
         /// Date/time format for DB operations 
         public const String SQL_DTS = "yyyy-MM-dd HH:mm:ss";
+        public const String LOG_DTS = "yyyy-MM-dd_HH-mm-ss";
 
         // Fill these fields by your site data
         /// Site name 
