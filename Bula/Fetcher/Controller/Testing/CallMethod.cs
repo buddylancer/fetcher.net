@@ -40,10 +40,10 @@ namespace Bula.Fetcher.Controller.Testing {
     		var package = Request.Get("package");
     		if (BLANK(package))
     			Response.End("Empty package!");
-            String[] package_chunks = Strings.Split("-", package);
-            for (int n = 0; n < SIZE(package_chunks); n++)
-                package_chunks[n] = Strings.FirstCharToUpper(package_chunks[n]);
-    		package = Strings.Join("/", package_chunks);
+            String[] packageChunks = Strings.Split("-", package);
+            for (int n = 0; n < SIZE(packageChunks); n++)
+                packageChunks[n] = Strings.FirstCharToUpper(packageChunks[n]);
+    		package = Strings.Join("/", packageChunks);
 
     		// Check class
             if (!Request.Contains("class"))
@@ -63,25 +63,25 @@ namespace Bula.Fetcher.Controller.Testing {
             var count = 0;
     		var pars = new ArrayList();
     		for (int n = 1; n <= 6; n++) {
-    			var par_name = CAT("par", n);
-    			if (!Request.Contains(par_name))
+    			var parName = CAT("par", n);
+    			if (!Request.Contains(parName))
     				break;
-    			var par_value = Request.Get(par_name);
-    			if (EQ(par_value, "_"))
-    				par_value = "";
-    			//pars_array[] = par_value;
-                pars.Add(par_value);
+    			var parValue = Request.Get(parName);
+    			if (EQ(parValue, "_"))
+    				parValue = "";
+    			//parsArray[] = parValue;
+                pars.Add(parValue);
     			count++;
     		}
 
             var buffer = (String)null;
             var result = (Object)null;
 
-            var full_class = CAT(package, "/", className);
+            var fullClass = CAT(package, "/", className);
 
-    		full_class = Strings.Replace("/", ".", full_class);
+    		fullClass = Strings.Replace("/", ".", fullClass);
             method = Strings.FirstCharToUpper(method);
-            result = Internal.CallMethod(full_class, new ArrayList(), method, pars);
+            result = Internal.CallMethod(fullClass, new ArrayList(), method, pars);
 
             if (result == null)
                 buffer = "NULL";

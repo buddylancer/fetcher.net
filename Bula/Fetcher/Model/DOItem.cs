@@ -17,8 +17,8 @@ namespace Bula.Fetcher.Model {
     public class DOItem : DOBase {
         /// Public constructor (overrides base constructor) 
         public DOItem (): base() {
-            this.table_name = "items";
-            this.id_field = "i_ItemId";
+            this.tableName = "items";
+            this.idField = "i_ItemId";
         }
 
         /// <summary>
@@ -29,9 +29,9 @@ namespace Bula.Fetcher.Model {
         public override DataSet GetById(int itemid) { // overloaded
             if (itemid <= 0) return null;
             var query = Strings.Concat(
-                " SELECT _this.*, s.s_SourceName FROM ", this.table_name, " _this ",
+                " SELECT _this.*, s.s_SourceName FROM ", this.tableName, " _this ",
                 " LEFT JOIN sources s ON (s.i_SourceId = _this.i_SourceLink) ",
-                " WHERE _this.", this.id_field, " = ? ");
+                " WHERE _this.", this.idField, " = ? ");
             Object[] pars = ARR("SetInt", itemid);
             return this.GetDataSet(query, pars);
         }
@@ -48,18 +48,18 @@ namespace Bula.Fetcher.Model {
         /// Find item with given link.
         /// </summary>
         /// <param name="link">Link to find.</param>
-        /// <param name="source_id">Source ID to find in (default = 0).</param>
+        /// <param name="sourceId">Source ID to find in (default = 0).</param>
         /// <returns>Resulting data set.</returns>
-        public DataSet FindItemByLink(String link, int source_id) {
+        public DataSet FindItemByLink(String link, int sourceId) {
             if (link == null)
                 return null;
             var query = Strings.Concat(
-                " SELECT _this.", this.id_field, " FROM ", this.table_name, " _this ",
+                " SELECT _this.", this.idField, " FROM ", this.tableName, " _this ",
                 //(BLANK(source) ? null : " LEFT JOIN sources s ON (s.i_SourceId = _this.i_SourceLink) "),
-                " WHERE ", (source_id == 0 ? null : " _this.i_SourceLink = ? AND "), "_this.s_Link = ?");
+                " WHERE ", (sourceId == 0 ? null : " _this.i_SourceLink = ? AND "), "_this.s_Link = ?");
             Object[] pars = ARR();
-            if (source_id != 0)
-                pars = ARR("SetInt", source_id);
+            if (sourceId != 0)
+                pars = ARR("SetInt", sourceId);
             pars = ADD(pars, ARR("SetString", link));
             return this.GetDataSet(query, pars);
         }
@@ -70,38 +70,38 @@ namespace Bula.Fetcher.Model {
         /// <param name="filter">Filter from the category.</param>
         /// <returns>Appropriate SQL-query.</returns>
         public String BuildSqlFilter(String filter) {
-            String[] filter_chunks = Strings.Split("~", filter);
-            String[] include_chunks = SIZE(filter_chunks) > 0 ?
-                Strings.Split("|", filter_chunks[0]) : null;
-            String[] exclude_chunks = SIZE(filter_chunks) > 1 ?
-                Strings.Split("|", filter_chunks[1]) : null;
-            var include_filter = "";
-            for (int n = 0; n < SIZE(include_chunks); n++) {
-                if (include_filter.Length != 0)
-                    include_filter += (" OR ");
-                include_filter += ("(_this.s_Title LIKE '%");
-                    include_filter += (include_chunks[n]);
-    			include_filter += ("%' OR _this.t_FullDescription LIKE '%");
-    				include_filter += (include_chunks[n]);
-    			include_filter += ("%')");
+            String[] filterChunks = Strings.Split("~", filter);
+            String[] includeChunks = SIZE(filterChunks) > 0 ?
+                Strings.Split("|", filterChunks[0]) : null;
+            String[] excludeChunks = SIZE(filterChunks) > 1 ?
+                Strings.Split("|", filterChunks[1]) : null;
+            var includeFilter = "";
+            for (int n = 0; n < SIZE(includeChunks); n++) {
+                if (includeFilter.Length != 0)
+                    includeFilter += (" OR ");
+                includeFilter += ("(_this.s_Title LIKE '%");
+                    includeFilter += (includeChunks[n]);
+    			includeFilter += ("%' OR _this.t_FullDescription LIKE '%");
+    				includeFilter += (includeChunks[n]);
+    			includeFilter += ("%')");
     		}
-    		if (include_filter.Length != 0)
-    			include_filter = Strings.Concat(" (", include_filter, ") ");
+    		if (includeFilter.Length != 0)
+    			includeFilter = Strings.Concat(" (", includeFilter, ") ");
 
-    		var exclude_filter = "";
-    		for (int n = 0; n < SIZE(exclude_chunks); n++) {
-    			if (!BLANK(exclude_filter))
-    				exclude_filter = Strings.Concat(exclude_filter, " AND ");
-    			exclude_filter = Strings.Concat(exclude_filter,
-    				"(_this.s_Title not like '%", exclude_chunks[n], "%' AND _this.t_Description not like '%", exclude_chunks[n], "%')");
+    		var excludeFilter = "";
+    		for (int n = 0; n < SIZE(excludeChunks); n++) {
+    			if (!BLANK(excludeFilter))
+    				excludeFilter = Strings.Concat(excludeFilter, " AND ");
+    			excludeFilter = Strings.Concat(excludeFilter,
+    				"(_this.s_Title not like '%", excludeChunks[n], "%' AND _this.t_Description not like '%", excludeChunks[n], "%')");
     		}
-    		if (exclude_filter.Length != 0)
-    			exclude_filter = Strings.Concat(" (", exclude_filter, ") ");
+    		if (excludeFilter.Length != 0)
+    			excludeFilter = Strings.Concat(" (", excludeFilter, ") ");
 
-    		var real_filter = include_filter;
-    		if (exclude_filter.Length != 0)
-    			real_filter = CAT(real_filter, " AND ", exclude_filter);
-    		return real_filter;
+    		var realFilter = includeFilter;
+    		if (excludeFilter.Length != 0)
+    			realFilter = CAT(realFilter, " AND ", excludeFilter);
+    		return realFilter;
     	}
 
     	/// <summary>
@@ -112,43 +112,43 @@ namespace Bula.Fetcher.Model {
         /// <param name="list">Include the list No.</param>
         /// <param name="rows">List size.</param>
         /// <returns>Resulting data set.</returns>
-        public DataSet EnumItems(String source, String search, int list, int rows) { //, total_rows) {
-    		var real_search = BLANK(search) ? null : this.BuildSqlFilter(search);
+        public DataSet EnumItems(String source, String search, int list, int rows) { //, totalRows) {
+    		var realSearch = BLANK(search) ? null : this.BuildSqlFilter(search);
     		String query1 = Strings.Concat(
-    			" SELECT _this.", this.id_field, " FROM ", this.table_name, " _this ",
+    			" SELECT _this.", this.idField, " FROM ", this.tableName, " _this ",
     			" LEFT JOIN sources s ON (s.i_SourceId = _this.i_SourceLink) ",
     			" WHERE s.b_SourceActive = 1 ",
     			(BLANK(source) ? null : CAT(" AND s.s_SourceName = '", source, "' ")),
-    			(BLANK(real_search) ? null : CAT(" AND (", real_search, ") ")),
-    			" ORDER BY _this.d_Date DESC, _this.", this.id_field, " DESC "
+    			(BLANK(realSearch) ? null : CAT(" AND (", realSearch, ") ")),
+    			" ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC "
     		);
 
     		Object[] pars1 = ARR();
-    		DataSet ds1 = this.GetDataSetList(query1, pars1, list, rows); //, total_rows);
+    		DataSet ds1 = this.GetDataSetList(query1, pars1, list, rows); //, totalRows);
     		if (ds1.GetSize() == 0)
     			return ds1;
 
-    		var total_pages = ds1.GetTotalPages();
-    		var in_list = "";
+    		var totalPages = ds1.GetTotalPages();
+    		var inList = "";
     		for (int n = 0; n < ds1.GetSize(); n++) {
     			var o = ds1.GetRow(n);
     			if (n != 0)
-    				in_list += (", ");
-                var id = o[this.id_field];
-    			in_list += (id);
+    				inList += (", ");
+                var id = o[this.idField];
+    			inList += (id);
     		}
 
     		String query2 = Strings.Concat(
-    			" SELECT _this.", this.id_field, ", s.s_SourceName, _this.s_Title, _this.s_Url, _this.d_Date, _this.s_Category, ",
+    			" SELECT _this.", this.idField, ", s.s_SourceName, _this.s_Title, _this.s_Url, _this.d_Date, _this.s_Category, ",
     			" _this.s_Creator, _this.s_Custom1, _this.s_Custom2, s.s_SourceName ",
-    			" FROM ", this.table_name, " _this ",
+    			" FROM ", this.tableName, " _this ",
     			" LEFT JOIN sources s ON (s.i_SourceId = _this.i_SourceLink ) ",
-    			" WHERE _this.", this.id_field, " IN (", in_list, ") ",
-    			" ORDER BY _this.d_Date DESC, _this.", this.id_field, " DESC "
+    			" WHERE _this.", this.idField, " IN (", inList, ") ",
+    			" ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC "
     		);
     		Object[] pars2 = ARR();
     		DataSet ds2 = this.GetDataSet(query2, pars2);
-    		ds2.SetTotalPages(total_pages);
+    		ds2.SetTotalPages(totalPages);
 
     		return ds2;
     	}
@@ -160,10 +160,10 @@ namespace Bula.Fetcher.Model {
         /// <returns>Resulting data set.</returns>
         public DataSet EnumItemsFromDate(String fromdate) {
     		var query = Strings.Concat(
-    			" SELECT _this.*, s.s_SourceName FROM ", this.table_name, " _this ",
+    			" SELECT _this.*, s.s_SourceName FROM ", this.tableName, " _this ",
     			" INNER JOIN sources s ON (s.i_SourceId = _this.i_SourceLink) ",
     			" WHERE _this.d_Date > ? ",
-    			" ORDER BY _this.d_Date DESC, _this.", this.id_field, " DESC "
+    			" ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC "
     		);
     		Object[] pars = ARR("SetDate", fromdate);
     		return this.GetDataSet(query, pars);
@@ -173,49 +173,49 @@ namespace Bula.Fetcher.Model {
     	/// <summary>
     	/// Enumerate items from given date.
     	/// </summary>
-        /// <param name="from_date">Date to include items starting from.</param>
+        /// <param name="fromDate">Date to include items starting from.</param>
         /// <param name="source">Source name to include items from (default - all sources).</param>
         /// <param name="filter">Filter for the category (or empty - no filtering).</param>
         /// <returns>Resulting data set.</returns>
-    	public DataSet EnumItemsFromSource(String from_date, String source, String filter) {
-            return this.EnumItemsFromSource(from_date, source, filter, 20);
+    	public DataSet EnumItemsFromSource(String fromDate, String source, String filter) {
+            return this.EnumItemsFromSource(fromDate, source, filter, 20);
         }
 
     	/// <summary>
     	/// Enumerate items from given date.
     	/// </summary>
-        /// <param name="from_date">Date to include items starting from.</param>
+        /// <param name="fromDate">Date to include items starting from.</param>
         /// <param name="source">Source name to include items from (default - all sources).</param>
         /// <param name="filter">Filter for the category (or empty - no filtering).</param>
-        /// <param name="max_items">Max number of returned items.</param>
+        /// <param name="maxItems">Max number of returned items.</param>
         /// <returns>Resulting data set.</returns>
-        public DataSet EnumItemsFromSource(String from_date, String source, String filter, int max_items) {
-    		var real_filter = BLANK(filter) ? null : this.BuildSqlFilter(filter);
+        public DataSet EnumItemsFromSource(String fromDate, String source, String filter, int maxItems) {
+    		var realFilter = BLANK(filter) ? null : this.BuildSqlFilter(filter);
     		String query1 = Strings.Concat(
-    			" SELECT _this.*, s.s_SourceName FROM ", this.table_name, " _this ",
+    			" SELECT _this.*, s.s_SourceName FROM ", this.tableName, " _this ",
     			" INNER JOIN sources s ON (s.i_SourceId = _this.i_SourceLink) ",
     			" WHERE s.b_SourceActive = 1 ",
     			(BLANK(source) ? null : Strings.Concat(" AND s.s_SourceName = '", source, "' ")),
-    			(BLANK(real_filter) ? null : Strings.Concat(" AND (", real_filter, ") ")),
-    			" ORDER BY _this.d_Date DESC, _this.", this.id_field, " DESC ",
-    			" LIMIT ", max_items
+    			(BLANK(realFilter) ? null : Strings.Concat(" AND (", realFilter, ") ")),
+    			" ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC ",
+    			" LIMIT ", maxItems
     		);
     		Object[] pars1 = ARR();
     		DataSet ds1 = this.GetDataSet(query1, pars1);
-            if (from_date == null)
+            if (fromDate == null)
                 return ds1;
 
     		String query2 = Strings.Concat(
-    			" SELECT _this.*, s.s_SourceName FROM ", this.table_name, " _this ",
+    			" SELECT _this.*, s.s_SourceName FROM ", this.tableName, " _this ",
     			" INNER JOIN sources s ON (s.i_SourceId = _this.i_SourceLink) ",
     			" WHERE s.b_SourceActive = 1 ",
     			(BLANK(source) ? null : Strings.Concat(" AND s.s_SourceName = '", source, "' ")),
     			" AND _this.d_Date > ? ",
-    			(BLANK(real_filter) ? null : Strings.Concat(" AND (", real_filter, ") ")),
-    			" ORDER BY _this.d_Date DESC, _this.", this.id_field, " DESC ",
-    			" LIMIT ", max_items
+    			(BLANK(realFilter) ? null : Strings.Concat(" AND (", realFilter, ") ")),
+    			" ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC ",
+    			" LIMIT ", maxItems
     		);
-    		Object[] pars2 = ARR("SetDate", from_date);
+    		Object[] pars2 = ARR("SetDate", fromDate);
     		DataSet ds2 = this.GetDataSet(query2, pars2);
 
     		return ds1.GetSize() > ds2.GetSize() ? ds1 : ds2;
@@ -227,9 +227,9 @@ namespace Bula.Fetcher.Model {
         /// <param name="days">Remove items older than days.</param>
         /// <returns>Resulting data set.</returns>
         public int PurgeOldItems(int days) {
-    		var purge_date = DateTimes.Format(DBConfig.SQL_DTS, DateTimes.GetTime(CAT("-", days, " days")));
-    		var query = Strings.Concat("DELETE FROM ", this.table_name, " WHERE d_Date < ?");
-    		Object[] pars = ARR("SetDate", purge_date);
+    		var purgeDate = DateTimes.Format(DBConfig.SQL_DTS, DateTimes.GetTime(CAT("-", days, " days")));
+    		var query = Strings.Concat("DELETE FROM ", this.tableName, " WHERE d_Date < ?");
+    		Object[] pars = ARR("SetDate", purgeDate);
 
     		return this.UpdateInternal(query, pars, "update");
     	}

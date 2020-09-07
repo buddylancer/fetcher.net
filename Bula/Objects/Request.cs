@@ -112,10 +112,10 @@ namespace Bula.Objects {
         /// <returns>True - referer contains provided text, False - not contains.</returns>
         public static Boolean CheckReferer(String text) {
             //return true; //TODO
-            var http_referer = GetVar(INPUT_SERVER, "HTTP_REFERER");
-            if (http_referer == null)
+            var httpReferer = GetVar(INPUT_SERVER, "HTTP_REFERER");
+            if (httpReferer == null)
                 return false;
-            return http_referer.IndexOf(text) != -1;
+            return httpReferer.IndexOf(text) != -1;
         }
 
         /// <summary>
@@ -123,10 +123,10 @@ namespace Bula.Objects {
         /// </summary>
         /// <returns>True - from test script, False - from ordinary user agent.</returns>
         public static Boolean CheckTester() {
-            var http_tester = GetVar(INPUT_SERVER, "HTTP_USER_AGENT");
-            if (http_tester == null)
+            var httpTester = GetVar(INPUT_SERVER, "HTTP_USER_AGENT");
+            if (httpTester == null)
                 return false;
-            return http_tester.IndexOf("Wget") != -1;
+            return httpTester.IndexOf("Wget") != -1;
         }
 
         /// <summary>
@@ -215,39 +215,39 @@ namespace Bula.Objects {
         /// Test (match) a page request with array of allowed pages.
         /// </summary>
         /// <param name="pages">Array of allowed pages (and their parameters).</param>
-        /// <param name="default_page">Default page to use for testing.</param>
+        /// <param name="defaultPage">Default page to use for testing.</param>
         /// <returns>Resulting page parameters.</returns>
-        public static Hashtable TestPage(Object[] pages, String default_page) {
-            var page_info = new Hashtable();
+        public static Hashtable TestPage(Object[] pages, String defaultPage) {
+            var pageInfo = new Hashtable();
 
             // Get page name
             var page = (String)null;
-            page_info["from_get"] = 0;
-            page_info["from_post"] = 0;
-            var p_value = GetVar(INPUT_GET, "p");
-            if (p_value != null) {
-                page = p_value;
-                page_info["from_get"] = 1;
+            pageInfo["from_get"] = 0;
+            pageInfo["from_post"] = 0;
+            var pValue = GetVar(INPUT_GET, "p");
+            if (pValue != null) {
+                page = pValue;
+                pageInfo["from_get"] = 1;
             }
-            p_value = GetVar(INPUT_POST, "p");
-            if (p_value != null) {
-                page = p_value;
-                page_info["from_post"] = 1;
+            pValue = GetVar(INPUT_POST, "p");
+            if (pValue != null) {
+                page = pValue;
+                pageInfo["from_post"] = 1;
             }
             if (page == null)
-                page = default_page;
+                page = defaultPage;
 
-            page_info.Remove("page");
+            pageInfo.Remove("page");
             for (int n = 0; n < SIZE(pages); n += 4) {
                 if (EQ(pages[n], page)) {
-                    page_info["page"] = pages[n+0];
-                    page_info["class"] = pages[n+1];
-                    page_info["post_required"] = pages[n+2];
-                    page_info["code_required"] = pages[n+3];
+                    pageInfo["page"] = pages[n+0];
+                    pageInfo["class"] = pages[n+1];
+                    pageInfo["post_required"] = pages[n+2];
+                    pageInfo["code_required"] = pages[n+3];
                     break;
                 }
             }
-            return page_info;
+            return pageInfo;
         }
 
         /// <summary>

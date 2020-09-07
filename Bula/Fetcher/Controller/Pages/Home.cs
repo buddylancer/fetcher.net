@@ -32,33 +32,33 @@ namespace Bula.Fetcher.Controller.Pages {
 
         /// Execute main logic for Home block. 
         public override void Execute() {
-            var Pars = this.Check();
-            if (Pars == null)
+            var pars = this.Check();
+            if (pars == null)
                 return;
 
-            var Prepare = new Hashtable();
+            var prepare = new Hashtable();
 
             var doItem = new DOItem();
 
-            var all_items_href =
+            var allItemsHref =
                 CAT(Config.TOP_DIR, (this.context.FineUrls ? null : CAT(Config.INDEX_PAGE, "?p=")), "items");
-            Prepare["[#BrowseItemsLink]"] = all_items_href;
+            prepare["[#BrowseItemsLink]"] = allItemsHref;
 
             var source = (String)null;
             var search = (String)null;
-            var max_rows = Config.DB_HOME_ROWS;
-            var dsItems = doItem.EnumItems(source, search, 1, max_rows);
-            var row_count = 1;
-            var Items = new ArrayList();
+            var maxRows = Config.DB_HOME_ROWS;
+            var dsItems = doItem.EnumItems(source, search, 1, maxRows);
+            var rowCount = 1;
+            var items = new ArrayList();
             for (int n = 0; n < dsItems.GetSize(); n++) {
                 var oItem = dsItems.GetRow(n);
-                var Row = FillItemRow(oItem, doItem.GetIdField(), row_count);
-                Items.Add(Row);
-                row_count++;
+                var row = FillItemRow(oItem, doItem.GetIdField(), rowCount);
+                items.Add(row);
+                rowCount++;
             }
-            Prepare["[#Items]"] = Items;
+            prepare["[#Items]"] = items;
 
-            this.Write("Bula/Fetcher/View/Pages/home.html", Prepare);
+            this.Write("Bula/Fetcher/View/Pages/home.html", prepare);
         }
     }
 }

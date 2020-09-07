@@ -40,8 +40,8 @@ namespace Bula.Fetcher.Controller {
             this.context["Log_Object"] = this.oLogger;
             var log = Request.GetOptionalInteger("log");
             if (!NUL(log) && log != -99999) { //TODO
-                var filename_template = (String)CAT(this.context.LocalRoot, "local/logs/{0}_{1}.html");
-                var filename = Util.FormatString(filename_template, ARR("fetch_items", DateTimes.Format(Config.LOG_DTS)));
+                var filenameTemplate = (String)CAT(this.context.LocalRoot, "local/logs/{0}_{1}.html");
+                var filename = Util.FormatString(filenameTemplate, ARR("fetch_items", DateTimes.Format(Config.LOG_DTS)));
                 this.oLogger.Init(filename);
             }
         }
@@ -71,9 +71,9 @@ namespace Bula.Fetcher.Controller {
             this.oLogger.Output("<br/>\r\nStarted ");
 
             //if (url.IndexOf("https") != -1) {
-            //    String enc_url = url.Replace("?", "%3F");
-            //    enc_url = enc_url.Replace("&", "%26");
-            //    url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", enc_url);
+            //    String encUrl = url.Replace("?", "%3F");
+            //    encUrl = encUrl.Replace("&", "%26");
+            //    url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", encUrl);
             //}
             this.oLogger.Output(CAT("[[[", url, "]]]<br/>\r\n"));
             var rss = Internal.FetchRss(url);
@@ -98,15 +98,15 @@ namespace Bula.Fetcher.Controller {
         private int ParseItemData(Hashtable oSource, Hashtable item) {
             // Load original values
 
-            var source_name = STR(oSource["s_SourceName"]);
-            var source_id = INT(oSource["i_SourceId"]);
-            var boItem = new BOItem(source_name, item);
+            var sourceName = STR(oSource["s_SourceName"]);
+            var sourceId = INT(oSource["i_SourceId"]);
+            var boItem = new BOItem(sourceName, item);
             var pubdate = STR(item["pubdate"]);
             var date = DateTimes.Format(Config.SQL_DTS, DateTimes.FromRss(pubdate));
 
             // Check whether item with the same link exists already
             var doItem = new DOItem();
-            var dsItems = doItem.FindItemByLink(boItem.link, source_id);
+            var dsItems = doItem.FindItemByLink(boItem.link, sourceId);
             if (dsItems.GetSize() > 0)
                 return 0;
 
@@ -122,12 +122,12 @@ namespace Bula.Fetcher.Controller {
             var fields = new Hashtable();
             fields["s_Link"] = boItem.link;
             fields["s_Title"] = boItem.title;
-            fields["s_FullTitle"] = boItem.full_title;
+            fields["s_FullTitle"] = boItem.fullTitle;
             fields["s_Url"] = url;
             if (boItem.description != null)
                 fields["t_Description"] = boItem.description;
-            if (boItem.full_description != null)
-                fields["t_FullDescription"] = boItem.full_description;
+            if (boItem.fullDescription != null)
+                fields["t_FullDescription"] = boItem.fullDescription;
             fields["d_Date"] = date;
             fields["i_SourceLink"] = INT(oSource["i_SourceId"]);
             if (!BLANK(boItem.category))
@@ -156,30 +156,30 @@ namespace Bula.Fetcher.Controller {
             var doSource = new DOSource();
             var dsSources = doSource.EnumFetchedSources();
 
-            var total_counter = 0;
+            var totalCounter = 0;
             this.oLogger.Output(CAT("<br/>\r\nChecking ", dsSources.GetSize(), " sources..."));
 
             // Loop through sources
             for (int n = 0; n < dsSources.GetSize(); n++) {
                 var oSource = dsSources.GetRow(n);
 
-                Object[] items_array = this.FetchFromSource(oSource);
-                if (items_array == null)
+                Object[] itemsArray = this.FetchFromSource(oSource);
+                if (itemsArray == null)
                     continue;
 
                 // Fetch done for this source
                 this.oLogger.Output(" fetched ");
 
-                var items_counter = 0;
+                var itemsCounter = 0;
                 // Loop through fetched items and parse their data
-                for (int i = SIZE(items_array) - 1; i >= 0; i--) {
-                    var hash = (Hashtable)items_array[i];
+                for (int i = SIZE(itemsArray) - 1; i >= 0; i--) {
+                    var hash = (Hashtable)itemsArray[i];
                     if (BLANK(hash["link"]))
                         continue;
                     var itemid = this.ParseItemData(oSource, hash);
                     if (itemid > 0) {
-                        items_counter++;
-                        total_counter++;
+                        itemsCounter++;
+                        totalCounter++;
                     }
                 }
 
@@ -189,15 +189,15 @@ namespace Bula.Fetcher.Controller {
                     DBConfig.Connection = null;
                 }
 
-                this.oLogger.Output(CAT(" (", items_counter, " items) end<br/>\r\n"));
+                this.oLogger.Output(CAT(" (", itemsCounter, " items) end<br/>\r\n"));
             }
 
             // Re-count categories
             this.RecountCategories();
 
-            this.oLogger.Output(CAT("<hr/>Total items added - ", total_counter, "<br/>\r\n"));
+            this.oLogger.Output(CAT("<hr/>Total items added - ", totalCounter, "<br/>\r\n"));
 
-            if (Config.CACHE_PAGES && total_counter > 0) {
+            if (Config.CACHE_PAGES && totalCounter > 0) {
                 var doCleanCache = new DoCleanCache(this.context);
                 doCleanCache.CleanCache(this.oLogger);
             }
@@ -215,8 +215,8 @@ namespace Bula.Fetcher.Controller {
                 var id = STR(oCategory["s_CatId"]);
                 var filter = STR(oCategory["s_Filter"]);
                 var doItem = new DOItem();
-                var sql_filter = doItem.BuildSqlFilter(filter);
-                var dsItems = doItem.EnumIds(sql_filter);
+                var sqlFilter = doItem.BuildSqlFilter(filter);
+                var dsItems = doItem.EnumIds(sqlFilter);
                 var fields = new Hashtable();
                 fields["i_Counter"] = dsItems.GetSize();
                 var result = doCategory.UpdateById(id, fields);

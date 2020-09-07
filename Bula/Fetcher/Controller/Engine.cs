@@ -17,14 +17,14 @@ namespace Bula.Fetcher.Controller {
     /// </summary>
     public class Engine : Bula.Meta {
         private Context context = null;
-        private Boolean print_flag = false;
-        private String print_string = "";
+        private Boolean printFlag = false;
+        private String printString = "";
 
         /// Public default constructor 
         public Engine (Context context) {
             this.context = context;
-            this.print_flag = false;
-            this.print_string = "";
+            this.printFlag = false;
+            this.printString = "";
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="val">Print string to set.</param>
         public void SetPrintString(String val) {
-            this.print_string = val;
+            this.printString = val;
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <returns>Current print string.</returns>
         public String GetPrintString() {
-            return this.print_string;
+            return this.printString;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="val">Print flag to set.</param>
         public void SetPrintFlag(Boolean val) {
-            this.print_flag = val;
+            this.printFlag = val;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <returns>Current print flag.</returns>
         public Boolean GetPrintFlag() {
-            return this.print_flag;
+            return this.printFlag;
         }
 
         /// <summary>
@@ -64,31 +64,31 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="val">String to write.</param>
         public void Write(String val) {
-            if (this.print_flag)
+            if (this.printFlag)
                 Response.Write(val);
             else
-                this.print_string += val;
+                this.printString += val;
         }
 
         /// <summary>
         /// Include file with class and generate content by calling method Execute().
         /// </summary>
-        /// <param name="class_name">Class name to include.</param>
-        /// <param name="default_method">Default method to call.</param>
+        /// <param name="className">Class name to include.</param>
+        /// <param name="defaultMethod">Default method to call.</param>
         /// <returns>Resulting content.</returns>
-        public String IncludeTemplate(String class_name, String default_method = "Execute") {
+        public String IncludeTemplate(String className, String defaultMethod = "Execute") {
             var engine = this.context.PushEngine(false);
-            var file_name = 
-                CAT(class_name, ".cs");
+            var fileName = 
+                CAT(className, ".cs");
 
             var content = (String)null;
-            if (Helper.FileExists(CAT(this.context.LocalRoot, file_name))) {
+            if (Helper.FileExists(CAT(this.context.LocalRoot, fileName))) {
                 ArrayList args0 = new ArrayList(); args0.Add(this.context);
-                Internal.CallMethod(class_name, args0, default_method, null);
+                Internal.CallMethod(className, args0, defaultMethod, null);
                 content = engine.GetPrintString();
             }
             else
-                content = CAT("No such file: ", file_name);
+                content = CAT("No such file: ", fileName);
             this.context.PopEngine();
             return content;
         }
@@ -180,95 +180,95 @@ namespace Bula.Fetcher.Controller {
                     hash = new Hashtable();
                 hash["[#Is_Mobile]"] = 1;
             }
-            var trim_line = true;
-            var trim_end = "\n";
-            var if_mode = 0;
-            var repeat_mode = 0;
-            var if_buf = new ArrayList();
-            var repeat_buf = new ArrayList();
-            var if_what = "";
-            var repeat_what = "";
+            var trimLine = true;
+            var trimEnd = "\n";
+            var ifMode = 0;
+            var repeatMode = 0;
+            var ifBuf = new ArrayList();
+            var repeatBuf = new ArrayList();
+            var ifWhat = "";
+            var repeatWhat = "";
             var content = "";
             for (int n = 0; n < template.Count; n++) {
                 var line = (String)template[n];
-                var line_no_comments = TrimComments(line);
-                if (if_mode > 0) {
-                    if (line_no_comments.IndexOf("#if") == 0)
-                        if_mode++;
-                    if (line_no_comments.IndexOf("#end if") == 0) {
-                        if (if_mode == 1) {
-                            var not = (if_what.IndexOf("!") == 0);
-                            var eq = (if_what.IndexOf("==") != -1);
-                            var neq = (if_what.IndexOf("!=") != -1);
-                            var process_flag = false;
+                var lineNoComments = TrimComments(line);
+                if (ifMode > 0) {
+                    if (lineNoComments.IndexOf("#if") == 0)
+                        ifMode++;
+                    if (lineNoComments.IndexOf("#end if") == 0) {
+                        if (ifMode == 1) {
+                            var not = (ifWhat.IndexOf("!") == 0);
+                            var eq = (ifWhat.IndexOf("==") != -1);
+                            var neq = (ifWhat.IndexOf("!=") != -1);
+                            var processFlag = false;
                             if (not == true) {
-                                if (!hash.ContainsKey(if_what.Substring(1))) //TODO
-                                    process_flag = true;
+                                if (!hash.ContainsKey(ifWhat.Substring(1))) //TODO
+                                    processFlag = true;
                             }
                             else {
                                 if (eq) {
-                                    String[] if_what_array = Strings.Split("==", if_what);
-                                    String if_what_1 = if_what_array[0];
-                                    String if_what_2 = if_what_array[1];
-                                    if (hash.ContainsKey(if_what_1) && EQ(hash[if_what_1], if_what_2))
-                                        process_flag = true;
+                                    String[] ifWhatArray = Strings.Split("==", ifWhat);
+                                    String ifWhat1 = ifWhatArray[0];
+                                    String ifWhat2 = ifWhatArray[1];
+                                    if (hash.ContainsKey(ifWhat1) && EQ(hash[ifWhat1], ifWhat2))
+                                        processFlag = true;
                                 }
                                 else if (neq) {
-                                    String[] if_what_array = Strings.Split("!=", if_what);
-                                    String if_what_1 = if_what_array[0];
-                                    String if_what_2 = if_what_array[1];
-                                    if (hash.ContainsKey(if_what_1) && !EQ(hash[if_what_1], if_what_2))
-                                        process_flag = true;
+                                    String[] ifWhatArray = Strings.Split("!=", ifWhat);
+                                    String ifWhat1 = ifWhatArray[0];
+                                    String ifWhat2 = ifWhatArray[1];
+                                    if (hash.ContainsKey(ifWhat1) && !EQ(hash[ifWhat1], ifWhat2))
+                                        processFlag = true;
                                 }
-                                else if (hash.ContainsKey(if_what))
-                                    process_flag = true;
+                                else if (hash.ContainsKey(ifWhat))
+                                    processFlag = true;
                             }
 
-                            if (process_flag)
-                                content += (ProcessTemplate(if_buf, hash));
-                            if_buf = new ArrayList();
+                            if (processFlag)
+                                content += (ProcessTemplate(ifBuf, hash));
+                            ifBuf = new ArrayList();
                         }
                         else
-                            if_buf.Add(line);
-                        if_mode--;
+                            ifBuf.Add(line);
+                        ifMode--;
                     }
                     else
-                        if_buf.Add(line);
+                        ifBuf.Add(line);
                 }
-                else if (repeat_mode > 0) {
-                    if (line_no_comments.IndexOf("#repeat") == 0)
-                        repeat_mode++;
-                    if (line_no_comments.IndexOf("#end repeat") == 0) {
-                        if (repeat_mode == 1) {
-                            if (hash.ContainsKey(repeat_what)) {
-                                var rows = (ArrayList)hash[repeat_what];
+                else if (repeatMode > 0) {
+                    if (lineNoComments.IndexOf("#repeat") == 0)
+                        repeatMode++;
+                    if (lineNoComments.IndexOf("#end repeat") == 0) {
+                        if (repeatMode == 1) {
+                            if (hash.ContainsKey(repeatWhat)) {
+                                var rows = (ArrayList)hash[repeatWhat];
                                 for (int r = 0; r < rows.Count; r++)
-                                    content += (ProcessTemplate(repeat_buf, (Hashtable)rows[r]));
-                                hash.Remove(repeat_what);
+                                    content += (ProcessTemplate(repeatBuf, (Hashtable)rows[r]));
+                                hash.Remove(repeatWhat);
                             }
-                            repeat_buf = new ArrayList();
+                            repeatBuf = new ArrayList();
                         }
                         else
-                            repeat_buf.Add(line);
-                        repeat_mode--;
+                            repeatBuf.Add(line);
+                        repeatMode--;
                     }
                     else
-                        repeat_buf.Add(line);
+                        repeatBuf.Add(line);
                 }
                 else {
-                    if (line_no_comments.IndexOf("#if") == 0) {
-                        if_mode = repeat_mode > 0 ? 2 : 1;
-                        if_what = line_no_comments.Substring(4).Trim();
+                    if (lineNoComments.IndexOf("#if") == 0) {
+                        ifMode = repeatMode > 0 ? 2 : 1;
+                        ifWhat = lineNoComments.Substring(4).Trim();
                     }
-                    else if (line_no_comments.IndexOf("#repeat") == 0) {
-                        repeat_mode++;
-                        repeat_what = line_no_comments.Substring(8).Trim();
-                        repeat_buf = new ArrayList();
+                    else if (lineNoComments.IndexOf("#repeat") == 0) {
+                        repeatMode++;
+                        repeatWhat = lineNoComments.Substring(8).Trim();
+                        repeatBuf = new ArrayList();
                     }
                     else {
-                        if (trim_line) {
+                        if (trimLine) {
                             line = line.Trim();
-                            line += (trim_end);
+                            line += (trimEnd);
                         }
                         content += (line);
                     }

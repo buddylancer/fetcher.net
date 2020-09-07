@@ -47,24 +47,24 @@ namespace Bula.Fetcher.Controller.Actions {
 
         /// Execute main logic for DoTestItems action 
         public override void Execute() {
-            var insert_required = false;
-            var update_required = false;
+            var insertRequired = false;
+            var updateRequired = false;
 
             var doTime = new DOTime();
 
             var dsTimes = doTime.GetById(1);
-            var time_shift = 240; // 4 min
-            var current_time = DateTimes.GetTime();
+            var timeShift = 240; // 4 min
+            var currentTime = DateTimes.GetTime();
             if (dsTimes.GetSize() > 0) {
                 var oTime = dsTimes.GetRow(0);
-                if (current_time > DateTimes.GetTime(STR(oTime["d_Time"])) + time_shift)
-                    update_required = true;
+                if (currentTime > DateTimes.GetTime(STR(oTime["d_Time"])) + timeShift)
+                    updateRequired = true;
             }
             else
-                insert_required = true;
+                insertRequired = true;
 
             Response.Write(TOP);
-            if (update_required || insert_required) {
+            if (updateRequired || insertRequired) {
                 Response.Write("Fetching new items... Please wait...<br/>\r\n");
 
                 var boFetcher = new BOFetcher(this.context);
@@ -73,7 +73,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 doTime = new DOTime(); // Need for DB reopen
                 var fields = new Hashtable();
                 fields["d_Time"] = DateTimes.Format(Config.SQL_DTS, DateTimes.GetTime());
-                if (insert_required) {
+                if (insertRequired) {
                     fields["i_Id"] = 1;
                     doTime.Insert(fields);
                 }

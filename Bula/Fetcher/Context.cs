@@ -98,22 +98,22 @@ namespace Bula.Fetcher {
         /// Check whether current request is from test script?
         /// </summary>
         public void CheckTestRun() {
-            var http_tester = Request.GetVar(Request.INPUT_SERVER, "HTTP_USER_AGENT");
-            if (http_tester == null)
+            var httpTester = Request.GetVar(Request.INPUT_SERVER, "HTTP_USER_AGENT");
+            if (httpTester == null)
                 return;
-            if (EQ(http_tester, "TestFull")) {
+            if (EQ(httpTester, "TestFull")) {
                 this.TestRun = true;
                 this.FineUrls = false;
                 this.ImmediateRedirect = false;
                 this.Site = "http://www.test.com";
             }
-            else if (EQ(http_tester, "TestFine")) {
+            else if (EQ(httpTester, "TestFine")) {
                 this.TestRun = true;
                 this.FineUrls = true;
                 this.ImmediateRedirect = false;
                 this.Site = "http://www.test.com";
             }
-            else if (EQ(http_tester, "TestDirect")) {
+            else if (EQ(httpTester, "TestDirect")) {
                 this.TestRun = true;
                 this.FineUrls = true;
                 this.ImmediateRedirect = true;
@@ -127,12 +127,12 @@ namespace Bula.Fetcher {
         public void Initialize() {
             //------------------------------------------------------------------------------
             // You can change something below this line if you know what are you doing :)
-            var root_dir = Request.GetVar(Request.INPUT_SERVER, "APPL_PHYSICAL_PATH");
+            var rootDir = Request.GetVar(Request.INPUT_SERVER, "APPL_PHYSICAL_PATH");
             for (int n = 0; n <= 3; n++) {
-                var last_slash_index = root_dir.LastIndexOf("\\");
-                root_dir = root_dir.Substring(0, last_slash_index);
+                var lastSlashIndex = rootDir.LastIndexOf("\\");
+                rootDir = rootDir.Substring(0, lastSlashIndex);
             }
-            this.LocalRoot = root_dir += ("/");
+            this.LocalRoot = rootDir += ("/");
 
             this.Host = Request.GetVar(Request.INPUT_SERVER, "HTTP_HOST");
             this.Site = Strings.Concat("http://", this.Host);
@@ -199,10 +199,10 @@ namespace Bula.Fetcher {
         /// <summary>
         /// Push engine.
         /// </summary>
-        /// <param name="print_flag">Whether to print content immediately (true) or save it for further processing (false).</param>
-        public Engine PushEngine(Boolean print_flag) {
+        /// <param name="printFlag">Whether to print content immediately (true) or save it for further processing (false).</param>
+        public Engine PushEngine(Boolean printFlag) {
             var engine = new Engine(this);
-            engine.SetPrintFlag(print_flag);
+            engine.SetPrintFlag(printFlag);
             this.EngineIndex++;
             if (this.EngineInstances == null)
                 this.EngineInstances = new ArrayList();

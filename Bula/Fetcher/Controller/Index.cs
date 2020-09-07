@@ -17,10 +17,10 @@ namespace Bula.Fetcher.Controller {
     /// Controller for main Index page.
     /// </summary>
     public class Index : Page {
-        private static Object[] pages_array = null;
+        private static Object[] pagesArray = null;
 
         private static void Initialize() {
-            pages_array = ARR(
+            pagesArray = ARR(
                 // page name,   class,          post,   code
                 "home",         "Home",         0,      0,
                 "items",        "Items",        0,      0,
@@ -37,75 +37,75 @@ namespace Bula.Fetcher.Controller {
 
         /// Execute main logic for Index block 
         public override void Execute() {
-            if (pages_array == null)
+            if (pagesArray == null)
                 Initialize();
 
             DataAccess.SetErrorDelegate(Bula.Objects.Response.End);
 
-            var page_info = Request.TestPage(pages_array, "home");
+            var pageInfo = Request.TestPage(pagesArray, "home");
 
             // Test action name
-            if (!page_info.ContainsKey("page"))
+            if (!pageInfo.ContainsKey("page"))
                 Response.End("Error in parameters -- no page");
 
-            var page_name = (String)page_info["page"];
-            var class_name = (String)page_info["class"];
+            var pageName = (String)pageInfo["page"];
+            var className = (String)pageInfo["class"];
 
             Request.Initialize();
-            if (INT(page_info["post_required"]) == 1)
+            if (INT(pageInfo["post_required"]) == 1)
                 Request.ExtractPostVars();
             else
                 Request.ExtractAllVars();
             //echo "In Index -- " . Print_r(this, true);
-            this.context["Page"] = page_name;
+            this.context["Page"] = pageName;
 
             var engine = this.context.PushEngine(true);
 
-            var Prepare = new Hashtable();
-            Prepare["[#Site_Name]"] = Config.SITE_NAME;
-            var p_from_vars = Request.Contains("p") ? Request.Get("p") : "home";
-            var id_from_vars = Request.Contains("id") ? Request.Get("id") : null;
+            var prepare = new Hashtable();
+            prepare["[#Site_Name]"] = Config.SITE_NAME;
+            var pFromVars = Request.Contains("p") ? Request.Get("p") : "home";
+            var idFromVars = Request.Contains("id") ? Request.Get("id") : null;
             var title = Config.SITE_NAME;
-            if (p_from_vars != "home")
-                title = CAT(title, " :: ", p_from_vars, (!NUL(id_from_vars)? CAT(" :: ", id_from_vars) : null));
+            if (pFromVars != "home")
+                title = CAT(title, " :: ", pFromVars, (!NUL(idFromVars)? CAT(" :: ", idFromVars) : null));
 
-            Prepare["[#Title]"] = title; //TODO -- need unique title on each page
-            Prepare["[#Keywords]"] = Config.SITE_KEYWORDS;
-            Prepare["[#Description]"] = Config.SITE_DESCRIPTION;
-            Prepare["[#Styles]"] = CAT(
+            prepare["[#Title]"] = title; //TODO -- need unique title on each page
+            prepare["[#Keywords]"] = Config.SITE_KEYWORDS;
+            prepare["[#Description]"] = Config.SITE_DESCRIPTION;
+            prepare["[#Styles]"] = CAT(
                     (this.context.TestRun ? null : Config.TOP_DIR),
                     this.context.IsMobile ? "styles2" : "styles");
-            Prepare["[#ContentType]"] = "text/html; charset=UTF-8";
-            Prepare["[#Top]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Top");
-            Prepare["[#Menu]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Menu");
+            prepare["[#ContentType]"] = "text/html; charset=UTF-8";
+            prepare["[#Top]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Top");
+            prepare["[#Menu]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Menu");
 
             // Get included page either from cache or build it from the scratch
-            var error_content = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", class_name), "check");
-            if (!BLANK(error_content)) {
-                Prepare["[#Page]"] = error_content;
+            var errorContent = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", className), "check");
+            if (!BLANK(errorContent)) {
+                prepare["[#Page]"] = errorContent;
             }
             else {
-                if (Config.CACHE_PAGES/* && !Config.DontCache.Contains(page_name)*/) //TODO!!!
-                    Prepare["[#Page]"] = Util.ShowFromCache(engine, this.context.CacheFolder, page_name, class_name);
+                if (Config.CACHE_PAGES/* && !Config.DontCache.Contains(pageName)*/) //TODO!!!
+                    prepare["[#Page]"] = Util.ShowFromCache(engine, this.context.CacheFolder, pageName, className);
                 else
-                    Prepare["[#Page]"] = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", class_name));
+                    prepare["[#Page]"] = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", className));
             }
 
             if (/*Config.RssAllowed != null && */Config.SHOW_BOTTOM) {
                 // Get bottom block either from cache or build it from the scratch
                 if (Config.CACHE_PAGES)
-                    Prepare["[#Bottom]"] = Util.ShowFromCache(engine, this.context.CacheFolder, "bottom", "Bottom");
+                    prepare["[#Bottom]"] = Util.ShowFromCache(engine, this.context.CacheFolder, "bottom", "Bottom");
                 else
-                    Prepare["[#Bottom]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Bottom");
+                    prepare["[#Bottom]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Bottom");
             }
 
-            this.Write("Bula/Fetcher/View/index.html", Prepare);
+            this.Write("Bula/Fetcher/View/index.html", prepare);
 
             // Fix <title>
             //TODO -- comment for now
-            //new_title = Util.ExtractInfo(content, "<input type=\"hidden\" name=\"s_Title\" value=\"", "\" />");
-            //if (!BLANK(new_title))
-            //    content = Regex.Replace(content, "<title>(.*?)</title>", CAT("<title>", Config.SITE_NAME, " -- ", new_title, "</title>"), RegexOptions.IgnoreCase);
+            //newTitle = Util.ExtractInfo(content, "<input type=\"hidden\" name=\"s_Title\" value=\"", "\" />");
+            //if (!BLANK(newTitle))
+            //    content = Regex.Replace(content, "<title>(.*?)</title>", CAT("<title>", Config.SITE_NAME, " -- ", newTitle, "</title>"), RegexOptions.IgnoreCase);
 
             Response.Write(engine.GetPrintString());
 

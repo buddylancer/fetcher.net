@@ -12,14 +12,14 @@ namespace Bula.Objects {
     /// Simple logger.
     /// </summary>
     public class Logger : Bula.Meta {
-        private String file_name = null;
+        private String fileName = null;
 
         /// <summary>
         /// Initialize logging into file.
         /// </summary>
         /// <param name="filename">Log file name.</param>
         public void Init(String filename) {
-            this.file_name = filename;
+            this.fileName = filename;
             if (filename.Length != 0) {
                 if (Helper.FileExists(filename))
                     Helper.DeleteFile(filename);
@@ -31,15 +31,15 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="text">Content to log.</param>
         public void Output(String text) {
-            if (this.file_name == null) {
+            if (this.fileName == null) {
                 Response.Write(text);
                 return;
             }
-            if (Helper.FileExists(this.file_name))
-                Helper.AppendText(this.file_name, text);
+            if (Helper.FileExists(this.fileName))
+                Helper.AppendText(this.fileName, text);
             else {
-                Helper.TestFileFolder(this.file_name);
-                Helper.WriteText(this.file_name, text);
+                Helper.TestFileFolder(this.fileName);
+                Helper.WriteText(this.fileName, text);
             }
 
         }

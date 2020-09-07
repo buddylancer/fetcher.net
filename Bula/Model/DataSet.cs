@@ -14,14 +14,14 @@ namespace Bula.Model {
     /// </summary>
     public class DataSet : Bula.Meta {
     	private ArrayList rows;
-    	private int page_size;
-    	private int total_pages;
+    	private int pageSize;
+    	private int totalPages;
 
     	/// Default public constructor 
         public DataSet () {
     		this.rows = new ArrayList();
-    		this.page_size = 10;
-    		this.total_pages = 0;
+    		this.pageSize = 10;
+    		this.totalPages = 0;
     	}
 
         /// <summary>
@@ -54,15 +54,15 @@ namespace Bula.Model {
     	/// </summary>
         /// <returns>Current page size.</returns>
         public int GetPageSize() {
-            return this.page_size;
+            return this.pageSize;
         }
 
     	/// <summary>
     	/// Set page size of the DataSet.
     	/// </summary>
         /// <param name="page_size">Current page size.</param>
-    	public void SetPageSize(int page_size) {
-            this.page_size = page_size;
+    	public void SetPageSize(int pageSize) {
+            this.pageSize = pageSize;
         }
 
     	/// <summary>
@@ -70,15 +70,15 @@ namespace Bula.Model {
     	/// </summary>
         /// <returns>Number of pages.</returns>
         public int GetTotalPages() {
-            return this.total_pages;
+            return this.totalPages;
         }
 
     	/// <summary>
     	/// Set total number of pages in the DataSet.
     	/// </summary>
-        /// <param name="total_pages">Number of pages.</param>
-        public void SetTotalPages(int total_pages) {
-            this.total_pages = total_pages;
+        /// <param name="totalPages">Number of pages.</param>
+        public void SetTotalPages(int totalPages) {
+            this.totalPages = totalPages;
         }
 
         private String AddSpaces(int level) {

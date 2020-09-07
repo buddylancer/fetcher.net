@@ -13,38 +13,38 @@ namespace Bula.Model {
     /// Base class for manipulating with DB objects.
     /// </summary>
     public class DOBase : Bula.Meta {
-        private Connection db_connection = null;
+        private Connection dbConnection = null;
 
         /// <summary>
         /// Name of a DB table.
         /// </summary>
         /// @var String
-        protected String table_name;
+        protected String tableName;
 
         /// <summary>
         /// Name of a table ID field.
         /// </summary>
         /// @var String
-        protected String id_field;
+        protected String idField;
 
         /// Public constructor 
         public DOBase () {
             if (DBConfig.Connection == null)
                 DBConfig.Connection = this.CreateConnection();
 
-            this.db_connection = DBConfig.Connection;
+            this.dbConnection = DBConfig.Connection;
         }
 
         // Create connection to the database given parameters from DBConfig.
         private Connection CreateConnection() {
             var oConn = new Connection();
-            var db_admin = DBConfig.DB_ADMIN != null ? DBConfig.DB_ADMIN : DBConfig.DB_NAME;
-            var db_password = DBConfig.DB_PASSWORD != null ? DBConfig.DB_PASSWORD : DBConfig.DB_NAME;
+            var dbAdmin = DBConfig.DB_ADMIN != null ? DBConfig.DB_ADMIN : DBConfig.DB_NAME;
+            var dbPassword = DBConfig.DB_PASSWORD != null ? DBConfig.DB_PASSWORD : DBConfig.DB_NAME;
             var ret = 0;
             if (DBConfig.DB_CHARSET != null)
-                ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, db_admin, db_password, DBConfig.DB_NAME, DBConfig.DB_CHARSET);
+                ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, dbAdmin, dbPassword, DBConfig.DB_NAME, DBConfig.DB_CHARSET);
             else
-                ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, db_admin, db_password, DBConfig.DB_NAME);
+                ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, dbAdmin, dbPassword, DBConfig.DB_NAME);
             if (ret == -1)
                 oConn = null;
             return oConn;
@@ -55,14 +55,14 @@ namespace Bula.Model {
         /// </summary>
         /// <returns>Current connection.</returns>
         public Connection GetConnection() {
-            return this.db_connection;
+            return this.dbConnection;
         }
 
         /// <summary>
         /// Get current ID field name.
         /// </summary>
         public String GetIdField() {
-            return this.id_field;
+            return this.idField;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Bula.Model {
         /// <param name="pars">Query parameters.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet GetDataSet(String query, Object[] pars) {
-            var oStmt = this.db_connection.PrepareStatement(query);
+            var oStmt = this.dbConnection.PrepareStatement(query);
             if (pars != null && SIZE(pars) > 0) {
                 var n = 1;
                 for (int i = 0; i < SIZE(pars); i += 2) {
@@ -109,7 +109,7 @@ namespace Bula.Model {
             if (rows <= 0 || list <= 0)
                 return this.GetDataSet(query, pars);
 
-            var oStmt = this.db_connection.PrepareStatement(query);
+            var oStmt = this.dbConnection.PrepareStatement(query);
             if (SIZE(pars) > 0) {
                 var n = 1;
                 for (int p = 0; p < SIZE(pars); p += 2) {
@@ -124,8 +124,8 @@ namespace Bula.Model {
                 return null;
 
             var ds = new DataSet();
-            var total_rows = oRs.GetRows();
-            ds.SetTotalPages(INT((total_rows - 1) / rows + 1));
+            var totalRows = oRs.GetRows();
+            ds.SetTotalPages(INT((totalRows - 1) / rows + 1));
 
             var count = 0;
             if (list != 1) {
@@ -168,7 +168,7 @@ namespace Bula.Model {
         /// <param name="operation">Operation - "update" (default) or "insert".</param>
         /// <returns>Update status (or inserted ID for "insert" operation).</returns>
         protected int UpdateInternal(String query, Object[] pars, Object operation) {
-            var oStmt = this.db_connection.PrepareStatement(query);
+            var oStmt = this.dbConnection.PrepareStatement(query);
             if (SIZE(pars) > 0) {
                 var n = 1;
                 for (int i = 0; i < SIZE(pars); i += 2) {
@@ -192,8 +192,8 @@ namespace Bula.Model {
         /// <returns>Resulting data set.</returns>
         public virtual DataSet GetById(int id) {
             var query = Strings.Concat(
-                " select * from ", this.table_name,
-                " where ", this.id_field, " = ?"
+                " select * from ", this.tableName,
+                " where ", this.idField, " = ?"
             );
             Object[] pars = ARR("SetInt", id);
             return this.GetDataSet(query, pars);
@@ -222,10 +222,10 @@ namespace Bula.Model {
         /// <returns>Resulting data set.</returns>
         public DataSet EnumIds(String where, String order) {
             var query = Strings.Concat(
-                " select ", this.id_field, " from ", this.table_name, " _this ",
+                " select ", this.idField, " from ", this.tableName, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
                 " order by ",
-                (BLANK(order) ? this.id_field : order)
+                (BLANK(order) ? this.idField : order)
             );
             Object[] pars = ARR();
             return this.GetDataSet(query, pars);
@@ -252,7 +252,7 @@ namespace Bula.Model {
         /// <returns>Resulting data set.</returns>
         public DataSet EnumAll(String where, String order) {
             var query = Strings.Concat(
-                " select * from ", this.table_name, " _this ",
+                " select * from ", this.tableName, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
                 (BLANK(order) ? null : CAT(" order by ", order))
             );
@@ -286,7 +286,7 @@ namespace Bula.Model {
         /// <returns>Resulting data set.</returns>
         public DataSet EnumFields(String fields, String where, String order) {
             var query = Strings.Concat(
-                " select ", fields, " from ", this.table_name, " _this ",
+                " select ", fields, " from ", this.tableName, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
                 (BLANK(order) ? null : CAT(" order by ", order))
             );
@@ -331,7 +331,7 @@ namespace Bula.Model {
 
             var query = Strings.Concat(
                 " select ", fields,
-                " from ", this.table_name, " _this ",
+                " from ", this.tableName, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
                 (BLANK(order) ? null : CAT(" order by ", order))
             );
@@ -383,7 +383,7 @@ namespace Bula.Model {
                 fields = "_this.*";
             var query = Strings.Concat(
                 " select ",  fields,
-                " from ", this.table_name, " _this ",
+                " from ", this.tableName, " _this ",
                 (BLANK(where) ? null : CAT(" where ", where)),
                 (BLANK(order) ? null : CAT(" order by ", order))
             );
@@ -400,8 +400,8 @@ namespace Bula.Model {
         /// <returns>Result of operation.</returns>
         public int DeleteById(int id) {
             var query = Strings.Concat(
-                " delete from ", this.table_name,
-                " where ", this.id_field, " = ?"
+                " delete from ", this.tableName,
+                " where ", this.idField, " = ?"
             );
             Object[] pars = ARR("SetInt", id);
             return this.UpdateInternal(query, pars, "update");
@@ -414,23 +414,23 @@ namespace Bula.Model {
         /// <returns>Result of SQL-query execution.</returns>
         public int Insert(Hashtable fields) {
             var keys = fields.Keys.GetEnumerator();
-            var field_names = "";
-            var field_values = "";
+            var fieldNames = "";
+            var fieldValues = "";
             Object[] pars = ARR();
             //pars.SetPullValues(true);
             var n = 0;
             while (keys.MoveNext()) {
                 var key = (String)keys.Current;
-                if (n != 0) field_names += (", ");
-                if (n != 0) field_values += (", ");
-                field_names += (key);
-                field_values += ("?");
+                if (n != 0) fieldNames += (", ");
+                if (n != 0) fieldValues += (", ");
+                fieldNames += (key);
+                fieldValues += ("?");
                 pars = ADD(pars, this.SetFunction(key), fields[key]);
                 n++;
             }
             var query = Strings.Concat(
-                " insert into ", this.table_name, " (", field_names, ") ",
-                " values (", field_values, ")"
+                " insert into ", this.tableName, " (", fieldNames, ") ",
+                " values (", fieldValues, ")"
             );
             return this.UpdateInternal(query, pars, "insert");
         }
@@ -443,23 +443,23 @@ namespace Bula.Model {
         /// <returns>Result of SQL-query execution.</returns>
         public int UpdateById(Object id, Hashtable fields) {
             var keys = fields.Keys.GetEnumerator();
-            var set_values = "";
+            var setValues = "";
             Object[] pars = ARR();
             var n = 0;
             while (keys.MoveNext()) {
                 var key = (String)keys.Current;
-                if (key == this.id_field) //TODO PHP
+                if (key == this.idField) //TODO PHP
                     continue;
                 if (n != 0)
-                    set_values += (", ");
-                set_values += (CAT(key, " = ?"));
+                    setValues += (", ");
+                setValues += (CAT(key, " = ?"));
                 pars = ADD(pars, this.SetFunction(key), fields[key]);
                 n++;
             }
-            pars = ADD(pars, this.SetFunction(this.id_field), id);
+            pars = ADD(pars, this.SetFunction(this.idField), id);
             var query = Strings.Concat(
-                " update ", this.table_name, " set ", set_values,
-                " where (", this.id_field, " = ?)"
+                " update ", this.tableName, " set ", setValues,
+                " where (", this.idField, " = ?)"
             );
             return this.UpdateInternal(query, pars, "update");
         }

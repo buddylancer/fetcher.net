@@ -30,197 +30,197 @@ namespace Bula.Fetcher.Controller.Pages {
         /// </summary>
         /// <returns>Parsed parameters (or null in case of any error).</returns>
         public Hashtable Check() {
-            var error_message = "";
+            var errorMessage = "";
 
             var list = Request.Get("list");
             if (!NUL(list)) {
                 if (BLANK(list))
-                    error_message += ("Empty list number!");
+                    errorMessage += ("Empty list number!");
                 else if (!Request.IsInteger(list))
-                    error_message += ("Incorrect list number!");
+                    errorMessage += ("Incorrect list number!");
             }
 
-            var source_name = Request.Get("source");
-            if (!NUL(source_name)) {
-                if (BLANK(source_name)) {
-                    if (error_message.Length > 0)
-                        error_message += ("<br/>");
-                    error_message += ("Empty source name!");
+            var sourceName = Request.Get("source");
+            if (!NUL(sourceName)) {
+                if (BLANK(sourceName)) {
+                    if (errorMessage.Length > 0)
+                        errorMessage += ("<br/>");
+                    errorMessage += ("Empty source name!");
                 }
-                else if (!Request.IsDomainName(source_name)) {
-                    if (error_message.Length > 0)
-                        error_message += ("<br/>");
-                    error_message += ("Incorrect source name!");
-                }
-            }
-
-            var filter_name = Request.Get("filter");
-            if (!NUL(filter_name)) {
-                if (BLANK(filter_name)) {
-                    if (error_message.Length > 0)
-                        error_message += ("<br/>");
-                    error_message += ("Empty filter name!");
-                }
-                else if (!Request.IsName(filter_name)) {
-                    if (error_message.Length > 0)
-                        error_message += ("<br/>");
-                    error_message += ("Incorrect filter name!");
+                else if (!Request.IsDomainName(sourceName)) {
+                    if (errorMessage.Length > 0)
+                        errorMessage += ("<br/>");
+                    errorMessage += ("Incorrect source name!");
                 }
             }
 
-            if (error_message.Length > 0) {
-                var Prepare = new Hashtable();
-                Prepare["[#ErrMessage]"] = error_message;
-                this.Write("Bula/Fetcher/View/error.html", Prepare);
+            var filterName = Request.Get("filter");
+            if (!NUL(filterName)) {
+                if (BLANK(filterName)) {
+                    if (errorMessage.Length > 0)
+                        errorMessage += ("<br/>");
+                    errorMessage += ("Empty filter name!");
+                }
+                else if (!Request.IsName(filterName)) {
+                    if (errorMessage.Length > 0)
+                        errorMessage += ("<br/>");
+                    errorMessage += ("Incorrect filter name!");
+                }
+            }
+
+            if (errorMessage.Length > 0) {
+                var prepare = new Hashtable();
+                prepare["[#ErrMessage]"] = errorMessage;
+                this.Write("Bula/Fetcher/View/error.html", prepare);
                 return null;
             }
 
-            var Pars = new Hashtable();
+            var pars = new Hashtable();
             if (!NUL(list))
-                Pars["list"] = list;
-            if (!NUL(source_name))
-                Pars["source_name"] = source_name;
-            if (!NUL(filter_name))
-                Pars["filter_name"] = filter_name;
-            return Pars;
+                pars["list"] = list;
+            if (!NUL(sourceName))
+                pars["source_name"] = sourceName;
+            if (!NUL(filterName))
+                pars["filter_name"] = filterName;
+            return pars;
         }
 
         /// Execute main logic for Items block. 
         public override void Execute() {
-            var Pars = this.Check();
-            if (Pars == null)
+            var pars = this.Check();
+            if (pars == null)
                 return;
 
-            var list = (String)Pars["list"];
-            var list_number = list == null ? 1 : INT(list);
-            var source_name = (String)Pars["source_name"];
-            var filter_name = (String)Pars["filter_name"];
+            var list = (String)pars["list"];
+            var listNumber = list == null ? 1 : INT(list);
+            var sourceName = (String)pars["source_name"];
+            var filterName = (String)pars["filter_name"];
 
-            var error_message = "";
+            var errorMessage = "";
             var filter = (String)null;
 
-            if (!NUL(filter_name)) {
+            if (!NUL(filterName)) {
                 var doCategory = new DOCategory();
                 Hashtable[] oCategory =
                     {new Hashtable()};
-                if (!doCategory.CheckFilterName(filter_name, oCategory))
-                    error_message += ("Non-existing filter name!");
+                if (!doCategory.CheckFilterName(filterName, oCategory))
+                    errorMessage += ("Non-existing filter name!");
                 else
                     filter = STR(oCategory[0]["s_Filter"]);
             }
 
-            if (!NUL(source_name)) {
+            if (!NUL(sourceName)) {
                 var doSource = new DOSource();
                 Hashtable[] oSource =
                     {new Hashtable()};
-                if (!doSource.CheckSourceName(source_name, oSource)) {
-                    if (error_message.Length > 0)
-                        error_message += ("<br/>");
-                    error_message += ("Non-existing source name!");
+                if (!doSource.CheckSourceName(sourceName, oSource)) {
+                    if (errorMessage.Length > 0)
+                        errorMessage += ("<br/>");
+                    errorMessage += ("Non-existing source name!");
                 }
             }
 
             var engine = this.context.GetEngine();
 
-            var Prepare = new Hashtable();
-            if (error_message.Length > 0) {
-                Prepare["[#ErrMessage]"] = error_message;
-                this.Write("Bula/Fetcher/View/error.html", Prepare);
+            var prepare = new Hashtable();
+            if (errorMessage.Length > 0) {
+                prepare["[#ErrMessage]"] = errorMessage;
+                this.Write("Bula/Fetcher/View/error.html", prepare);
                 return;
             }
 
             // Uncomment to enable filtering by source and/or category
-            Prepare["[#FilterItems]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/FilterItems");
+            prepare["[#FilterItems]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/FilterItems");
 
             var s_Title = CAT(
                 "Browse ",
                 Config.NAME_ITEMS,
                 (this.context.IsMobile ? "<br/>" : null),
-                (!BLANK(source_name) ? CAT(" ... from '", source_name, "'") : null),
-                (!BLANK(filter) ? CAT(" ... for '", filter_name, "'") : null)
+                (!BLANK(sourceName) ? CAT(" ... from '", sourceName, "'") : null),
+                (!BLANK(filter) ? CAT(" ... for '", filterName, "'") : null)
             );
 
-            Prepare["[#Title]"] = s_Title;
+            prepare["[#Title]"] = s_Title;
 
-            var max_rows = Config.DB_ITEMS_ROWS;
+            var maxRows = Config.DB_ITEMS_ROWS;
 
             var doItem = new DOItem();
-            var dsItems = doItem.EnumItems(source_name, filter, list_number, max_rows);
+            var dsItems = doItem.EnumItems(sourceName, filter, listNumber, maxRows);
 
-            var list_total = dsItems.GetTotalPages();
-            if (list_number > list_total) {
-                Prepare["[#ErrMessage]"] = "List number is too large!";
-                this.Write("Bula/Fetcher/View/error.html", Prepare);
+            var listTotal = dsItems.GetTotalPages();
+            if (listNumber > listTotal) {
+                prepare["[#ErrMessage]"] = "List number is too large!";
+                this.Write("Bula/Fetcher/View/error.html", prepare);
                 return;
             }
-            if (list_total > 1) {
-                Prepare["[#List_Total]"] = list_total;
-                Prepare["[#List]"] = list_number;
+            if (listTotal > 1) {
+                prepare["[#List_Total]"] = listTotal;
+                prepare["[#List]"] = listNumber;
             }
 
             var count = 1;
-            var Rows = new ArrayList();
+            var rows = new ArrayList();
             for (int n = 0; n < dsItems.GetSize(); n++) {
                 var oItem = dsItems.GetRow(n);
-                var Row = FillItemRow(oItem, doItem.GetIdField(), count);
+                var row = FillItemRow(oItem, doItem.GetIdField(), count);
                 count++;
-                Rows.Add(Row);
+                rows.Add(row);
             }
-            Prepare["[#Rows]"] = Rows;
+            prepare["[#Rows]"] = rows;
 
-            if (list_total > 1) {
+            if (listTotal > 1) {
                 var chunk = 2;
                 var before = false;
                 var after = false;
 
-                var Pages = new ArrayList();
-                for (int n = 1; n <= list_total; n++) {
-                    var Page = new Hashtable();
-                    if (n < list_number - chunk) {
+                var pages = new ArrayList();
+                for (int n = 1; n <= listTotal; n++) {
+                    var page = new Hashtable();
+                    if (n < listNumber - chunk) {
                         if (!before) {
                             before = true;
-                            Page["[#Text]"] = "1";
-                            Page["[#Link]"] = GetPageLink(1);
-                            Pages.Add(Page);
-                            Page = new Hashtable();
-                            Page["[#Text]"] = " ... ";
-                            //Row.Remove("[#Link]");
-                            Pages.Add(Page);
+                            page["[#Text]"] = "1";
+                            page["[#Link]"] = GetPageLink(1);
+                            pages.Add(page);
+                            page = new Hashtable();
+                            page["[#Text]"] = " ... ";
+                            //row.Remove("[#Link]");
+                            pages.Add(page);
                         }
                         continue;
                     }
-                    if (n > list_number + chunk) {
+                    if (n > listNumber + chunk) {
                         if (!after) {
                             after = true;
-                            Page["[#Text]"] = " ... ";
-                            Pages.Add(Page);
-                            Page = new Hashtable();
-                            Page["[#Text]"] = list_total;
-                            Page["[#Link]"] = GetPageLink(list_total);
-                            Pages.Add(Page);
+                            page["[#Text]"] = " ... ";
+                            pages.Add(page);
+                            page = new Hashtable();
+                            page["[#Text]"] = listTotal;
+                            page["[#Link]"] = GetPageLink(listTotal);
+                            pages.Add(page);
                         }
                         continue;
                     }
-                    if (list_number == n) {
-                        Page["[#Text]"] = CAT("=", n, "=");
-                        Pages.Add(Page);
+                    if (listNumber == n) {
+                        page["[#Text]"] = CAT("=", n, "=");
+                        pages.Add(page);
                     }
                     else {
                         if (n == 1) {
-                            Page["[#Link]"] = GetPageLink(1);
-                            Page["[#Text]"] = 1;
+                            page["[#Link]"] = GetPageLink(1);
+                            page["[#Text]"] = 1;
                         }
                         else  {
-                            Page["[#Link]"] = GetPageLink(n);
-                            Page["[#Text]"] = n;
+                            page["[#Link]"] = GetPageLink(n);
+                            page["[#Text]"] = n;
                         }
-                        Pages.Add(Page);
+                        pages.Add(page);
                     }
                 }
-                Prepare["[#Pages]"] = Pages;
+                prepare["[#Pages]"] = pages;
             }
 
-            this.Write("Bula/Fetcher/View/Pages/items.html", Prepare);
+            this.Write("Bula/Fetcher/View/Pages/items.html", prepare);
         }
     }
 }

@@ -32,42 +32,42 @@ namespace Bula.Fetcher.Controller.Pages {
 
         /// Execute main logic for Source block. 
         public override void Execute() {
-            var Prepare = new Hashtable();
+            var prepare = new Hashtable();
 
             var doSource = new DOSource();
             var doItem = new DOItem();
 
             var dsSources = doSource.EnumSources();
             var count = 1;
-            var Sources = new ArrayList();
+            var sources = new ArrayList();
             for (int ns = 0; ns < dsSources.GetSize(); ns++) {
                 var oSource = dsSources.GetRow(ns);
-                var source_name = STR(oSource["s_SourceName"]);
+                var sourceName = STR(oSource["s_SourceName"]);
 
-                var SourceRow = new Hashtable();
-                SourceRow["[#SourceName]"] = source_name;
-                //SourceRow["[#RedirectSource]"] = Config.TOP_DIR .
+                var sourceRow = new Hashtable();
+                sourceRow["[#SourceName]"] = sourceName;
+                //sourceRow["[#RedirectSource]"] = Config.TOP_DIR .
                 //    (Config.FINE_URLS ? "redirect/source/" : "action.php?p=do_redirect_source&source=") .
                 //        oSource["s_SourceName"];
-                SourceRow["[#RedirectSource]"] = CAT(Config.TOP_DIR,
-                    (this.context.FineUrls ? "items/source/" : CAT(Config.INDEX_PAGE, "?p=items&source=")), source_name);
+                sourceRow["[#RedirectSource]"] = CAT(Config.TOP_DIR,
+                    (this.context.FineUrls ? "items/source/" : CAT(Config.INDEX_PAGE, "?p=items&source=")), sourceName);
 
-                var dsItems = doItem.EnumItemsFromSource(null, source_name, null, 3);
-                var Items = new ArrayList();
-                var item_count = 0;
+                var dsItems = doItem.EnumItemsFromSource(null, sourceName, null, 3);
+                var items = new ArrayList();
+                var itemCount = 0;
                 for (int ni = 0; ni < dsItems.GetSize(); ni++) {
                     var oItem = dsItems.GetRow(ni);
-                    Items.Add(FillItemRow(oItem, doItem.GetIdField(), item_count));
-                    item_count++;
+                    items.Add(FillItemRow(oItem, doItem.GetIdField(), itemCount));
+                    itemCount++;
                 }
-                SourceRow["[#Items]"] = Items;
+                sourceRow["[#Items]"] = items;
 
-                Sources.Add(SourceRow);
+                sources.Add(sourceRow);
                 count++;
             }
-            Prepare["[#Sources]"] = Sources;
+            prepare["[#Sources]"] = sources;
 
-            this.Write("Bula/Fetcher/View/Pages/sources.html", Prepare);
+            this.Write("Bula/Fetcher/View/Pages/sources.html", prepare);
         }
     }
 }

@@ -21,17 +21,17 @@ namespace Bula.Model {
         /// Current record 
         public Hashtable record = null;
 
-        private int num_rows = 0;
-        private int num_pages = 0;
-        private int page_rows = 10;
-        private int page_no = 0;
+        private int numRows = 0;
+        private int numPages = 0;
+        private int pageRows = 10;
+        private int pageNo = 0;
 
         /// Public constructor 
         public RecordSet () {
-            this.num_rows = 0;
-            this.num_pages = 0;
-            this.page_rows = 10;
-            this.page_no = 0;
+            this.numRows = 0;
+            this.numPages = 0;
+            this.pageRows = 10;
+            this.pageNo = 0;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Bula.Model {
         /// </summary>
         /// <param name="no">Number of rows.</param>
         public void SetPageRows(int no) {
-            this.page_rows = no;
+            this.pageRows = no;
         }
 
         /// <summary>
@@ -47,8 +47,8 @@ namespace Bula.Model {
         /// </summary>
         /// <param name="no">Number of rows.</param>
         public void SetRows(int no) {
-            this.num_rows = no;
-            this.num_pages = INT((no - 1) / this.page_rows) + 1;
+            this.numRows = no;
+            this.numPages = INT((no - 1) / this.pageRows) + 1;
         }
 
         /// <summary>
@@ -56,7 +56,7 @@ namespace Bula.Model {
         /// </summary>
         /// <returns>Number of rows.</returns>
         public int GetRows() {
-            return this.num_rows;
+            return this.numRows;
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Bula.Model {
         /// </summary>
         /// <returns>Number of pages.</returns>
         public int GetPages() {
-            return this.num_pages;
+            return this.numPages;
         }
 
         /// <summary>
@@ -72,9 +72,9 @@ namespace Bula.Model {
         /// </summary>
         /// <param name="no">Current page.</param>
         public void SetPage(int no) {
-            this.page_no = no;
+            this.pageNo = no;
             if (no != 1) {
-                var n = (no - 1) * this.page_rows;
+                var n = (no - 1) * this.pageRows;
                 while (n-- > 0)
                     this.Next();
             }
@@ -85,7 +85,7 @@ namespace Bula.Model {
         /// </summary>
         /// <returns>Current page number.</returns>
         public int GetPage() {
-            return this.page_no;
+            return this.pageNo;
         }
 
         /// <summary>

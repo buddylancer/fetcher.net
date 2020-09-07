@@ -25,9 +25,9 @@ namespace Bula.Fetcher.Controller {
         /// Link to external item 
         public String link = null;
         /// Original title 
-        public String full_title = null;
+        public String fullTitle = null;
         /// Original description 
-        public String full_description = null;
+        public String fullDescription = null;
 
         // Output fields
         /// Final (processed) title 
@@ -67,9 +67,9 @@ namespace Bula.Fetcher.Controller {
 
             // Pre-process full description & title
             // Trick to eliminate non-UTF-8 characters
-            this.full_title = Regex.Replace((String)item["title"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
+            this.fullTitle = Regex.Replace((String)item["title"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
             if (item.ContainsKey("description") && !BLANK(item["description"]))
-                this.full_description = Regex.Replace((String)item["description"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
+                this.fullDescription = Regex.Replace((String)item["description"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
 
             this.PreProcessLink();
         }
@@ -84,16 +84,16 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         public void ProcessDescription() {
             var BR = "\n";
-            var title = Strings.RemoveTags(this.full_title);
+            var title = Strings.RemoveTags(this.fullTitle);
             title = title.Replace("&#", "[--amp--]");
             title = title.Replace("#", "[sharp]");
             title = title.Replace("[--amp--]", "&#");
             title = title.Replace("&amp;", "&");
             this.title = title;
 
-            if (this.full_description == null)
+            if (this.fullDescription == null)
                 return;
-            var description = this.full_description;
+            var description = this.fullDescription;
 
             //TODO -- Fixes for FetchRSS feeds (parsed from Twitter) here...
             description = description.Replace("&#160;", "");
@@ -102,22 +102,22 @@ namespace Bula.Fetcher.Controller {
             // Start -- Fixes and workarounds for some sources here...
             // End
 
-            var has_p = Regex.IsMatch(description, "<p[^>]*>");
-            var has_br = description.IndexOf("<br") != -1;
-            var has_li = description.IndexOf("<li") != -1;
-            var has_div = description.IndexOf("<div") != -1;
-            var include_tags = Strings.Concat(
+            var hasP = Regex.IsMatch(description, "<p[^>]*>");
+            var hasBr = description.IndexOf("<br") != -1;
+            var hasLi = description.IndexOf("<li") != -1;
+            var hasDiv = description.IndexOf("<div") != -1;
+            var includeTags = Strings.Concat(
                 "<br>",
-                (has_p ? "<p>" : null),
-                (has_li ? "<ul><ol><li>" : null),
-                (has_div ? "<div>" : null)
+                (hasP ? "<p>" : null),
+                (hasLi ? "<ul><ol><li>" : null),
+                (hasDiv ? "<div>" : null)
             );
 
-            description = Strings.RemoveTags(description, include_tags);
+            description = Strings.RemoveTags(description, includeTags);
 
-            if (has_br)
+            if (hasBr)
                 description = Regex.Replace(description, "[ \t\r\n]*<br[ ]*[/]*>[ \t\r\n]*", BR, RegexOptions.IgnoreCase);
-            if (has_li) {
+            if (hasLi) {
                 description = Regex.Replace(description, "<ul[^>]*>", BR, RegexOptions.IgnoreCase);
                 description = Regex.Replace(description, "<ol[^>]*>", "* ", RegexOptions.IgnoreCase);
                 description = Regex.Replace(description, "<li[^>]*>", "* ", RegexOptions.IgnoreCase);
@@ -125,11 +125,11 @@ namespace Bula.Fetcher.Controller {
                 description = Regex.Replace(description, "</ol>", BR, RegexOptions.IgnoreCase);
                 description = Regex.Replace(description, "</li>", BR, RegexOptions.IgnoreCase);
             }
-            if (has_p) {
+            if (hasP) {
                 description = Regex.Replace(description, "<p[^>]*>", BR, RegexOptions.IgnoreCase);
                 description = Regex.Replace(description, "</p>", BR, RegexOptions.IgnoreCase);
             }
-            if (has_div) {
+            if (hasDiv) {
                 description = Regex.Replace(description, "<div[^>]*>", BR, RegexOptions.IgnoreCase);
                 description = Regex.Replace(description, "</div>", BR, RegexOptions.IgnoreCase);
             }
@@ -165,9 +165,9 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Pre-process category.
         /// </summary>
-        /// <param name="category_item">Input category.</param>
+        /// <param name="categoryItem">Input category.</param>
         /// <returns>Pre-processed category.</returns>
-        private String PreProcessCategory(String category_item) {
+        private String PreProcessCategory(String categoryItem) {
             // Pre-process category from item["category"]
 
             // This is just sample - implement your own logic
@@ -176,15 +176,15 @@ namespace Bula.Fetcher.Controller {
             }
 
             var category = (String)null;
-            if (category_item.Length != 0) {
-                String[] categories_arr = category_item.Replace(",&,", " & ").Split(new char[] {','});
-                var categories_new = new ArrayList();
-                for (int c = 0; c < SIZE(categories_arr); c++) {
-                    var temp = categories_arr[c];
+            if (categoryItem.Length != 0) {
+                String[] categoriesArr = categoryItem.Replace(",&,", " & ").Split(new char[] {','});
+                var categoriesNew = new ArrayList();
+                for (int c = 0; c < SIZE(categoriesArr); c++) {
+                    var temp = categoriesArr[c];
                     if (!BLANK(temp))
-                        categories_new.Add(temp);
+                        categoriesNew.Add(temp);
                 }
-                category = Strings.Join(", ", (String[])categories_new.ToArray());
+                category = Strings.Join(", ", (String[])categoriesNew.ToArray());
             }
 
             return category;
@@ -215,48 +215,48 @@ namespace Bula.Fetcher.Controller {
             //if (BLANK(this.description))
             //    return;
 
-            String[] category_tags = BLANK(this.category) ?
+            String[] categoryTags = BLANK(this.category) ?
                 Strings.EmptyArray() : this.category.Split(new char[] {','});
             for (int n1 = 0; n1 < dsCategories.GetSize(); n1++) {
                 var oCategory = dsCategories.GetRow(n1);
-                var rss_allowed_key = STR(oCategory["s_CatId"]);
+                var rssAllowedKey = STR(oCategory["s_CatId"]);
                 var name = STR(oCategory["s_Name"]);
 
-                var filter_value = STR(oCategory["s_Filter"]);
-                String[] filter_chunks = Strings.Split("~", filter_value);
-                String[] include_chunks = SIZE(filter_chunks) > 0 ?
-                    Strings.Split("|", filter_chunks[0]) : Strings.EmptyArray();
-                String[] exclude_chunks = SIZE(filter_chunks) > 1 ?
-                    Strings.Split("|", filter_chunks[1]) : Strings.EmptyArray();
+                var filterValue = STR(oCategory["s_Filter"]);
+                String[] filterChunks = Strings.Split("~", filterValue);
+                String[] includeChunks = SIZE(filterChunks) > 0 ?
+                    Strings.Split("|", filterChunks[0]) : Strings.EmptyArray();
+                String[] excludeChunks = SIZE(filterChunks) > 1 ?
+                    Strings.Split("|", filterChunks[1]) : Strings.EmptyArray();
 
-                var include_flag = false;
-                for (int n2 = 0; n2 < SIZE(include_chunks); n2++) {
-                    var include_chunk = Regex.Escape(include_chunks[n2]);
-                    if (!BLANK(this.description) && Regex.IsMatch(this.description, include_chunk, RegexOptions.IgnoreCase))
-                        include_flag |= true;
-                    if (Regex.IsMatch(this.title, include_chunk, RegexOptions.IgnoreCase))
-                        include_flag |= true;
+                var includeFlag = false;
+                for (int n2 = 0; n2 < SIZE(includeChunks); n2++) {
+                    var includeChunk = Regex.Escape(includeChunks[n2]);
+                    if (!BLANK(this.description) && Regex.IsMatch(this.description, includeChunk, RegexOptions.IgnoreCase))
+                        includeFlag |= true;
+                    if (Regex.IsMatch(this.title, includeChunk, RegexOptions.IgnoreCase))
+                        includeFlag |= true;
                 }
-                for (int n3 = 0; n3 < SIZE(exclude_chunks); n3++) {
-                    var exclude_chunk = Regex.Escape(exclude_chunks[n3]);
-                    if (!BLANK(this.description) && Regex.IsMatch(this.description, exclude_chunk, RegexOptions.IgnoreCase))
-                        include_flag &= false;
-                    if (Regex.IsMatch(this.title, exclude_chunk, RegexOptions.IgnoreCase))
-                        include_flag |= true;
+                for (int n3 = 0; n3 < SIZE(excludeChunks); n3++) {
+                    var excludeChunk = Regex.Escape(excludeChunks[n3]);
+                    if (!BLANK(this.description) && Regex.IsMatch(this.description, excludeChunk, RegexOptions.IgnoreCase))
+                        includeFlag &= false;
+                    if (Regex.IsMatch(this.title, excludeChunk, RegexOptions.IgnoreCase))
+                        includeFlag |= true;
                 }
-                if (include_flag) {
-                    ArrayList arrayList = Arrays.CreateArrayList(category_tags); arrayList.Add(name);
-                    category_tags = (String[])arrayList.ToArray(typeof(String));
+                if (includeFlag) {
+                    ArrayList arrayList = Arrays.CreateArrayList(categoryTags); arrayList.Add(name);
+                    categoryTags = (String[])arrayList.ToArray(typeof(String));
                 }
             }
-            if (SIZE(category_tags) == 0)
+            if (SIZE(categoryTags) == 0)
                 return;
 
             //TODO
-            //ArrayList unique_categories = this.NormalizeList(category_tags, lang);
-            //category = String.Join(", ", unique_categories);
+            //ArrayList uniqueCategories = this.NormalizeList(categoryTags, lang);
+            //category = String.Join(", ", uniqueCategories);
 
-            this.category = Strings.Join(", ", category_tags);
+            this.category = Strings.Join(", ", categoryTags);
         }
 
         /// <summary>

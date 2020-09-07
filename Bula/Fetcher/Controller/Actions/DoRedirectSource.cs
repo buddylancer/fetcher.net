@@ -23,25 +23,25 @@ namespace Bula.Fetcher.Controller.Actions {
 
         /// Execute main logic for DoRedirectSource action 
         public override void Execute() {
-            var error_message = (String)null;
-            var link_to_redirect = (String)null;
+            var errorMessage = (String)null;
+            var linkToRedirect = (String)null;
             if (!Request.Contains("source"))
-                error_message = "Source name is required!";
+                errorMessage = "Source name is required!";
             else {
-                var source_name = Request.Get("source");
-                if (!Request.IsDomainName(source_name))
-                    error_message = "Incorrect source name!";
+                var sourceName = Request.Get("source");
+                if (!Request.IsDomainName(sourceName))
+                    errorMessage = "Incorrect source name!";
                 else {
                     var doSource = new DOSource();
                     Hashtable[] oSource =
                         {new Hashtable()};
-                    if (!doSource.CheckSourceName(source_name, oSource))
-                        error_message = "No such source name!";
+                    if (!doSource.CheckSourceName(sourceName, oSource))
+                        errorMessage = "No such source name!";
                     else
-                        link_to_redirect = STR(oSource[0]["s_External"]);
+                        linkToRedirect = STR(oSource[0]["s_External"]);
                 }
             }
-            this.ExecuteRedirect(link_to_redirect, error_message);
+            this.ExecuteRedirect(linkToRedirect, errorMessage);
         }
     }
 }

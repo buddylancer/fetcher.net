@@ -17,8 +17,8 @@ namespace Bula.Fetcher.Model {
     public class DOSource : DOBase {
         /// Public constructor (overrides base constructor) 
     	public DOSource (): base() {
-    		this.table_name = "sources";
-    		this.id_field = "i_SourceId";
+    		this.tableName = "sources";
+    		this.idField = "i_SourceId";
     	}
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Bula.Fetcher.Model {
         /// <returns>Resulting data set.</returns>
         public DataSet EnumSources() {
     		var query = Strings.Concat(
-    			" SELECT _this.* FROM ", this.table_name, " _this ",
+    			" SELECT _this.* FROM ", this.tableName, " _this ",
     			" where _this.b_SourceActive = 1 ",
     			" order by _this.s_SourceName asc"
     		);
@@ -41,7 +41,7 @@ namespace Bula.Fetcher.Model {
         /// <returns>Resulting data set.</returns>
     	public DataSet EnumFetchedSources() {
     		var query = Strings.Concat(
-    			" SELECT _this.* FROM ", this.table_name, " _this ",
+    			" SELECT _this.* FROM ", this.tableName, " _this ",
     			" where _this.b_SourceFetched = 1 ",
     			" order by _this.s_SourceName asc"
     		);
@@ -55,9 +55,9 @@ namespace Bula.Fetcher.Model {
         /// <returns>Resulting data set.</returns>
     	public DataSet EnumSourcesWithCounters() {
     		var query = Strings.Concat(
-    			" select _this.", this.id_field, ", _this.s_SourceName, ",
+    			" select _this.", this.idField, ", _this.s_SourceName, ",
     			" Count(p.i_SourceLink) as cntpro ",
-    			" from ", this.table_name, " _this ",
+    			" from ", this.tableName, " _this ",
     			" left outer join items p on (p.i_SourceLink = _this.i_SourceId) ",
     			" where _this.b_SourceActive = 1 ",
     			" group by _this.i_SourceId ",
@@ -108,17 +108,17 @@ namespace Bula.Fetcher.Model {
         /// <returns>True if exists.</returns>
         public Boolean CheckSourceName(String sourcename, Object[]source) {
     		var dsSources = this.EnumSources();
-    		var source_found = false;
+    		var sourceFound = false;
     		for (int n = 0; n < dsSources.GetSize(); n++) {
     			var oSource = dsSources.GetRow(n);
     			if (EQ(oSource["s_SourceName"], sourcename)) {
-    				source_found = true;
+    				sourceFound = true;
     				if (source != null)
                         source[0] = oSource;
     				break;
     			}
     		}
-    		return source_found;
+    		return sourceFound;
     	}
     }
 }

@@ -24,23 +24,23 @@ namespace Bula.Fetcher.Controller.Actions {
         /// <summary>
         /// Execute main logic for this action.
         /// </summary>
-        /// <param name="link_to_redirect">Link to redirect (or null if there were some errors).</param>
-        /// <param name="error_message">Error to show (or null if no errors).</param>
-        public void ExecuteRedirect(String link_to_redirect, String error_message) {
-            var Prepare = new Hashtable();
-            var template_name = (String)null;
-            if (!NUL(error_message)) {
-                Prepare["[#Title]"] = "Error";
-                Prepare["[#ErrMessage]"] = error_message;
-                template_name = "Bula/Fetcher/View/error_alone.html";
+        /// <param name="linkToRedirect">Link to redirect (or null if there were some errors).</param>
+        /// <param name="errorMessage">Error to show (or null if no errors).</param>
+        public void ExecuteRedirect(String linkToRedirect, String errorMessage) {
+            var prepare = new Hashtable();
+            var templateName = (String)null;
+            if (!NUL(errorMessage)) {
+                prepare["[#Title]"] = "Error";
+                prepare["[#ErrMessage]"] = errorMessage;
+                templateName = "Bula/Fetcher/View/error_alone.html";
             }
-            else if (!BLANK(link_to_redirect)) {
-                Prepare["[#Link]"] = link_to_redirect;
-                template_name = "Bula/Fetcher/View/redirect.html";
+            else if (!BLANK(linkToRedirect)) {
+                prepare["[#Link]"] = linkToRedirect;
+                templateName = "Bula/Fetcher/View/redirect.html";
             }
 
             var engine = this.context.PushEngine(true);
-            Response.Write(engine.ShowTemplate(template_name, Prepare));
+            Response.Write(engine.ShowTemplate(templateName, prepare));
         }
     }
 }

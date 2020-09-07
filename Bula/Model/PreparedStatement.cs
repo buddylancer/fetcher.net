@@ -29,7 +29,7 @@ namespace Bula.Model {
         /// Resulting record set of the last operation.
         /// </summary>
         /// @var RecordSet
-        public RecordSet record_set;
+        public RecordSet recordSet;
 
     	/// Default public constructor 
         public PreparedStatement () {
@@ -41,7 +41,7 @@ namespace Bula.Model {
         /// Execute selection query.
         /// </summary>
         public RecordSet ExecuteQuery() {
-            this.record_set = new RecordSet();
+            this.recordSet = new RecordSet();
             if (this.FormQuery()) {
                 DataAccess.CallPrintDelegate(CAT("Executing selection query [", this.query, "] ..."));
                 var result = DataAccess.SelectQuery(this.link, this.query);
@@ -49,10 +49,10 @@ namespace Bula.Model {
                     DataAccess.CallErrorDelegate(CAT("Selection query failed [", this.query, "]"));
                     return null;
                 }
-                this.record_set.result = result;
-                this.record_set.SetRows(DataAccess.NumRows(result));
-                this.record_set.SetPage(1);
-                return this.record_set;
+                this.recordSet.result = result;
+                this.recordSet.SetRows(DataAccess.NumRows(result));
+                this.recordSet.SetPage(1);
+                return this.recordSet;
             }
             else {
                 DataAccess.CallErrorDelegate(CAT("Error in query: ", this.query, "<hr/>"));
@@ -93,15 +93,15 @@ namespace Bula.Model {
         /// Form query (replace '?' marks with real parameters).
         /// </summary>
         private Boolean FormQuery() {
-            var question_index = -1;
-            var start_from = 0;
+            var questionIndex = -1;
+            var startFrom = 0;
             var n = 1;
             var str = (String)this.sql;
-            while ((question_index = str.IndexOf("?", start_from)) != -1) {
+            while ((questionIndex = str.IndexOf("?", startFrom)) != -1) {
                 var value = (String)this.pars[n];
-                var before = str.Substring(0, question_index);
-                var after = str.Substring(question_index + 1);
-                str = before; str += (value); start_from = str.Length;
+                var before = str.Substring(0, questionIndex);
+                var after = str.Substring(questionIndex + 1);
+                str = before; str += (value); startFrom = str.Length;
                 str += (after);
                 n++;
             }

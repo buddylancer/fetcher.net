@@ -24,8 +24,8 @@ namespace Bula.Fetcher.Controller.Actions {
             var oLogger = new Logger();
             var log = Request.GetOptionalInteger("log");
             if (!NUL(log) && log != -99999) {
-                var filename_template = (String)"C:/Temp/Log_{0}_{1}.html";
-                var filename = Util.FormatString(filename_template, ARR("do_clean_cache", DateTimes.Format(Config.SQL_DTS)));
+                var filenameTemplate = (String)"C:/Temp/Log_{0}_{1}.html";
+                var filename = Util.FormatString(filenameTemplate, ARR("do_clean_cache", DateTimes.Format(Config.SQL_DTS)));
                 oLogger.Init(filename);
             }
             this.CleanCache(oLogger);
@@ -35,13 +35,13 @@ namespace Bula.Fetcher.Controller.Actions {
         /// Actual cleaning of cache folder.
         /// </summary>
         /// <param name="oLogger">Logger instance.</param>
-        /// <param name="path_name">Cache folder name (path).</param>
+        /// <param name="pathName">Cache folder name (path).</param>
         /// <param name="ext">Files extension to clean.</param>
-        private void CleanCacheFolder(Logger oLogger, String path_name, String ext) {
-            if (!Helper.DirExists(path_name))
+        private void CleanCacheFolder(Logger oLogger, String pathName, String ext) {
+            if (!Helper.DirExists(pathName))
                 return;
 
-            var entries = Helper.ListDirEntries(path_name);
+            var entries = Helper.ListDirEntries(pathName);
             while (entries.MoveNext()) {
                 var entry = (String)entries.Current;
 
@@ -53,7 +53,7 @@ namespace Bula.Fetcher.Controller.Actions {
                     oLogger.Output(CAT("Drilling to ", entry, " ...<br/>\r\n"));
                     CleanCacheFolder(oLogger, entry, ext);
                 }
-                //unlink(path_name); //Comment for now -- dangerous operation!!!
+                //unlink(pathName); //Comment for now -- dangerous operation!!!
             }
         }
 

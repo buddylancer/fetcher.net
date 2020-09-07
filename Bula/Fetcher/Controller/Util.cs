@@ -60,8 +60,8 @@ namespace Bula.Fetcher.Controller {
             if (BLANK(format))
                 return null;
             var output = format;
-            var arr_size = SIZE(arr);
-            for (int n = 0; n < arr_size; n++) {
+            var arrSize = SIZE(arr);
+            for (int n = 0; n < arrSize; n++) {
                 var match = CAT("{", n, "}");
                 var ind = format.IndexOf(match);
                 if (ind == -1)
@@ -75,26 +75,26 @@ namespace Bula.Fetcher.Controller {
         /// Logic for getting/saving page from/into cache.
         /// </summary>
         /// <param name="engine">Engine instance.</param>
-        /// <param name="cache_folder">Cache folder root.</param>
-        /// <param name="page_name">Page to process.</param>
-        /// <param name="class_name">Appropriate class name.</param>
+        /// <param name="cacheFolder">Cache folder root.</param>
+        /// <param name="pageName">Page to process.</param>
+        /// <param name="className">Appropriate class name.</param>
         /// <returns>Resulting content.</returns>
-        public static String ShowFromCache(Engine engine, String cache_folder, String page_name, String class_name) {
-            return ShowFromCache(engine, cache_folder, page_name, class_name, null);
+        public static String ShowFromCache(Engine engine, String cacheFolder, String pageName, String className) {
+            return ShowFromCache(engine, cacheFolder, pageName, className, null);
         }
 
         /// <summary>
         /// Main logic for getting/saving page from/into cache.
         /// </summary>
         /// <param name="engine">Engine instance.</param>
-        /// <param name="cache_folder">Cache folder root.</param>
-        /// <param name="page_name">Page to process.</param>
-        /// <param name="class_name">Appropriate class name.</param>
+        /// <param name="cacheFolder">Cache folder root.</param>
+        /// <param name="pageName">Page to process.</param>
+        /// <param name="className">Appropriate class name.</param>
         /// <param name="query">Query to process.</param>
         /// <returns>Resulting content.</returns>
-        public static String ShowFromCache(Engine engine, String cache_folder, String page_name, String class_name, String query) {
-            if (EQ(page_name, "bottom"))
-                query = page_name;
+        public static String ShowFromCache(Engine engine, String cacheFolder, String pageName, String className, String query) {
+            if (EQ(pageName, "bottom"))
+                query = pageName;
             else {
                 if (query == null)
                     query = Request.GetVar(Request.INPUT_SERVER, "QUERY_STRING");
@@ -104,28 +104,28 @@ namespace Bula.Fetcher.Controller {
 
             var content = (String)null;
 
-            if (EQ(page_name, "view_item")) {
-                var title_pos = query.IndexOf("&title=");
-                if (title_pos != -1)
-                    query = query.Substring(0, title_pos);
+            if (EQ(pageName, "view_item")) {
+                var titlePos = query.IndexOf("&title=");
+                if (titlePos != -1)
+                    query = query.Substring(0, titlePos);
             }
 
             var hash = query;
             //hash = Str_replace("?", "_Q_", hash);
             hash = Strings.Replace("=", "_EQ_", hash);
             hash = Strings.Replace("&", "_AND_", hash);
-            var file_name = Strings.Concat(cache_folder, "/", hash, ".cache");
-            if (Helper.FileExists(file_name)) {
-                content = Helper.ReadAllText(file_name);
-                //content = CAT("*** Got from cache ", Str_replace("/", " /", file_name), "***<br/>", content);
+            var fileName = Strings.Concat(cacheFolder, "/", hash, ".cache");
+            if (Helper.FileExists(fileName)) {
+                content = Helper.ReadAllText(fileName);
+                //content = CAT("*** Got from cache ", Str_replace("/", " /", fileName), "***<br/>", content);
             }
             else {
-                var prefix = EQ(page_name, "bottom") ? null : "Pages/";
-                content = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/", prefix, class_name));
+                var prefix = EQ(pageName, "bottom") ? null : "Pages/";
+                content = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/", prefix, className));
 
-                Helper.TestFileFolder(file_name);
-                Helper.WriteText(file_name, content);
-                //content = CAT("*** Cached to ", Str_replace("/", " /", file_name), "***<br/>", content);
+                Helper.TestFileFolder(fileName);
+                Helper.WriteText(fileName, content);
+                //content = CAT("*** Cached to ", Str_replace("/", " /", fileName), "***<br/>", content);
             }
             return content;
         }
@@ -194,7 +194,7 @@ namespace Bula.Fetcher.Controller {
             return result.Trim();
         }
 
-        private static String[] ru_chars =
+        private static String[] ruChars =
         {
             "а","б","в","г","д","е","ё","ж","з","и","й","к","л","м","н","о","п",
             "р","с","т","у","ф","х","ц","ч","ш","щ","ъ","ы","ь","э","ю","я",
@@ -204,7 +204,7 @@ namespace Bula.Fetcher.Controller {
             "Á", "Ą", "Ä", "Ę", "Ó", "Ś"
         };
 
-        private static String[] en_chars =
+        private static String[] enChars =
         {
             "a","b","v","g","d","e","io","zh","z","i","y","k","l","m","n","o","p",
             "r","s","t","u","f","h","ts","ch","sh","shch","\"","i","\"","e","yu","ya",
@@ -217,12 +217,12 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Transliterate Russian text.
         /// </summary>
-        /// <param name="ru_text">Original Russian text.</param>
+        /// <param name="ruText">Original Russian text.</param>
         /// <returns>Transliterated text.</returns>
-        public static String TransliterateRusToLat(String ru_text) {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder(ru_text);
-            for (int n = 0; n < ru_chars.Length; n++)
-                sb.Replace(ru_chars[n], en_chars[n]);
+        public static String TransliterateRusToLat(String ruText) {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder(ruText);
+            for (int n = 0; n < ruChars.Length; n++)
+                sb.Replace(ruChars[n], enChars[n]);
             return sb.ToString();
         }
     }

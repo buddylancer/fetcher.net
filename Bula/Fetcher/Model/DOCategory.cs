@@ -17,8 +17,8 @@ namespace Bula.Fetcher.Model {
     public class DOCategory : DOBase {
         /// Public constructor (overrides base constructor) 
         public DOCategory (): base() {
-            this.table_name = "categories";
-            this.id_field = "s_CatId";
+            this.tableName = "categories";
+            this.idField = "s_CatId";
         }
 
         /// <summary>
@@ -30,8 +30,8 @@ namespace Bula.Fetcher.Model {
             if (BLANK(catid))
                 return null;
             var query = Strings.Concat(
-                " SELECT * FROM ", this.table_name, " _this " ,
-                " WHERE _this.", this.id_field, " = ? ");
+                " SELECT * FROM ", this.tableName, " _this " ,
+                " WHERE _this.", this.idField, " = ? ");
             Object[] pars = ARR("SetString", catid);
             return this.GetDataSet(query, pars);
         }
@@ -45,7 +45,7 @@ namespace Bula.Fetcher.Model {
             if (BLANK(catname))
                 return null;
             var query = Strings.Concat(
-                " SELECT * FROM ", this.table_name, " _this ",
+                " SELECT * FROM ", this.tableName, " _this ",
                 " WHERE _this.s_Name = ? ");
             Object[] pars = ARR("SetString", catname);
             return this.GetDataSet(query, pars);
@@ -70,24 +70,24 @@ namespace Bula.Fetcher.Model {
         /// Enumerate categories.
         /// </summary>
         /// <param name="order">Field name to sort result by (default = null).</param>
-        /// <param name="min_count">Include categories with Counter >= min_count.</param>
+        /// <param name="minCount">Include categories with Counter >= min_count.</param>
         /// <returns>Resulting data set.</returns>
-        public DataSet EnumCategories(String order, int min_count) {
-            return this.EnumCategories(order, min_count, 0); }
+        public DataSet EnumCategories(String order, int minCount) {
+            return this.EnumCategories(order, minCount, 0); }
 
         /// <summary>
         /// Enumerate categories.
         /// </summary>
         /// <param name="order">Field name to sort result by (default = null).</param>
-        /// <param name="min_count">Include categories with Counter >= min_count.</param>
+        /// <param name="minCount">Include categories with Counter >= min_count.</param>
         /// <param name="limit">Include not more than "limit" records (default = no limit).</param>
         /// <returns>Resulting data set.</returns>
-        public DataSet EnumCategories(String order, int min_count, int limit) {
-            if (min_count < 0)
+        public DataSet EnumCategories(String order, int minCount, int limit) {
+            if (minCount < 0)
                 return null;
             var query = Strings.Concat(
-                " SELECT * FROM ", this.table_name, " _this ",
-                (min_count > 0 ? CAT(" WHERE _this.i_Counter > ", min_count) : null),
+                " SELECT * FROM ", this.tableName, " _this ",
+                (minCount > 0 ? CAT(" WHERE _this.i_Counter > ", minCount) : null),
                 " ORDER BY ", (EQ(order, "counter") ? " _this.i_Counter desc " : " _this.s_CatId asc "),
                 (limit == 0 ? null : CAT(" LIMIT ", limit))
             );
@@ -98,22 +98,22 @@ namespace Bula.Fetcher.Model {
         /// <summary>
         /// Check whether category (filter) exists.
         /// </summary>
-        /// <param name="filter_name">Category ID.</param>
+        /// <param name="filterName">Category ID.</param>
         /// <param name="category">Category object (if found) copied to element 0 of object array.</param>
         /// <returns>True if exists.</returns>
-        public Boolean CheckFilterName(String filter_name, Object[]category) {
+        public Boolean CheckFilterName(String filterName, Object[]category) {
     		var dsCategories = this.Select("_this.s_CatId, _this.s_Filter");
-    		var filter_found = false;
+    		var filterFound = false;
     		for (int n = 0; n < dsCategories.GetSize(); n++) {
     			var oCategory = dsCategories.GetRow(n);
-    			if (EQ(oCategory["s_CatId"], filter_name)) {
-    				filter_found = true;
+    			if (EQ(oCategory["s_CatId"], filterName)) {
+    				filterFound = true;
     				if (category != null)
                         category[0] = oCategory;
     				break;
     			}
     		}
-    		return filter_found;
+    		return filterFound;
     	}
     }
 }

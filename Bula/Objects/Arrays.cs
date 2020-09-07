@@ -93,14 +93,14 @@ namespace Bula.Objects {
             if (extra == null)
                 return input;
 
-            var input_size = SIZE(input);
-            var extra_size = SIZE(extra);
-            var new_size = input_size + extra_size;
-            Object[] output = NewArray(new_size);
-            for (int n = 0; n < input_size; n++)
+            var inputSize = SIZE(input);
+            var extraSize = SIZE(extra);
+            var newSize = inputSize + extraSize;
+            Object[] output = NewArray(newSize);
+            for (int n = 0; n < inputSize; n++)
                 output[n] = input[n];
-            for (int n = 0; n < extra_size; n++)
-                output[input_size + n] = extra[n];
+            for (int n = 0; n < extraSize; n++)
+                output[inputSize + n] = extra[n];
             return output;
         }
 
@@ -116,12 +116,12 @@ namespace Bula.Objects {
             if (element == null)
                 return input;
 
-            var input_size = SIZE(input);
-            var new_size = input_size + 1;
-            Object[] output = NewArray(new_size);
-            for (int n = 0; n < input_size; n++)
+            var inputSize = SIZE(input);
+            var newSize = inputSize + 1;
+            Object[] output = NewArray(newSize);
+            for (int n = 0; n < inputSize; n++)
                 output[n] = input[n];
-            output[input_size] = element;
+            output[inputSize] = element;
             return output;
         }
 

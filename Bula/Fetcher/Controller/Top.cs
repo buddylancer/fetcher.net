@@ -22,15 +22,15 @@ namespace Bula.Fetcher.Controller {
 
         /// Execute main logic for Top block 
         public override void Execute() {
-            var Prepare = new Hashtable();
-            Prepare["[#ImgWidth]"] = this.context.IsMobile ? 234 : 468;
-            Prepare["[#ImgHeight]"] = this.context.IsMobile ? 30 : 60;
+            var prepare = new Hashtable();
+            prepare["[#ImgWidth]"] = this.context.IsMobile ? 234 : 468;
+            prepare["[#ImgHeight]"] = this.context.IsMobile ? 30 : 60;
             if (this.context.TestRun)
-                Prepare["[#Date]"] = "28-Jun-2020 16:49 GMT";
+                prepare["[#Date]"] = "28-Jun-2020 16:49 GMT";
             else
-                Prepare["[#Date]"] = Util.ShowTime(DateTimes.GmtFormat(Config.SQL_DTS));
+                prepare["[#Date]"] = Util.ShowTime(DateTimes.GmtFormat(Config.SQL_DTS));
 
-            this.Write("Bula/Fetcher/View/top.html", Prepare);
+            this.Write("Bula/Fetcher/View/top.html", prepare);
         }
     }
 }

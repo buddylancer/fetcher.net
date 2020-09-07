@@ -31,10 +31,10 @@ namespace Bula.Fetcher.Controller.Pages {
             if (Request.Contains("source"))
                 source = Request.Get("source");
 
-            var Prepare = new Hashtable();
+            var prepare = new Hashtable();
             if (this.context.FineUrls)
-                Prepare["[#Fine_Urls]"] = 1;
-            Prepare["[#Selected]"] = BLANK(source) ? " selected=\"selected\" " : null;
+                prepare["[#Fine_Urls]"] = 1;
+            prepare["[#Selected]"] = BLANK(source) ? " selected=\"selected\" " : null;
             var dsSources = (DataSet)null;
             //TODO -- This can be too long on big databases... Switch off counters for now.
             var useCounters = true;
@@ -42,19 +42,19 @@ namespace Bula.Fetcher.Controller.Pages {
                 dsSources = doSource.EnumSourcesWithCounters();
             else
                 dsSources = doSource.EnumSources();
-            var Options = new ArrayList();
+            var options = new ArrayList();
             for (int n = 0; n < dsSources.GetSize(); n++) {
                 var oSource = dsSources.GetRow(n);
-                var Option = new Hashtable();
-                Option["[#Selected]"] = (oSource["s_SourceName"].Equals(source) ? "selected=\"selected\"" : " ");
-                Option["[#Id]"] = STR(oSource["s_SourceName"]);
-                Option["[#Name]"] = STR(oSource["s_SourceName"]);
+                var option = new Hashtable();
+                option["[#Selected]"] = (oSource["s_SourceName"].Equals(source) ? "selected=\"selected\"" : " ");
+                option["[#Id]"] = STR(oSource["s_SourceName"]);
+                option["[#Name]"] = STR(oSource["s_SourceName"]);
                 if (useCounters)
-                    Option["[#Counter]"] = oSource["cntpro"];
-                Options.Add(Option);
+                    option["[#Counter]"] = oSource["cntpro"];
+                options.Add(option);
             }
-            Prepare["[#Options]"] = Options;
-            this.Write("Bula/Fetcher/View/Pages/filter_items.html", Prepare);
+            prepare["[#Options]"] = options;
+            this.Write("Bula/Fetcher/View/Pages/filter_items.html", prepare);
         }
     }
 }

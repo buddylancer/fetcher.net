@@ -16,10 +16,10 @@ namespace Bula.Fetcher.Controller {
     /// Logic for executing actions.
     /// </summary>
     public class Action : Page {
-        private static Object[] actions_array = null;
+        private static Object[] actionsArray = null;
 
         private static void Initialize() {
-            actions_array = ARR(
+            actionsArray = ARR(
             //action name            page                   post      code
             "do_redirect_item",     "DoRedirectItem",       0,        0,
             "do_redirect_source",   "DoRedirectSource",     0,        0,
@@ -36,21 +36,21 @@ namespace Bula.Fetcher.Controller {
 
         /// Execute main logic for required action. 
         public override void Execute() {
-            if (actions_array == null)
+            if (actionsArray == null)
                 Initialize();
 
-            var action_info = Request.TestPage(actions_array);
+            var actionInfo = Request.TestPage(actionsArray);
 
             // Test action name
-            if (!action_info.ContainsKey("page"))
+            if (!actionInfo.ContainsKey("page"))
                 Response.End("Error in parameters -- no page");
 
             // Test action context
-            if (INT(action_info["post_required"]) == 1 && INT(action_info["from_post"]) == 0)
+            if (INT(actionInfo["post_required"]) == 1 && INT(actionInfo["from_post"]) == 0)
                 Response.End("Error in parameters -- inconsistent pars");
 
             Request.Initialize();
-            if (INT(action_info["post_required"]) == 1)
+            if (INT(actionInfo["post_required"]) == 1)
                 Request.ExtractPostVars();
             else
                 Request.ExtractAllVars();
@@ -59,14 +59,14 @@ namespace Bula.Fetcher.Controller {
             //if (!Request.CheckReferer(Config.Site))
             //    err404();
 
-            if (INT(action_info["code_required"]) == 1) {
+            if (INT(actionInfo["code_required"]) == 1) {
                 if (!Request.Contains("code") || !EQ(Request.Get("code"), Config.SECURITY_CODE)) //TODO -- hardcoded!!!
                     Response.End("No access.");
             }
 
-            var action_class = CAT("Bula/Fetcher/Controller/Actions/", action_info["class"]);
+            var actionClass = CAT("Bula/Fetcher/Controller/Actions/", actionInfo["class"]);
             ArrayList args0 = new ArrayList(); args0.Add(this.context);
-            Internal.CallMethod(action_class, args0, "Execute", null);
+            Internal.CallMethod(actionClass, args0, "Execute", null);
 
             if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();
