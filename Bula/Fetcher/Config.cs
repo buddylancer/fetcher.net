@@ -60,9 +60,9 @@ namespace Bula.Fetcher {
         /// Site comments 
         public const String SITE_COMMENTS = "Latest Items";
         /// Site keywords 
-        public const String SITE_KEYWORDS = "Buddy Fetcher, rss, fetcher, aggregator, PHP, MySQL";
+        public const String SITE_KEYWORDS = "Buddy Fetcher, rss, fetcher, aggregator, NET, MySQL";
         /// Site description 
-        public const String SITE_DESCRIPTION = "Buddy Fetcher is a simple RSS fetcher/aggregator written in PHP/MySQL";
+        public const String SITE_DESCRIPTION = "Buddy Fetcher is a simple RSS fetcher/aggregator written in NET/MySQL";
 
         /// Name of item (in singular form) 
         public const String NAME_ITEM = "Item";
