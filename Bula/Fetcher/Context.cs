@@ -163,6 +163,8 @@ namespace Bula.Fetcher {
             this.GlobalConstants["[#Top_Dir]"] = Config.TOP_DIR;
             this.GlobalConstants["[#Index_Page]"] = Config.INDEX_PAGE;
             this.GlobalConstants["[#Action_Page]"] = Config.ACTION_PAGE;
+            this.GlobalConstants["[#Powered_By]"] = Config.POWERED_BY;
+            this.GlobalConstants["[#Github_Repo]"] = Config.GITHUB_REPO;
             //if (this.IsMobile)
             //    this.GlobalConstants["[#Is_Mobile]"] = "1";
             this.GlobalConstants["[#Lang]"] = this.Lang;

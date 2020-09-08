@@ -82,5 +82,8 @@ namespace Bula.Fetcher {
 
         /// Show bottom blocks (Filtering and RSS) 
         public const Boolean SHOW_BOTTOM = true;
+
+        public const String POWERED_BY = "Buddy Fetcher for NET";
+        public const String GITHUB_REPO = "buddylancer/fetcher.net";
     } 
 }
