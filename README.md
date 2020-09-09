@@ -12,6 +12,13 @@ Project features:
 - mobile version is configured in View section (through separate CSS)
 - Classic MVC (Model/View/Controller) implementation
 
+Test scripts are located in local/tests folder.
+
+This product was initially ported from original PHP version using own convertor (written in C# and using ~150 regular expressions).
+
+Working PHP version, ported from the same original PHP version with the same convertor (using ~80 regular expressions), can be found at http://github.com/buddylancer/fetcher.php.
+
+
 Websites powered by Buddy Fetcher:
 - 1001 Freelance Projects (http://www.1001freelanceprojects.com)
 - 1001 Freelance Projects / Rus (http://www.1001freelanceprojects.ru)

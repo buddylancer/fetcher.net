@@ -3,6 +3,8 @@
 // Author - Buddy Lancer <http://www.buddylancer.com>.
 // Licensed under the MIT license.
 
+// Note: this class is not ported (is fully specific for NET-version).
+
 namespace Bula
 {
     using System;

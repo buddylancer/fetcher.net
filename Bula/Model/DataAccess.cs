@@ -1,3 +1,10 @@
+// Buddy Fetcher: simple RSS-fetcher/aggregator.
+// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Author - Buddy Lancer <http://www.buddylancer.com>.
+// Licensed under the MIT license.
+
+// Note: this class is not ported (is fully specific for NET-version).
+
 namespace Bula.Model {
     using System;
 
