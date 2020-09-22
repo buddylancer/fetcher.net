@@ -131,7 +131,7 @@ namespace Bula.Objects {
         /// <param name="input">Array of objects.</param>
         /// <returns>Resulting array list.</returns>
         public static ArrayList CreateArrayList(Object[] input) {
-    		if (input == null)
+            if (input == null)
                 return null;
             var output = new ArrayList();
             if (SIZE(input) == 0)

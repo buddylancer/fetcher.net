@@ -13,9 +13,9 @@ namespace Bula.Fetcher.Model {
     /// </summary>
     public class DOTime : DOBase {
         /// Public constructor (overrides base constructor) 
-    	public DOTime (): base() {
-    		this.tableName = "as_of_time";
-    		this.idField = "i_Id";
-    	}
+        public DOTime (): base() {
+            this.tableName = "as_of_time";
+            this.idField = "i_Id";
+        }
     }
 }

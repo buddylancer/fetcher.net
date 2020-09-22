@@ -31,7 +31,7 @@ namespace Bula.Model {
         /// @var RecordSet
         public RecordSet recordSet;
 
-    	/// Default public constructor 
+        /// Default public constructor 
         public PreparedStatement () {
             this.pars = new ArrayList();
             this.pars.Add("dummy"); // Parameter number will start from 1.

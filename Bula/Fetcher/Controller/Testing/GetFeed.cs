@@ -22,17 +22,17 @@ namespace Bula.Fetcher.Controller.Testing {
         /// Get test feed using parameters from request. 
         public override void Execute() {
             Request.Initialize();
-    		Request.ExtractAllVars();
+            Request.ExtractAllVars();
 
-     		// Check source
+             // Check source
             if (!Request.Contains("source"))
-    			Response.End("Source is required!");
-    		var source = Request.Get("source");
-    		if (BLANK(source))
-    			Response.End("Empty source!");       
+                Response.End("Source is required!");
+            var source = Request.Get("source");
+            if (BLANK(source))
+                Response.End("Empty source!");       
 
             Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
             Response.Write(Helper.ReadAllText(CAT(this.context.LocalRoot, "local/tests/input/U.S. News - ", source, ".xml")));
-    	}
+        }
     }
 }

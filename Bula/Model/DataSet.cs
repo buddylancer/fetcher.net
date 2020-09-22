@@ -13,69 +13,69 @@ namespace Bula.Model {
     /// Non-typed data set implementation.
     /// </summary>
     public class DataSet : Bula.Meta {
-    	private ArrayList rows;
-    	private int pageSize;
-    	private int totalPages;
+        private ArrayList rows;
+        private int pageSize;
+        private int totalPages;
 
-    	/// Default public constructor 
+        /// Default public constructor 
         public DataSet () {
-    		this.rows = new ArrayList();
-    		this.pageSize = 10;
-    		this.totalPages = 0;
-    	}
+            this.rows = new ArrayList();
+            this.pageSize = 10;
+            this.totalPages = 0;
+        }
 
         /// <summary>
         /// Get the size (number of rows) of the DataSet.
         /// </summary>
         /// @return int 
-    	public int GetSize() {
+        public int GetSize() {
             return this.rows.Count;
         }
 
-    	/// <summary>
-    	/// Get a row from the DataSet.
-    	/// </summary>
+        /// <summary>
+        /// Get a row from the DataSet.
+        /// </summary>
         /// <param name="n">Number of the row.</param>
         /// <returns>Required row or null.</returns>
         public Hashtable GetRow(int n) {
             return (Hashtable) this.rows[n];
         }
 
-    	/// <summary>
-    	/// Add new row into the DataSet.
-    	/// </summary>
+        /// <summary>
+        /// Add new row into the DataSet.
+        /// </summary>
         /// <param name="row">New row to add.</param>
         public void AddRow(Hashtable row) {
             this.rows.Add(row);
         }
 
-    	/// <summary>
-    	/// Get page size of the DataSet.
-    	/// </summary>
+        /// <summary>
+        /// Get page size of the DataSet.
+        /// </summary>
         /// <returns>Current page size.</returns>
         public int GetPageSize() {
             return this.pageSize;
         }
 
-    	/// <summary>
-    	/// Set page size of the DataSet.
-    	/// </summary>
+        /// <summary>
+        /// Set page size of the DataSet.
+        /// </summary>
         /// <param name="page_size">Current page size.</param>
-    	public void SetPageSize(int pageSize) {
+        public void SetPageSize(int pageSize) {
             this.pageSize = pageSize;
         }
 
-    	/// <summary>
-    	/// Get total number of pages in the DataSet.
-    	/// </summary>
+        /// <summary>
+        /// Get total number of pages in the DataSet.
+        /// </summary>
         /// <returns>Number of pages.</returns>
         public int GetTotalPages() {
             return this.totalPages;
         }
 
-    	/// <summary>
-    	/// Set total number of pages in the DataSet.
-    	/// </summary>
+        /// <summary>
+        /// Set total number of pages in the DataSet.
+        /// </summary>
         /// <param name="totalPages">Number of pages.</param>
         public void SetTotalPages(int totalPages) {
             this.totalPages = totalPages;

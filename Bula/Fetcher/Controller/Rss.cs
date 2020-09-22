@@ -76,8 +76,11 @@ namespace Bula.Fetcher.Controller {
                         else {
                             if (anyFilter)
                                 filter = filterName;
-                            else
+                            else {
+                                if (errorMessage.Length > 0)
+                                    errorMessage += (" ");
                                 errorMessage += (CAT("Incorrect filter '", filterName, "'!"));
+                            }
                         }
                     }
                 }
