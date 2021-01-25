@@ -26,7 +26,7 @@ namespace Bula.Fetcher.Controller {
             prepare["[#ImgWidth]"] = this.context.IsMobile ? 234 : 468;
             prepare["[#ImgHeight]"] = this.context.IsMobile ? 30 : 60;
             if (this.context.TestRun)
-                prepare["[#Date]"] = "28-Jun-2020-2021 16:49 GMT";
+                prepare["[#Date]"] = "28-Jun-2020 16:49 GMT";
             else
                 prepare["[#Date]"] = Util.ShowTime(DateTimes.GmtFormat(Config.SQL_DTS));
 
