@@ -1,5 +1,5 @@
 // Buddy Fetcher: simple RSS-fetcher/aggregator.
-// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Copyright (c) 2020-2021 Buddy Lancer. All rights reserved.
 // Author - Buddy Lancer <http://www.buddylancer.com>.
 // Licensed under the MIT license.
 
@@ -26,7 +26,7 @@ namespace Bula.Fetcher.Controller {
             prepare["[#ImgWidth]"] = this.context.IsMobile ? 234 : 468;
             prepare["[#ImgHeight]"] = this.context.IsMobile ? 30 : 60;
             if (this.context.TestRun)
-                prepare["[#Date]"] = "28-Jun-2020 16:49 GMT";
+                prepare["[#Date]"] = "28-Jun-2020-2021 16:49 GMT";
             else
                 prepare["[#Date]"] = Util.ShowTime(DateTimes.GmtFormat(Config.SQL_DTS));
 

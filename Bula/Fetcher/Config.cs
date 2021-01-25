@@ -1,5 +1,5 @@
 // Buddy Fetcher: simple RSS-fetcher/aggregator.
-// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Copyright (c) 2020-2021 Buddy Lancer. All rights reserved.
 // Author - Buddy Lancer <http://www.buddylancer.com>.
 // Licensed under the MIT license.
 
@@ -26,9 +26,9 @@ namespace Bula.Fetcher {
         public const Boolean FINE_URLS = false;
 
         /// Cache Web-pages 
-        public const Boolean CACHE_PAGES = true;
+        public const Boolean CACHE_PAGES = false;
         /// Cache RSS-feeds 
-        public const Boolean CACHE_RSS = true;
+        public const Boolean CACHE_RSS = false;
         /// Show what source an item is originally from 
         public const Boolean SHOW_FROM = false;
         /// Show an item or immediately redirect to external source item 

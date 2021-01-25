@@ -1,5 +1,5 @@
 // Buddy Fetcher: simple RSS-fetcher/aggregator.
-// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Copyright (c) 2020-2021 Buddy Lancer. All rights reserved.
 // Author - Buddy Lancer <http://www.buddylancer.com>.
 // Licensed under the MIT license.
 
