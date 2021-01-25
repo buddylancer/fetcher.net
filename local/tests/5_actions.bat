@@ -3,8 +3,8 @@
 echo *** Starting 5_actions.bat ...
 
 rem Query templates
-rem /action.%ext%?p=do_redirect_item&id=1
-rem /action.%ext%?p=do_redirect_source&id=some_source
+rem /action%ext%?p=do_redirect_item&id=1
+rem /action%ext%?p=do_redirect_source&id=some_source
 rem /redirect/item/1
 rem /redirect/source/some_source
 

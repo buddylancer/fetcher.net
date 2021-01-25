@@ -21,7 +21,7 @@ namespace Bula.Fetcher.Controller.Actions {
         private static String BOTTOM = null;
 
         /// Initialize TOP and BOTTOM blocks. 
-        private static void Initialize() {
+        static DoTestItems(){
             TOP = CAT(
                 "<!DOCTYPE html>\r\n",
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n",

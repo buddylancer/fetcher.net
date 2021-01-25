@@ -23,7 +23,7 @@ namespace Bula
         /// <param name="str">Error message</param>
         public static void STOP(Object str) {
             Response.Write(str.ToString());
-            System.Web.HttpContext.Current.Response.End();
+            Response.End("");
         }
 
         // Common functions

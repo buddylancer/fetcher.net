@@ -45,8 +45,10 @@ namespace Bula.Fetcher.Controller {
             var pageInfo = Request.TestPage(pagesArray, "home");
 
             // Test action name
-            if (!pageInfo.ContainsKey("page"))
+            if (!pageInfo.ContainsKey("page")) {
                 Response.End("Error in parameters -- no page");
+                return;
+            }
 
             var pageName = (String)pageInfo["page"];
             var className = (String)pageInfo["class"];

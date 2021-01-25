@@ -2,7 +2,7 @@ This test configuration/scripts are for IIS installation.
 
 
 0. Prerequisites
-Microsoft Windows, NET Framework 4.5+, Microsoft IIS + ASP.NET, MySQL database.
+Microsoft Windows, NET Framework 4.5+, Microsoft IIS (with URL rewrite) + ASP.NET, MySQL database.
 
 
 1. Local test website

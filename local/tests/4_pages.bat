@@ -3,7 +3,7 @@
 echo *** Starting 4_pages.bat ...
 
 rem Query templates
-rem /index.%ext%?p=items&source=something&list=2
+rem /index%ext%?p=items&source=something&list=2
 rem /items/source/something/list/2
 
 set folder=4_pages

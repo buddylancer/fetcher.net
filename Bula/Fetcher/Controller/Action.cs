@@ -1,5 +1,5 @@
 // Buddy Fetcher: simple RSS-fetcher/aggregator.
-// Copyright (c) 2020 Buddy Lancer. All rights reserved.
+// Copyright (c) 2020-2021 Buddy Lancer. All rights reserved.
 // Author - Buddy Lancer <http://www.buddylancer.com>.
 // Licensed under the MIT license.
 
@@ -42,12 +42,16 @@ namespace Bula.Fetcher.Controller {
             var actionInfo = Request.TestPage(actionsArray);
 
             // Test action name
-            if (!actionInfo.ContainsKey("page"))
+            if (!actionInfo.ContainsKey("page")) {
                 Response.End("Error in parameters -- no page");
+                return;
+            }
 
             // Test action context
-            if (INT(actionInfo["post_required"]) == 1 && INT(actionInfo["from_post"]) == 0)
+            if (INT(actionInfo["post_required"]) == 1 && INT(actionInfo["from_post"]) == 0) {
                 Response.End("Error in parameters -- inconsistent pars");
+                return;
+            }
 
             Request.Initialize();
             if (INT(actionInfo["post_required"]) == 1)
@@ -60,8 +64,10 @@ namespace Bula.Fetcher.Controller {
             //    err404();
 
             if (INT(actionInfo["code_required"]) == 1) {
-                if (!Request.Contains("code") || !EQ(Request.Get("code"), Config.SECURITY_CODE)) //TODO -- hardcoded!!!
+                if (!Request.Contains("code") || !EQ(Request.Get("code"), Config.SECURITY_CODE)) { //TODO -- hardcoded!!!
                     Response.End("No access.");
+                    return;
+                }
             }
 
             var actionClass = CAT("Bula/Fetcher/Controller/Actions/", actionInfo["class"]);

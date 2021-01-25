@@ -3,7 +3,7 @@
 echo *** Starting 6_view.bat ...
 
 rem Query templates
-rem /index.%ext%?p=view_item&id=1[&title=something]
+rem /index%ext%?p=view_item&id=1[&title=something]
 rem /item/1[/title/something]
 
 set folder=6_view

@@ -30,6 +30,10 @@ namespace Bula.Objects {
         /// Enum value (type) for getting SERVER parameters 
         public const int INPUT_SERVER = 5;
 
+        private static System.Web.HttpRequest CurrentRequest() {
+            return System.Web.HttpContext.Current.Request;
+        }
+
         static Request() { Initialize(); }
 
         /// Initialize internal variables for new request. 
@@ -41,7 +45,7 @@ namespace Bula.Objects {
         /// <summary>
         /// Get private variables.
         /// </summary>
-         public static Hashtable GetPrivateVars() {
+        public static Hashtable GetPrivateVars() {
             return Vars;
         }
 
@@ -240,10 +244,10 @@ namespace Bula.Objects {
             pageInfo.Remove("page");
             for (int n = 0; n < SIZE(pages); n += 4) {
                 if (EQ(pages[n], page)) {
-                    pageInfo["page"] = pages[n+0];
-                    pageInfo["class"] = pages[n+1];
-                    pageInfo["post_required"] = pages[n+2];
-                    pageInfo["code_required"] = pages[n+3];
+                    pageInfo["page"] = pages[n + 0];
+                    pageInfo["class"] = pages[n + 1];
+                    pageInfo["post_required"] = pages[n + 2];
+                    pageInfo["code_required"] = pages[n + 3];
                     break;
                 }
             }
@@ -289,13 +293,13 @@ namespace Bula.Objects {
             {
                 case Request.INPUT_GET:
                 default:
-                    vars = System.Web.HttpContext.Current.Request.QueryString;
+                    vars = CurrentRequest().QueryString;
                     break;
                 case Request.INPUT_POST:
-                    vars = System.Web.HttpContext.Current.Request.Form;
+                    vars = CurrentRequest().Form;
                     break;
                 case Request.INPUT_SERVER:
-                    vars = System.Web.HttpContext.Current.Request.ServerVariables;
+                    vars = CurrentRequest().ServerVariables;
                     break;
             }
             IEnumerator keys = vars.AllKeys.GetEnumerator();
@@ -325,13 +329,13 @@ namespace Bula.Objects {
             {
                 case Request.INPUT_GET:
                 default:
-                    vars = System.Web.HttpContext.Current.Request.QueryString;
+                    vars = CurrentRequest().QueryString;
                     break;
                 case Request.INPUT_POST:
-                    vars = System.Web.HttpContext.Current.Request.Form;
+                    vars = CurrentRequest().Form;
                     break;
                 case Request.INPUT_SERVER:
-                    vars = System.Web.HttpContext.Current.Request.ServerVariables;
+                    vars = CurrentRequest().ServerVariables;
                     break;
             }
             return vars[name];    

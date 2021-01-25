@@ -6,18 +6,21 @@
 namespace Bula.Objects {
     using System;
 
-    using System.Web;
-
     /// <summary>
     /// Helper class for processing server response.
     /// </summary>
     public class Response : Bula.Meta {
+
+        private static System.Web.HttpResponse CurrentResponse() {
+            return System.Web.HttpContext.Current.Response;
+        }
+
         /// <summary>
         /// Write text to current response.
         /// </summary>
         /// <param name="input">Text to write.</param>
         public static void Write(String input) {
-            HttpContext.Current.Response.Write(input);
+            CurrentResponse().Write(input);
         }
 
         /// <summary>
@@ -26,7 +29,7 @@ namespace Bula.Objects {
         /// <param name="name">Header name.</param>
         /// <param name="value">Header value.</param>
         public static void WriteHeader(String name, String value) {
-            HttpContext.Current.Response.Headers.Add(name, value);
+            CurrentResponse().Headers.Add(name, value);
         }
 
         /// <summary>
@@ -35,7 +38,7 @@ namespace Bula.Objects {
         /// <param name="input">Text to write before ending response.</param>
         public static void End(String input) {
             Write(input);
-            HttpContext.Current.Response.End();
+            CurrentResponse().End();
         }
     }
 

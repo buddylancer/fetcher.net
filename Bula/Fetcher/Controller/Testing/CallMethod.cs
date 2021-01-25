@@ -28,36 +28,52 @@ namespace Bula.Fetcher.Controller.Testing {
             Request.ExtractAllVars();
 
             // Check security code
-            if (!Request.Contains("code"))
+            if (!Request.Contains("code")) {
                 Response.End("Code is required!");
+                return;
+            }
             var code = Request.Get("code");
-            if (!EQ(code, Config.SECURITY_CODE))
+            if (!EQ(code, Config.SECURITY_CODE)) {
                 Response.End("Incorrect code!");
+                return;
+            }
 
             // Check package
-            if (!Request.Contains("package"))
+            if (!Request.Contains("package")) {
                 Response.End("Package is required!");
+                return;
+            }
             var package = Request.Get("package");
-            if (BLANK(package))
+            if (BLANK(package)) {
                 Response.End("Empty package!");
+                return;
+            }
             String[] packageChunks = Strings.Split("-", package);
             for (int n = 0; n < SIZE(packageChunks); n++)
                 packageChunks[n] = Strings.FirstCharToUpper(packageChunks[n]);
             package = Strings.Join("/", packageChunks);
 
             // Check class
-            if (!Request.Contains("class"))
+            if (!Request.Contains("class")) {
                 Response.End("Class is required!");
+                return;
+            }
             var className = Request.Get("class");
-            if (BLANK(className))
+            if (BLANK(className)) {
                 Response.End("Empty class!");
+                return;
+            }
 
             // Check method
-            if (!Request.Contains("method"))
+            if (!Request.Contains("method")) {
                 Response.End("Method is required!");
+                return;
+            }
             var method = Request.Get("method");
-            if (BLANK(method))
+            if (BLANK(method)) {
                 Response.End("Empty method!");
+                return;
+            }
 
             // Fill array with parameters
             var count = 0;

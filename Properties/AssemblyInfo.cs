@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Fetcher.Net")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Simple RSS fetcher/aggregator (.NET/MySQL)")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Buddy Lancer")]
 [assembly: AssemblyProduct("Buddy Fetcher")]
-[assembly: AssemblyCopyright("Copyright © Buddy Lancer 2020")]
+[assembly: AssemblyCopyright("Copyright © Buddy Lancer 2020-2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

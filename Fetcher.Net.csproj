@@ -82,7 +82,6 @@
     <Compile Include="Bula\Fetcher\Controller\Bottom.cs" />
     <Compile Include="Bula\Fetcher\Controller\Engine.cs" />
     <Compile Include="Bula\Fetcher\Controller\Index.cs" />
-    <Compile Include="Bula\Fetcher\Controller\Logger.cs" />
     <Compile Include="Bula\Fetcher\Controller\Menu.cs" />
     <Compile Include="Bula\Fetcher\Controller\Page.cs" />
     <Compile Include="Bula\Fetcher\Controller\Pages\FilterItems.cs" />
@@ -112,6 +111,7 @@
     <Compile Include="Bula\Objects\Arrays.cs" />
     <Compile Include="Bula\Objects\DateTimes.cs" />
     <Compile Include="Bula\Objects\Helper.cs" />
+    <Compile Include="Bula\Objects\Logger.cs" />
     <Compile Include="Bula\Objects\Request.cs" />
     <Compile Include="Bula\Objects\Response.cs" />
     <Compile Include="Bula\Objects\Strings.cs" />
