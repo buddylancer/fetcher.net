@@ -1,10 +1,13 @@
 @echo off
 
+set start_time=%time%
+
 set wget=bin\wget.exe
 if exist %wget% goto :WGET_OK
 echo *** %wget% is required!
 goto :END
 :WGET_OK
+
 
 rem Set your test site (local) info:
 set site=http://www.ff.com:8000
@@ -25,9 +28,6 @@ if not exist %origin% mkdir %origin%
 
 set log=%output%\log.txt
 echo > %log%
-
-rem Just for debugging -- remove on production!!!
-rem goto :STYLES
 
 :CREATE
 echo *** Starting 1_create.bat >> %log%
@@ -96,4 +96,7 @@ set mobile=
 set site=
 
 :EOF
+set end_time=%time%
+
+echo Start Time - [%start_time%]; End Time - [%end_time%].
 pause
