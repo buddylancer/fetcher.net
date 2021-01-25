@@ -1,1 +1,1 @@
-Download and put MySQL Connnector/NET (mysql.data.dll) here.
+Download and put MySQL Connnector/NET (mysql.data.dll) of appropriate version here.
