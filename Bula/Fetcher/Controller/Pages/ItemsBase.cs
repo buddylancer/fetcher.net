@@ -32,7 +32,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 if (!Request.IsInteger(Request.Get("list"))) {
                     var prepare = new Hashtable();
                     prepare["[#ErrMessage]"] = "Incorrect list number!";
-                    this.Write("Bula/Fetcher/View/error.html", prepare);
+                    this.Write("error", prepare);
                     return false;
                 }
             }
@@ -59,7 +59,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var prepare = new Hashtable();
             prepare["[#ErrMessage]"] = errMessage;
-            this.Write("Bula/Fetcher/View/error.html", prepare);
+            this.Write("error", prepare);
             return false;
         }
 
@@ -106,8 +106,10 @@ namespace Bula.Fetcher.Controller.Pages {
             var d_Date = Util.ShowTime(STR(oItem["d_Date"]));
             if (this.context.IsMobile)
                 d_Date = Strings.Replace("-", " ", d_Date);
-            else
-                d_Date = Strings.ReplaceFirst(" ", "<br/>", d_Date);
+            else {
+                if (BLANK(this.context.Api))
+                    d_Date = Strings.ReplaceFirst(" ", "<br/>", d_Date);
+            }
             row["[#Date]"] = d_Date;
             return row;
         }
@@ -129,6 +131,7 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <returns>Resulting external link.</returns>
         public String GetRedirectItemLink(int itemId, String urlTitle) {
             return CAT(
+                (!BLANK(this.context.Api) ? this.context.Site : ""),
                 Config.TOP_DIR,
                 (this.context.FineUrls ? "redirect/item/" : CAT(Config.ACTION_PAGE, "?p=do_redirect_item&id=")), itemId,
                 (urlTitle != null ? CAT(this.context.FineUrls ? "/" : "&title=", urlTitle) : null)
@@ -152,6 +155,7 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <returns>Resulting internal link.</returns>
         public String GetViewItemLink(int itemId, String urlTitle) {
             return CAT(
+                (!BLANK(this.context.Api) ? this.context.Site : ""),
                 Config.TOP_DIR,
                 (this.context.FineUrls ? "item/" : CAT(Config.INDEX_PAGE, "?p=view_item&id=")), itemId,
                 (urlTitle != null ? CAT(this.context.FineUrls ? "/" : "&title=", urlTitle) : null)
@@ -165,6 +169,7 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <returns>Resulting internal link to the page.</returns>
         protected String GetPageLink(int listNo) {
             var href = CAT(
+                (!BLANK(this.context.Api) ? this.context.Site : ""),
                 Config.TOP_DIR,
                 (this.context.FineUrls ?
                     "items" : CAT(Config.INDEX_PAGE, "?p=items")),

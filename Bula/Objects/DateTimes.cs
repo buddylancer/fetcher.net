@@ -7,6 +7,7 @@ namespace Bula.Objects {
     using System;
 
     using System.Globalization;
+
     using Bula.Objects;
 
     /// <summary>
@@ -24,7 +25,8 @@ namespace Bula.Objects {
         /// </summary>
         /// <returns>Resulting time (Unix timestamp).</returns>
         public static int GetTime() {
-            return (int)DateTime.Now.Subtract(unix).TotalSeconds; }
+            return (int)DateTime.Now.Subtract(unix).TotalSeconds;
+        }
 
         /// <summary>
         /// Get time as Unix timestamp.
@@ -45,7 +47,6 @@ namespace Bula.Objects {
             timeString = timeString.Replace("PST", "-08:00");
             return (int)DateTime.ParseExact(timeString, RSS_DTS,
                 DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None).ToUniversalTime().Subtract(unix).TotalSeconds;
-
         }
 
         /// <summary>
@@ -54,7 +55,8 @@ namespace Bula.Objects {
         /// <param name="formatString">Format to apply.</param>
         /// <returns>Resulting string.</returns>
         public static String Format(String formatString) {
-            return Format(formatString, 0); }
+            return Format(formatString, 0);
+        }
 
         /// <summary>
         /// Format time from Unix timestamp to string presentation.
@@ -72,7 +74,8 @@ namespace Bula.Objects {
         /// <param name="formatString">Format to apply.</param>
         /// <returns>Resulting string.</returns>
         public static String GmtFormat(String formatString) {
-            return GmtFormat(formatString, 0); }
+            return GmtFormat(formatString, 0);
+        }
 
         /// <summary>
         /// Format time from timestamp to GMT string presentation.

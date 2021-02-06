@@ -31,13 +31,13 @@ namespace Bula.Fetcher.Controller.Pages {
             var prepare = new Hashtable();
             if (!Request.Contains("id")) {
                 prepare["[#ErrMessage]"] = "Item ID is required!";
-                this.Write("Bula/Fetcher/View/error.html", prepare);
+                this.Write("error", prepare);
                 return null;
             }
             var id = Request.Get("id");
             if (!Request.IsInteger(id)) {
                 prepare["[#ErrMessage]"] = "Item ID must be positive integer!";
-                this.Write("Bula/Fetcher/View/error.html", prepare);
+                this.Write("error", prepare);
                 return null;
             }
 
@@ -60,7 +60,7 @@ namespace Bula.Fetcher.Controller.Pages {
             var dsItems = doItem.GetById(INT(id));
             if (dsItems == null || dsItems.GetSize() == 0) {
                 prepare["[#ErrMessage]"] = "Wrong item ID!";
-                this.Write("Bula/Fetcher/View/error.html", prepare);
+                this.Write("error", prepare);
                 return;
             }
 
@@ -74,7 +74,9 @@ namespace Bula.Fetcher.Controller.Pages {
                 leftWidth = "20%";
 
             var idField = doItem.GetIdField();
-            var redirectItem = CAT(Config.TOP_DIR,
+            var redirectItem = CAT(
+                (BLANK(this.context.Api) ? "" : this.context.Site),
+                Config.TOP_DIR,
                 (this.context.FineUrls ? "redirect/item/" : CAT(Config.ACTION_PAGE, "?p=do_redirect_item&id=")),
                 oItem[idField]);
             prepare["[#RedirectLink]"] = redirectItem;
@@ -83,6 +85,7 @@ namespace Bula.Fetcher.Controller.Pages {
             prepare["[#InputTitle]"] = Util.Safe(title);
 
             var redirectSource = CAT(
+                (BLANK(this.context.Api) ? "" : this.context.Site),
                 Config.TOP_DIR,
                 (this.context.FineUrls ? "redirect/source/" : CAT(Config.ACTION_PAGE, "?p=do_redirect_source&source=")),
                 sourceName
@@ -105,9 +108,9 @@ namespace Bula.Fetcher.Controller.Pages {
             if (Config.CACHE_PAGES)
                 prepare["[#Home]"] = Util.ShowFromCache(engine, this.context.CacheFolder, "home", "Home", "p=home&from_view_item=1");
             else
-                prepare["[#Home]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/Home");
+                prepare["[#Home]"] = engine.IncludeTemplate("Pages/Home");
 
-            this.Write("Bula/Fetcher/View/Pages/view_item.html", prepare);
+            this.Write("Pages/view_item", prepare);
         }
     }
 }

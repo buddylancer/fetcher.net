@@ -32,11 +32,11 @@ namespace Bula.Fetcher.Controller.Actions {
             if (!NUL(errorMessage)) {
                 prepare["[#Title]"] = "Error";
                 prepare["[#ErrMessage]"] = errorMessage;
-                templateName = "Bula/Fetcher/View/error_alone.html";
+                templateName = "error_alone";
             }
             else if (!BLANK(linkToRedirect)) {
                 prepare["[#Link]"] = linkToRedirect;
-                templateName = "Bula/Fetcher/View/redirect.html";
+                templateName = "redirect";
             }
 
             var engine = this.context.PushEngine(true);

@@ -78,13 +78,14 @@ namespace Bula.Fetcher.Controller {
         /// <returns>Resulting content.</returns>
         public String IncludeTemplate(String className, String defaultMethod = "Execute") {
             var engine = this.context.PushEngine(false);
-            var fileName = 
-                CAT(className, ".cs");
+            var prefix = "Bula/Fetcher/Controller/";
+            var fileName =
+                CAT(prefix, className, ".cs");
 
             var content = (String)null;
             if (Helper.FileExists(CAT(this.context.LocalRoot, fileName))) {
                 ArrayList args0 = new ArrayList(); args0.Add(this.context);
-                Internal.CallMethod(className, args0, defaultMethod, null);
+                Internal.CallMethod(CAT(prefix, className), args0, defaultMethod, null);
                 content = engine.GetPrintString();
             }
             else
@@ -104,16 +105,21 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Show template content by merging template and data.
         /// </summary>
-        /// <param name="filename">Template file to use for merging.</param>
+        /// <param name="id">Template ID to use for merging.</param>
         /// <param name="hash">Data in the form of Hashtable to use for merging.</param>
         /// <returns>Resulting content.</returns>
-        public String ShowTemplate(String filename, Hashtable hash) {
+        public String ShowTemplate(String id, Hashtable hash) {
+            var ext = BLANK(this.context.Api) ? ".html" : ".txt";
+            var filename = 
+                    CAT("Bula/Fetcher/View/", (BLANK(this.context.Api) ? "Html/" : "Rest/"), id, ext);
             var template = this.GetTemplate(filename);
 
             var content = "";
-            content += (CAT("\n<!-- BEGIN ", Strings.Replace("Bula/Fetcher/", "", filename), " -->\n"));
+            if (BLANK(this.context.Api))
+                content += (CAT("\n<!-- BEGIN ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->\n"));
             content += (this.ProcessTemplate(template, hash));
-            content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/", "", filename), " -->\n"));
+            if (BLANK(this.context.Api))
+                content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->\n"));
             return content;
         }
 
@@ -152,7 +158,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="str">Input string.</param>
         /// <returns>Resulting string.</returns>
-        private static String TrimComments(String str) {
+        private static String TrimComments(String str, Boolean trim = true) {
             var line = (String)str;
             var trimmed = false;
             if (line.IndexOf("<!--#") != -1) {
@@ -164,7 +170,8 @@ namespace Bula.Fetcher.Controller {
                 line = line.Replace("//#", "#");
                 trimmed = true;
             }
-            line = line.Trim();
+            if (trim)
+                line = line.Trim();
             return line;
         }
 
@@ -191,7 +198,7 @@ namespace Bula.Fetcher.Controller {
             var content = "";
             for (int n = 0; n < template.Count; n++) {
                 var line = (String)template[n];
-                var lineNoComments = TrimComments(line);
+                var lineNoComments = TrimComments(line); //, BLANK(this.context.Api)); //TODO
                 if (ifMode > 0) {
                     if (lineNoComments.IndexOf("#if") == 0)
                         ifMode++;

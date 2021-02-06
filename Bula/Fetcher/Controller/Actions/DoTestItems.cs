@@ -21,7 +21,7 @@ namespace Bula.Fetcher.Controller.Actions {
         private static String BOTTOM = null;
 
         /// Initialize TOP and BOTTOM blocks. 
-        static DoTestItems(){
+        public static void Initialize() {
             TOP = CAT(
                 "<!DOCTYPE html>\r\n",
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n",
@@ -43,7 +43,7 @@ namespace Bula.Fetcher.Controller.Actions {
         /// Public default constructor.
         /// </summary>
         /// <param name="context">Context instance.</param>
-        public DoTestItems(Context context) : base(context) { }
+        public DoTestItems(Context context) : base(context) { Initialize(); }
 
         /// Execute main logic for DoTestItems action 
         public override void Execute() {

@@ -88,7 +88,7 @@ namespace Bula.Fetcher.Controller {
                 }
                 prepare["[#RssBlocks]"] = rssBlocks;
             }
-            this.Write("Bula/Fetcher/View/bottom.html", prepare);
+            this.Write("bottom", prepare);
         }
     }
 }

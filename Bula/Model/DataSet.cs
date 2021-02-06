@@ -27,7 +27,7 @@ namespace Bula.Model {
         /// <summary>
         /// Get the size (number of rows) of the DataSet.
         /// </summary>
-        /// @return int 
+        /// <returns>DataSet size.</returns>
         public int GetSize() {
             return this.rows.Count;
         }
@@ -60,7 +60,7 @@ namespace Bula.Model {
         /// <summary>
         /// Set page size of the DataSet.
         /// </summary>
-        /// <param name="page_size">Current page size.</param>
+        /// <param name="pageSize">Current page size.</param>
         public void SetPageSize(int pageSize) {
             this.pageSize = pageSize;
         }

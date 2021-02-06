@@ -30,7 +30,7 @@ namespace Bula.Fetcher.Controller {
             else
                 prepare["[#Date]"] = Util.ShowTime(DateTimes.GmtFormat(Config.SQL_DTS));
 
-            this.Write("Bula/Fetcher/View/top.html", prepare);
+            this.Write("top", prepare);
         }
     }
 }

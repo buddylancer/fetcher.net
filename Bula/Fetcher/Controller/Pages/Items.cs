@@ -71,7 +71,7 @@ namespace Bula.Fetcher.Controller.Pages {
             if (errorMessage.Length > 0) {
                 var prepare = new Hashtable();
                 prepare["[#ErrMessage]"] = errorMessage;
-                this.Write("Bula/Fetcher/View/error.html", prepare);
+                this.Write("error", prepare);
                 return null;
             }
 
@@ -125,12 +125,12 @@ namespace Bula.Fetcher.Controller.Pages {
             var prepare = new Hashtable();
             if (errorMessage.Length > 0) {
                 prepare["[#ErrMessage]"] = errorMessage;
-                this.Write("Bula/Fetcher/View/error.html", prepare);
+                this.Write("error", prepare);
                 return;
             }
 
             // Uncomment to enable filtering by source and/or category
-            prepare["[#FilterItems]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Pages/FilterItems");
+            prepare["[#FilterItems]"] = engine.IncludeTemplate("Pages/FilterItems");
 
             var s_Title = CAT(
                 "Browse ",
@@ -150,7 +150,7 @@ namespace Bula.Fetcher.Controller.Pages {
             var listTotal = dsItems.GetTotalPages();
             if (listNumber > listTotal) {
                 prepare["[#ErrMessage]"] = "List number is too large!";
-                this.Write("Bula/Fetcher/View/error.html", prepare);
+                this.Write("error", prepare);
                 return;
             }
             if (listTotal > 1) {
@@ -220,7 +220,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 prepare["[#Pages]"] = pages;
             }
 
-            this.Write("Bula/Fetcher/View/Pages/items.html", prepare);
+            this.Write("Pages/items", prepare);
         }
     }
 }

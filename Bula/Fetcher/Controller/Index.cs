@@ -61,6 +61,9 @@ namespace Bula.Fetcher.Controller {
             //echo "In Index -- " . Print_r(this, true);
             this.context["Page"] = pageName;
 
+            var apiName = pageInfo["api"];
+            this.context.Api = BLANK(apiName) ? "" : (String)apiName; // Blank (html) or "rest" for now
+
             var engine = this.context.PushEngine(true);
 
             var prepare = new Hashtable();
@@ -78,11 +81,11 @@ namespace Bula.Fetcher.Controller {
                     (this.context.TestRun ? null : Config.TOP_DIR),
                     this.context.IsMobile ? "styles2" : "styles");
             prepare["[#ContentType]"] = "text/html; charset=UTF-8";
-            prepare["[#Top]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Top");
-            prepare["[#Menu]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Menu");
+            prepare["[#Top]"] = engine.IncludeTemplate("Top");
+            prepare["[#Menu]"] = engine.IncludeTemplate("Menu");
 
             // Get included page either from cache or build it from the scratch
-            var errorContent = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", className), "check");
+            var errorContent = engine.IncludeTemplate(CAT("Pages/", className), "check");
             if (!BLANK(errorContent)) {
                 prepare["[#Page]"] = errorContent;
             }
@@ -90,7 +93,7 @@ namespace Bula.Fetcher.Controller {
                 if (Config.CACHE_PAGES/* && !Config.DontCache.Contains(pageName)*/) //TODO!!!
                     prepare["[#Page]"] = Util.ShowFromCache(engine, this.context.CacheFolder, pageName, className);
                 else
-                    prepare["[#Page]"] = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/Pages/", className));
+                    prepare["[#Page]"] = engine.IncludeTemplate(CAT("Pages/", className));
             }
 
             if (/*Config.RssAllowed != null && */Config.SHOW_BOTTOM) {
@@ -98,10 +101,10 @@ namespace Bula.Fetcher.Controller {
                 if (Config.CACHE_PAGES)
                     prepare["[#Bottom]"] = Util.ShowFromCache(engine, this.context.CacheFolder, "bottom", "Bottom");
                 else
-                    prepare["[#Bottom]"] = engine.IncludeTemplate("Bula/Fetcher/Controller/Bottom");
+                    prepare["[#Bottom]"] = engine.IncludeTemplate("Bottom");
             }
 
-            this.Write("Bula/Fetcher/View/index.html", prepare);
+            this.Write("index", prepare);
 
             // Fix <title>
             //TODO -- comment for now

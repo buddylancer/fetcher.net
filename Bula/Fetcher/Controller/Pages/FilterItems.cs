@@ -54,7 +54,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 options.Add(option);
             }
             prepare["[#Options]"] = options;
-            this.Write("Bula/Fetcher/View/Pages/filter_items.html", prepare);
+            this.Write("Pages/filter_items", prepare);
         }
     }
 }

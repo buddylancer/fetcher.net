@@ -58,7 +58,7 @@ namespace Bula.Fetcher.Controller.Pages {
             }
             prepare["[#Items]"] = items;
 
-            this.Write("Bula/Fetcher/View/Pages/home.html", prepare);
+            this.Write("Pages/home", prepare);
         }
     }
 }

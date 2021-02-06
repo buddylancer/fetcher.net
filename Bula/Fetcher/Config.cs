@@ -26,9 +26,9 @@ namespace Bula.Fetcher {
         public const Boolean FINE_URLS = false;
 
         /// Cache Web-pages 
-        public const Boolean CACHE_PAGES = true;
+        public const Boolean CACHE_PAGES = false;
         /// Cache RSS-feeds 
-        public const Boolean CACHE_RSS = true;
+        public const Boolean CACHE_RSS = false;
         /// Show what source an item is originally from 
         public const Boolean SHOW_FROM = false;
         /// Show an item or immediately redirect to external source item 
@@ -83,7 +83,9 @@ namespace Bula.Fetcher {
         /// Show bottom blocks (Filtering and RSS) 
         public const Boolean SHOW_BOTTOM = true;
 
+        /// Powered By string 
         public const String POWERED_BY = "Buddy Fetcher for NET";
+        /// GitHub repository 
         public const String GITHUB_REPO = "buddylancer/fetcher.net";
-    } 
+    }
 }

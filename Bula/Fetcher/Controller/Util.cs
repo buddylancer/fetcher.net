@@ -121,7 +121,7 @@ namespace Bula.Fetcher.Controller {
             }
             else {
                 var prefix = EQ(pageName, "bottom") ? null : "Pages/";
-                content = engine.IncludeTemplate(CAT("Bula/Fetcher/Controller/", prefix, className));
+                content = engine.IncludeTemplate(CAT(prefix, className));
 
                 Helper.TestFileFolder(fileName);
                 Helper.WriteText(fileName, content);

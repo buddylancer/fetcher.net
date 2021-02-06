@@ -77,7 +77,8 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Pre-process link (just placeholder for now)
         /// </summary>
-        protected void PreProcessLink() {}
+        protected void PreProcessLink()
+        {}
 
         /// <summary>
         /// Process description.

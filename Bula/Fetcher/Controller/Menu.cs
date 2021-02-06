@@ -76,7 +76,7 @@ namespace Bula.Fetcher.Controller {
 
             var prepare = new Hashtable();
             prepare["[#MenuItems]"] = menuItems;
-            this.Write("Bula/Fetcher/View/menu.html", prepare);
+            this.Write("menu", prepare);
         }
     }
 

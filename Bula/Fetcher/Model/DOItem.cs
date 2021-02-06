@@ -42,7 +42,8 @@ namespace Bula.Fetcher.Model {
         /// <param name="link">Link to find.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet FindItemByLink(String link) {
-            return FindItemByLink(link, 0); }
+            return FindItemByLink(link, 0);
+        }
 
         /// <summary>
         /// Find item with given link.

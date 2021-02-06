@@ -67,6 +67,8 @@ namespace Bula.Fetcher {
         public String Site;
         /// Is request for mobile version? 
         public Boolean IsMobile;
+        /// Optional -- API used. Currently can be blank for HTML or "rest" (for REST API) 
+        public String Api;
         /// Current language 
         public String Lang;
 
@@ -128,6 +130,7 @@ namespace Bula.Fetcher {
             //------------------------------------------------------------------------------
             // You can change something below this line if you know what are you doing :)
             var rootDir = Request.GetVar(Request.INPUT_SERVER, "APPL_PHYSICAL_PATH");
+            // Regarding that we have the ordinary local website (not virtual directory)
             for (int n = 0; n <= 3; n++) {
                 var lastSlashIndex = rootDir.LastIndexOf("\\");
                 rootDir = rootDir.Substring(0, lastSlashIndex);
