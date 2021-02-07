@@ -38,5 +38,32 @@ namespace Bula.Fetcher.Controller {
             var engine = this.context.GetEngine();
             engine.Write(engine.ShowTemplate(template, prepare));
         }
+
+        public String GetLink(String page, String ordinaryUrl, String fineUrl, Object extraData = null) {
+            if (!BLANK(this.context.Api))
+                return this.GetAbsoluteLink(page, ordinaryUrl, fineUrl, extraData);
+            else
+                return this.GetRelativeLink(page, ordinaryUrl, fineUrl, extraData);
+        }
+
+        public String GetRelativeLink(String page, String ordinaryUrl, String fineUrl, Object extraData = null) {
+            var link = CAT(
+                Config.TOP_DIR,
+                (this.context.FineUrls ? fineUrl : CAT(page, this.QuoteLink(ordinaryUrl))),
+                extraData);
+            return link;
+        }
+
+        public String GetAbsoluteLink(String page, String ordinaryUrl, String fineUrl, Object extraData = null) {
+            return CAT(this.context.Site, this.GetRelativeLink(page, ordinaryUrl, fineUrl, extraData));
+        }
+
+        public String AppendLink(String link, String ordinaryUrl, String fineUrl, Object extraData = null) {
+            return CAT(link, (this.context.FineUrls ? fineUrl : this.QuoteLink(ordinaryUrl)), extraData);
+        }
+
+        public String QuoteLink(String link) {
+            return !BLANK(this.context.Api) && EQ(Config.API_FORMAT, "Xml") ? Util.Safe(link) : link;
+        }
     }
 }

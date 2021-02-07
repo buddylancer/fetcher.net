@@ -29,7 +29,7 @@ namespace Bula.Objects {
         /// <param name="name">Header name.</param>
         /// <param name="value">Header value.</param>
         public static void WriteHeader(String name, String value) {
-            CurrentResponse().Headers.Add(name, value);
+            CurrentResponse().AppendHeader(name, value);
         }
 
         /// <summary>
@@ -38,6 +38,7 @@ namespace Bula.Objects {
         /// <param name="input">Text to write before ending response.</param>
         public static void End(String input) {
             Write(input);
+            CurrentResponse().Flush();
             CurrentResponse().End();
         }
     }

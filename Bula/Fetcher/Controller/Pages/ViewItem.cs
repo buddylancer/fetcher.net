@@ -74,23 +74,11 @@ namespace Bula.Fetcher.Controller.Pages {
                 leftWidth = "20%";
 
             var idField = doItem.GetIdField();
-            var redirectItem = CAT(
-                (BLANK(this.context.Api) ? "" : this.context.Site),
-                Config.TOP_DIR,
-                (this.context.FineUrls ? "redirect/item/" : CAT(Config.ACTION_PAGE, "?p=do_redirect_item&id=")),
-                oItem[idField]);
-            prepare["[#RedirectLink]"] = redirectItem;
+            prepare["[#RedirectLink]"] = this.GetLink(Config.ACTION_PAGE, "?p=do_redirect_item&id=", "redirect/item/", oItem[idField]);
             prepare["[#LeftWidth]"] = leftWidth;
             prepare["[#Title]"] = Util.Show(title);
             prepare["[#InputTitle]"] = Util.Safe(title);
-
-            var redirectSource = CAT(
-                (BLANK(this.context.Api) ? "" : this.context.Site),
-                Config.TOP_DIR,
-                (this.context.FineUrls ? "redirect/source/" : CAT(Config.ACTION_PAGE, "?p=do_redirect_source&source=")),
-                sourceName
-            );
-            prepare["[#RedirectSource]"] = redirectSource;
+            prepare["[#RedirectSource]"] = this.GetLink(Config.ACTION_PAGE, "?p=do_redirect_source&source=", "redirect/source/", sourceName);
             prepare["[#SourceName]"] = sourceName;
             prepare["[#Date]"] = Util.ShowTime(STR(oItem["d_Date"]));
             prepare["[#Creator]"] = STR(oItem["s_Creator"]);

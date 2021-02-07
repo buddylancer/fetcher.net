@@ -49,8 +49,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 //sourceRow["[#RedirectSource]"] = Config.TOP_DIR .
                 //    (Config.FINE_URLS ? "redirect/source/" : "action.php?p=do_redirect_source&source=") .
                 //        oSource["s_SourceName"];
-                sourceRow["[#RedirectSource]"] = CAT(Config.TOP_DIR,
-                    (this.context.FineUrls ? "items/source/" : CAT(Config.INDEX_PAGE, "?p=items&source=")), sourceName);
+                sourceRow["[#RedirectSource]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&source=", "items/source/", sourceName);
 
                 var dsItems = doItem.EnumItemsFromSource(null, sourceName, null, 3);
                 var items = new ArrayList();

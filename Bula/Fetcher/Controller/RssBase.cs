@@ -200,18 +200,15 @@ namespace Bula.Fetcher.Controller {
                 else {
                     var url = STR(oItem["s_Url"]);
                     var idField = doItem.GetIdField();
-                    link = CAT(
-                        this.context.Site, Config.TOP_DIR,
-                        (this.context.FineUrls ? "item/" : CAT(Config.INDEX_PAGE, "?p=view_item&amp;id=")),
-                        oItem[idField],
-                        (BLANK(url) ? null : CAT((this.context.FineUrls ? "/" : "&amp;title="), url))
-                    );
+                    link = this.GetAbsoluteLink(Config.INDEX_PAGE, "?p=view_item&amp;id=", "item/", oItem[idField]);
+                    if (!BLANK(url))
+                        link = this.AppendLink(link, "&amp;title=", "/", url);
                 }
 
                 Object[] args = ARR(7);
                 args[0] = link;
                 args[1] = itemTitle;
-                args[2] = CAT(this.context.Site, Config.TOP_DIR, Config.ACTION_PAGE, "?p=do_redirect_source&amp;source=", sourceName);
+                args[2] = this.GetAbsoluteLink(Config.ACTION_PAGE, "?p=do_redirect_source&amp;source=", "redirect/source/", sourceName);
                 args[3] = sourceName;
                 args[4] = DateTimes.Format(Config.XML_DTS, DateTimes.GetTime(date));
                 var additional = CAT(

@@ -25,9 +25,6 @@ namespace Bula.Fetcher.Controller {
         public override void Execute() {
             var prepare = new Hashtable();
 
-            var filterLink = CAT(Config.TOP_DIR,
-                (this.context.FineUrls ? "items/filter/" : CAT(Config.INDEX_PAGE, "?p=items&filter=")));
-
             var doCategory = new DOCategory();
             var dsCategory = doCategory.EnumAll("_this.i_Counter <> 0");
             var size = dsCategory.GetSize();
@@ -47,8 +44,7 @@ namespace Bula.Fetcher.Controller {
                     var key = STR(oCategory["s_CatId"]);
                     var name = STR(oCategory["s_Name"]);
                     var row = new Hashtable();
-                    var href = CAT(filterLink, key);
-                    row["[#Link]"] = href;
+                    row["[#Link]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&filter=", "items/filter/", key);
                     row["[#LinkText]"] = name;
                     //if (counter > 0)
                         row["[#Counter]"] = counter;
@@ -60,8 +56,6 @@ namespace Bula.Fetcher.Controller {
             prepare["[#FilterBlocks]"] = filterBlocks;
 
             if (!this.context.IsMobile) {
-                filterLink = CAT(Config.TOP_DIR,
-                    (this.context.FineUrls ? "rss/" : CAT(Config.RSS_PAGE, "?filter=")));
                 dsCategory = doCategory.EnumAll();
                 size = dsCategory.GetSize(); //50
                 size3 = size % 3; //2
@@ -78,8 +72,7 @@ namespace Bula.Fetcher.Controller {
                         var name = STR(oCategory["s_Name"]);
                         //counter = INT(oCategory["i_Counter"]);
                         var row = new Hashtable();
-                        var href = CAT(filterLink, key, (this.context.FineUrls ? ".xml" : null));
-                        row["[#Link]"] = href;
+                        row["[#Link]"] = this.GetLink(Config.RSS_PAGE, "?filter=", "rss/", CAT(key, (this.context.FineUrls ? ".xml" : null)));
                         row["[#LinkText]"] = name;
                         rows.Add(row);
                     }

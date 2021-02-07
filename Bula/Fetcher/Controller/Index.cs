@@ -33,7 +33,7 @@ namespace Bula.Fetcher.Controller {
         /// Public default constructor.
         /// </summary>
         /// <param name="context">Context instance.</param>
-        public Index(Context context) : base(context) { }
+          public Index(Context context) : base(context) { }
 
         /// Execute main logic for Index block 
         public override void Execute() {
@@ -72,7 +72,7 @@ namespace Bula.Fetcher.Controller {
             var idFromVars = Request.Contains("id") ? Request.Get("id") : null;
             var title = Config.SITE_NAME;
             if (pFromVars != "home")
-                title = CAT(title, " :: ", pFromVars, (!NUL(idFromVars)? CAT(" :: ", idFromVars) : null));
+                title = CAT(title, " :: ", pFromVars, (!NUL(idFromVars) ? CAT(" :: ", idFromVars) : null));
 
             prepare["[#Title]"] = title; //TODO -- need unique title on each page
             prepare["[#Keywords]"] = Config.SITE_KEYWORDS;
@@ -104,6 +104,9 @@ namespace Bula.Fetcher.Controller {
                     prepare["[#Bottom]"] = engine.IncludeTemplate("Bottom");
             }
 
+            Response.WriteHeader("Content-type", CAT(
+                (BLANK(apiName) ? "text/html" : Config.API_CONTENT), "; charset=UTF-8")
+            );
             this.Write("index", prepare);
 
             // Fix <title>
@@ -113,6 +116,7 @@ namespace Bula.Fetcher.Controller {
             //    content = Regex.Replace(content, "<title>(.*?)</title>", CAT("<title>", Config.SITE_NAME, " -- ", newTitle, "</title>"), RegexOptions.IgnoreCase);
 
             Response.Write(engine.GetPrintString());
+            Response.End("");
 
             if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();

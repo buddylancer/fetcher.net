@@ -63,9 +63,7 @@ namespace Bula.Fetcher.Controller {
                     if (EQ(page.Substring(0, 1), "#"))
                         href = page;
                     else {
-                        href = CAT(Config.TOP_DIR, Config.INDEX_PAGE, "?p=", page);
-                        if (this.context.FineUrls)
-                            href = CAT(Config.TOP_DIR, page);
+                        href = this.GetLink(Config.INDEX_PAGE, "?p=", null, page);
                     }
                 }
                 row["[#Link]"] = href;

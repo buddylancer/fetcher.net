@@ -109,15 +109,16 @@ namespace Bula.Fetcher.Controller {
         /// <param name="hash">Data in the form of Hashtable to use for merging.</param>
         /// <returns>Resulting content.</returns>
         public String ShowTemplate(String id, Hashtable hash) {
-            var ext = BLANK(this.context.Api) ? ".html" : ".txt";
+            var ext = BLANK(this.context.Api) ? ".html" : (Config.API_FORMAT == "Xml"? ".xml" : ".txt");
             var filename = 
-                    CAT("Bula/Fetcher/View/", (BLANK(this.context.Api) ? "Html/" : "Rest/"), id, ext);
+                    CAT("Bula/Fetcher/View/", (BLANK(this.context.Api) ? "Html/" : (Config.API_FORMAT == "Xml"? "Xml/" : "Rest/")), id, ext);
             var template = this.GetTemplate(filename);
 
             var content = "";
             if (BLANK(this.context.Api))
                 content += (CAT("\n<!-- BEGIN ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->\n"));
-            content += (this.ProcessTemplate(template, hash));
+            if (!BLANK(template))
+                content += (this.ProcessTemplate(template, hash));
             if (BLANK(this.context.Api))
                 content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->\n"));
             return content;
@@ -135,7 +136,7 @@ namespace Bula.Fetcher.Controller {
             }
             else {
                 var temp = new ArrayList();
-                temp.Add(CAT("File nor found -- '", filename, "'<hr/>"));
+                temp.Add(CAT("File not found -- '", filename, "'<hr/>"));
                 return temp;
             }
         }

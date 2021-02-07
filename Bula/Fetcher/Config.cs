@@ -18,6 +18,10 @@ namespace Bula.Fetcher {
         public const String ACTION_PAGE = "action.aspx";
         /// RSS-feeds page name 
         public const String RSS_PAGE = "rss.aspx";
+        /// Current API output format (can be "Json" or "Xml" for now) 
+        public const String API_FORMAT = "Json";
+        /// Current API output content type (can be "application/json" or "text/xml" for now) 
+        public const String API_CONTENT = "application/json";
 
         /// Security code 
         public const String SECURITY_CODE = "1234";

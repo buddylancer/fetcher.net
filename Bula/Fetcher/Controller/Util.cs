@@ -24,6 +24,7 @@ namespace Bula.Fetcher.Controller {
             var output = Strings.StripSlashes(input);
             output = output.Replace("<", "&lt;");
             output = output.Replace(">", "&gt;");
+            output = output.Replace("&", "&amp;");
             output = output.Replace("\"", "&quot;");
             return output;
         }
