@@ -83,6 +83,7 @@
     <Compile Include="Bula\Fetcher\Controller\Pages\Sources.cs" />
     <Compile Include="Bula\Fetcher\Controller\Pages\ViewItem.cs" />
     <Compile Include="Bula\Fetcher\Controller\Rss.cs" />
+    <Compile Include="Bula\Fetcher\Controller\RssBase.cs" />
     <Compile Include="Bula\Fetcher\Controller\Testing\CallMethod.cs" />
     <Compile Include="Bula\Fetcher\Controller\Testing\GetFeed.cs" />
     <Compile Include="Bula\Fetcher\Controller\Top.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Bula\Objects\Helper.cs" />
     <Compile Include="Bula\Objects\Logger.cs" />
     <Compile Include="Bula\Objects\Request.cs" />
+    <Compile Include="Bula\Objects\RequestBase.cs" />
     <Compile Include="Bula\Objects\Response.cs" />
     <Compile Include="Bula\Objects\Strings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

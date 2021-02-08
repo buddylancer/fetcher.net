@@ -79,6 +79,7 @@ call 8_methods.bat
 
 :FINAL
 rem ... and finally check the whole log
+set end_time=%time%
 call 99_compare.bat log.txt
 
 :END
@@ -94,7 +95,6 @@ set mobile=
 set site=
 
 :EOF
-set end_time=%time%
 
 echo Start Time - [%start_time%]; End Time - [%end_time%].
 pause
