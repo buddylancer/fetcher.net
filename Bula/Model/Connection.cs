@@ -27,7 +27,7 @@ namespace Bula.Model {
         /// <param name="db">DB name.</param>
         /// <returns>Result of operation (1 - OK, -1 - error).</returns>
         public int Open(String host, int port, String admin, String password, String db) {
-            return Open(host, port, admin, password, null); }
+            return Open(host, port, admin, password, db, null); }
 
         /// <summary>
         /// Open connection to the database.

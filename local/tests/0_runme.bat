@@ -31,7 +31,7 @@ set log=%output%\log.txt
 echo > %log%
 
 rem Just for debugging -- remove on production!!!
-rem goto :PAGES_REST
+rem goto :PAGES
 
 :CREATE
 echo *** Starting 1_create.bat >> %log%
