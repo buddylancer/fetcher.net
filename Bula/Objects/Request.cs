@@ -30,7 +30,7 @@ namespace Bula.Objects {
         /// <summary>
         /// Get private variables.
         /// </summary>
-         public static Hashtable GetPrivateVars() {
+        public static Hashtable GetPrivateVars() {
             return Vars;
         }
 

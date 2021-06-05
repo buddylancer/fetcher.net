@@ -33,7 +33,7 @@ namespace Bula.Fetcher.Controller {
         /// Public default constructor.
         /// </summary>
         /// <param name="context">Context instance.</param>
-          public Index(Context context) : base(context) { }
+        public Index(Context context) : base(context) { }
 
         /// Execute main logic for Index block 
         public override void Execute() {

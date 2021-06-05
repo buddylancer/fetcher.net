@@ -38,7 +38,7 @@ namespace Bula.Fetcher.Controller {
             if (input == null)
                 return null;
             var output = Safe(input);
-            output = output.Replace("\n", "<br/>");
+            output = output.Replace(EOL, "<br/>");
             return output;
         }
 

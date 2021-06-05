@@ -17,6 +17,9 @@ namespace Bula
     /// </summary>
     public class Meta {
 
+        /// End of line (CRLF on Windows, LF on Linux)
+        public const String EOL = "\r\n";
+
         /// <summary>
         /// Stop executiong.
         /// </summary>

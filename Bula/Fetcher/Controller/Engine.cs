@@ -116,11 +116,11 @@ namespace Bula.Fetcher.Controller {
 
             var content = "";
             if (BLANK(this.context.Api))
-                content += (CAT("\n<!-- BEGIN ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->\n"));
+                content += (CAT(EOL, "<!-- BEGIN ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL));
             if (!BLANK(template))
                 content += (this.ProcessTemplate(template, hash));
             if (BLANK(this.context.Api))
-                content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->\n"));
+                content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL));
             return content;
         }
 
@@ -189,7 +189,7 @@ namespace Bula.Fetcher.Controller {
                 hash["[#Is_Mobile]"] = 1;
             }
             var trimLine = true;
-            var trimEnd = "\n";
+            var trimEnd = EOL;
             var ifMode = 0;
             var repeatMode = 0;
             var ifBuf = new ArrayList();

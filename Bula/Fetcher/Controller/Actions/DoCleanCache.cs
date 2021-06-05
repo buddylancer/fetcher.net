@@ -46,11 +46,11 @@ namespace Bula.Fetcher.Controller.Actions {
                 var entry = (String)entries.Current;
 
                 if (Helper.IsFile(entry) && entry.EndsWith(ext)) {
-                    oLogger.Output(CAT("Deleting of ", entry, " ...<br/>\r\n"));
+                    oLogger.Output(CAT("Deleting of ", entry, " ...<br/>", EOL));
                     Helper.DeleteFile(entry);
                 }
                 else if (Helper.IsDir(entry)) {
-                    oLogger.Output(CAT("Drilling to ", entry, " ...<br/>\r\n"));
+                    oLogger.Output(CAT("Drilling to ", entry, " ...<br/>", EOL));
                     CleanCacheFolder(oLogger, entry, ext);
                 }
                 //unlink(pathName); //Comment for now -- dangerous operation!!!
@@ -62,16 +62,16 @@ namespace Bula.Fetcher.Controller.Actions {
         /// </summary>
         public void CleanCache(Logger oLogger) {
             // Clean cached rss content
-            oLogger.Output(CAT("Cleaning Rss Folder ", this.context.RssFolderRoot, " ...<br/>\r\n"));
+            oLogger.Output(CAT("Cleaning Rss Folder ", this.context.RssFolderRoot, " ...<br/>", EOL));
             var rssFolder = Strings.Concat(this.context.RssFolderRoot);
             this.CleanCacheFolder(oLogger, rssFolder, ".xml");
 
             // Clean cached pages content
-            oLogger.Output(CAT("Cleaning Cache Folder ", this.context.CacheFolderRoot,  "...<br/>\r\n"));
+            oLogger.Output(CAT("Cleaning Cache Folder ", this.context.CacheFolderRoot,  "...<br/>", EOL));
             var cacheFolder = Strings.Concat(this.context.CacheFolderRoot);
             this.CleanCacheFolder(oLogger, cacheFolder, ".cache");
 
-            oLogger.Output("<br/>... Done.<br/>\r\n");
+            oLogger.Output(CAT("<br/>... Done.<br/>", EOL));
         }
 
     }

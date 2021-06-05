@@ -96,24 +96,24 @@ namespace Bula.Model {
             var level = 0;
             var spaces = (String)null;
             var output = "";
-            output += (CAT("<DataSet Rows=\"", this.rows.Count, "\">\n"));
+            output += (CAT("<DataSet Rows=\"", this.rows.Count, "\">", EOL));
             for (int n = 0; n < this.GetSize(); n++) {
                 var row = this.GetRow(n);
                 level++; spaces = this.AddSpaces(level);
-                output += (CAT(spaces, "<Row>\n"));
+                output += (CAT(spaces, "<Row>", EOL));
                 var keys = row.Keys.GetEnumerator();
                 while (keys.MoveNext()) {
                     level++; spaces = this.AddSpaces(level);
                     var key = (String)keys.Current;
                     output += (CAT(spaces, "<Item Name=\"", key, "\">"));
                     output += (row[key]);
-                    output += ("</Item>\n");
+                    output += (CAT("</Item>", EOL));
                     level--; spaces = this.AddSpaces(level);
                 }
-                output += (CAT(spaces, "</Row>\n"));
+                output += (CAT(spaces, "</Row>", EOL));
                 level--; spaces = this.AddSpaces(level);
             }
-            output += ("</DataSet>\n");
+            output += (CAT("</DataSet>", EOL));
             return output;
         }
     }

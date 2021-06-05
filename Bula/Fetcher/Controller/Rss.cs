@@ -21,7 +21,7 @@ namespace Bula.Fetcher.Controller {
 
         public override void WriteErrorMessage(String errorMessage) {
             Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
-            Response.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n");
+            Response.Write(CAT("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", EOL));
             Response.Write(CAT("<data>", errorMessage, "</data>"));
         }
 
@@ -32,26 +32,26 @@ namespace Bula.Fetcher.Controller {
             );
             var xmlContent = Strings.Concat(
                 "<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\r\n",
-                "<channel>\r\n",
-                //"<title>" . Config.SITE_NAME . "</title>\r\n",
-                "<title>", rssTitle, "</title>\r\n",
-                "<link>", this.context.Site, Config.TOP_DIR, "</link>\r\n",
-                "<description>", rssTitle, "</description>\r\n",
-                (this.context.Lang == "ru" ? "<language>ru-RU</language>\r\n" : "<language>en-US</language>\r\n"),
-                "<pubDate>", pubDate, "</pubDate>\r\n",
-                "<lastBuildDate>", pubDate, "</lastBuildDate>\r\n",
-                "<generator>", Config.SITE_NAME, "</generator>\r\n"
+                "<channel>", EOL,
+                //"<title>" . Config.SITE_NAME . "</title>", EOL,
+                "<title>", rssTitle, "</title>", EOL,
+                "<link>", this.context.Site, Config.TOP_DIR, "</link>", EOL,
+                "<description>", rssTitle, "</description>", EOL,
+                (this.context.Lang == "ru" ? "<language>ru-RU</language>\r\n" : "<language>en-US</language>"), EOL,
+                "<pubDate>", pubDate, "</pubDate>", EOL,
+                "<lastBuildDate>", pubDate, "</lastBuildDate>", EOL,
+                "<generator>", Config.SITE_NAME, "</generator>", EOL
             );
             Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
-            Response.Write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n");
+            Response.Write(CAT("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", EOL));
             Response.Write(xmlContent);
             return xmlContent;
         }
 
         public override String WriteEnd() {
             var xmlContent = Strings.Concat(
-                "</channel>\r\n",
-                "</rss>\r\n");
+                "</channel>", EOL,
+                "</rss>", EOL);
             Response.Write(xmlContent);
             Response.End("");
             return xmlContent;
@@ -59,14 +59,14 @@ namespace Bula.Fetcher.Controller {
 
         public override String WriteItem(Object[] args) {
             var xmlTemplate = Strings.Concat(
-                "<item>\r\n",
-                "<title><![CDATA[{1}]]></title>\r\n",
-                "<link>{0}</link>\r\n",
-                "<pubDate>{4}</pubDate>\r\n",
-                BLANK(args[5]) ? null : "<description><![CDATA[{5}]]></description>\r\n",
-                BLANK(args[6]) ? null : "<category><![CDATA[{6}]]></category>\r\n",
-                "<guid>{0}</guid>\r\n",
-                "</item>\r\n"
+                "<item>", EOL,
+                "<title><![CDATA[{1}]]></title>", EOL,
+                "<link>{0}</link>", EOL,
+                "<pubDate>{4}</pubDate>", EOL,
+                BLANK(args[5]) ? null : CAT("<description><![CDATA[{5}]]></description>", EOL),
+                BLANK(args[6]) ? null : CAT("<category><![CDATA[{6}]]></category>", EOL),
+                "<guid>{0}</guid>", EOL,
+                "</item>", EOL
             );
             var itemContent = Util.FormatString(xmlTemplate, args);
             Response.Write(itemContent);

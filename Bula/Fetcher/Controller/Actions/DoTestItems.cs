@@ -21,21 +21,21 @@ namespace Bula.Fetcher.Controller.Actions {
         private static String BOTTOM = null;
 
         /// Initialize TOP and BOTTOM blocks. 
-        static DoTestItems(){
+        public static void Initialize() {
             TOP = CAT(
-                "<!DOCTYPE html>\r\n",
-                "<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n",
-                "    <head>\r\n",
-                "        <title>Buddy Fetcher -- Test for new items</title>\r\n",
-                "        <meta name=\"keywords\" content=\"Buddy Fetcher, rss, fetcher, aggregator, PHP, MySQL\" />\r\n",
-                "        <meta name=\"description\" content=\"Buddy Fetcher is a simple RSS Fetcher/aggregator written in PHP/MySQL\" />\r\n",
-                "        <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />\r\n",
-                "    </head>\r\n",
-                "    <body>\r\n"
+                "<!DOCTYPE html>", EOL,
+                "<html xmlns=\"http://www.w3.org/1999/xhtml\">", EOL,
+                "    <head>", EOL,
+                "        <title>Buddy Fetcher -- Test for new items</title>", EOL,
+                "        <meta name=\"keywords\" content=\"Buddy Fetcher, rss, fetcher, aggregator, PHP, MySQL\" />", EOL,
+                "        <meta name=\"description\" content=\"Buddy Fetcher is a simple RSS Fetcher/aggregator written in PHP/MySQL\" />", EOL,
+                "        <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />", EOL,
+                "    </head>", EOL,
+                "    <body>", EOL
             );
             BOTTOM = CAT(
-                "    </body>\r\n",
-                "</html>\r\n"
+                "    </body>", EOL,
+                "</html>", EOL
             );
         }
 
@@ -43,7 +43,7 @@ namespace Bula.Fetcher.Controller.Actions {
         /// Public default constructor.
         /// </summary>
         /// <param name="context">Context instance.</param>
-        public DoTestItems(Context context) : base(context) { }
+        public DoTestItems(Context context) : base(context) { Initialize(); }
 
         /// Execute main logic for DoTestItems action 
         public override void Execute() {
@@ -65,7 +65,7 @@ namespace Bula.Fetcher.Controller.Actions {
 
             Response.Write(TOP);
             if (updateRequired || insertRequired) {
-                Response.Write("Fetching new items... Please wait...<br/>\r\n");
+                Response.Write(CAT("Fetching new items... Please wait...<br/>", EOL));
 
                 var boFetcher = new BOFetcher(this.context);
                 boFetcher.FetchFromSources();
@@ -81,7 +81,7 @@ namespace Bula.Fetcher.Controller.Actions {
                     doTime.UpdateById(1, fields);
             }
             else
-                Response.Write("<hr/>Fetch is not required<br/>\r\n");
+                Response.Write(CAT("<hr/>Fetch is not required<br/>", EOL));
             Response.Write(BOTTOM);
         }
     }

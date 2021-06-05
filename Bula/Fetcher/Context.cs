@@ -130,9 +130,10 @@ namespace Bula.Fetcher {
             //------------------------------------------------------------------------------
             // You can change something below this line if you know what are you doing :)
             var rootDir = Request.GetVar(Request.INPUT_SERVER, "APPL_PHYSICAL_PATH");
+    		rootDir = rootDir.Replace("\\", "/"); // Fix for IIS
             // Regarding that we have the ordinary local website (not virtual directory)
             for (int n = 0; n <= 3; n++) {
-                var lastSlashIndex = rootDir.LastIndexOf("\\");
+                var lastSlashIndex = rootDir.LastIndexOf("/");
                 rootDir = rootDir.Substring(0, lastSlashIndex);
             }
             this.LocalRoot = rootDir += ("/");

@@ -49,7 +49,7 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="text">Content to log.</param>
         public void Time(String text) {
-            this.Output(CAT(text, " -- ", DateTimes.Format("H:i:s"), "<br/>\r\n"));
+            this.Output(CAT(text, " -- ", DateTimes.Format("H:i:s"), "<br/>", EOL));
         }
     }
 }

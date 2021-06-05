@@ -112,19 +112,36 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Bula\Fetcher\View\bottom.html" />
-    <Content Include="Bula\Fetcher\View\error.html" />
-    <Content Include="Bula\Fetcher\View\error_alone.html" />
-    <Content Include="Bula\Fetcher\View\index.html" />
-    <Content Include="Bula\Fetcher\View\menu.html" />
-    <Content Include="Bula\Fetcher\View\no_such_file.html" />
-    <Content Include="Bula\Fetcher\View\Pages\filter_items.html" />
-    <Content Include="Bula\Fetcher\View\Pages\home.html" />
-    <Content Include="Bula\Fetcher\View\Pages\items.html" />
-    <Content Include="Bula\Fetcher\View\Pages\sources.html" />
-    <Content Include="Bula\Fetcher\View\Pages\view_item.html" />
-    <Content Include="Bula\Fetcher\View\redirect.html" />
-    <Content Include="Bula\Fetcher\View\top.html" />
+    <Content Include="Bula\Fetcher\View\Html\bottom.html" />
+    <Content Include="Bula\Fetcher\View\Html\error.html" />
+    <Content Include="Bula\Fetcher\View\Html\error_alone.html" />
+    <Content Include="Bula\Fetcher\View\Html\index.html" />
+    <Content Include="Bula\Fetcher\View\Html\menu.html" />
+    <Content Include="Bula\Fetcher\View\Html\no_such_file.html" />
+    <Content Include="Bula\Fetcher\View\Html\Pages\filter_items.html" />
+    <Content Include="Bula\Fetcher\View\Html\Pages\home.html" />
+    <Content Include="Bula\Fetcher\View\Html\Pages\items.html" />
+    <Content Include="Bula\Fetcher\View\Html\Pages\sources.html" />
+    <Content Include="Bula\Fetcher\View\Html\Pages\view_item.html" />
+    <Content Include="Bula\Fetcher\View\Html\redirect.html" />
+    <Content Include="Bula\Fetcher\View\Html\top.html" />
+    <Content Include="Bula\Fetcher\View\Rest\bottom.txt" />
+    <Content Include="Bula\Fetcher\View\Rest\error.txt" />
+    <Content Include="Bula\Fetcher\View\Rest\index.txt" />
+    <Content Include="Bula\Fetcher\View\Rest\menu.txt" />
+    <Content Include="Bula\Fetcher\View\Rest\Pages\home.txt" />
+    <Content Include="Bula\Fetcher\View\Rest\Pages\items.txt" />
+    <Content Include="Bula\Fetcher\View\Rest\Pages\sources.txt" />
+    <Content Include="Bula\Fetcher\View\Rest\Pages\view_item.txt" />
+    <Content Include="Bula\Fetcher\View\Rest\top.txt" />
+    <Content Include="Bula\Fetcher\View\Xml\bottom.xml" />
+    <Content Include="Bula\Fetcher\View\Xml\error.xml" />
+    <Content Include="Bula\Fetcher\View\Xml\index.xml" />
+    <Content Include="Bula\Fetcher\View\Xml\Pages\home.xml" />
+    <Content Include="Bula\Fetcher\View\Xml\Pages\items.xml" />
+    <Content Include="Bula\Fetcher\View\Xml\Pages\sources.xml" />
+    <Content Include="Bula\Fetcher\View\Xml\Pages\view_item.xml" />
+    <Content Include="Bula\Fetcher\View\Xml\top.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

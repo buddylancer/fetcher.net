@@ -68,20 +68,20 @@ namespace Bula.Fetcher.Controller {
             if (Request.Contains("m") && !source.Equals(Request.Get("m")))
                 return null;
 
-            this.oLogger.Output("<br/>\r\nStarted ");
+            this.oLogger.Output(CAT("<br/>", EOL, "Started "));
 
             //if (url.IndexOf("https") != -1) {
             //    String encUrl = url.Replace("?", "%3F");
             //    encUrl = encUrl.Replace("&", "%26");
             //    url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", encUrl);
             //}
-            this.oLogger.Output(CAT("[[[", url, "]]]<br/>\r\n"));
+            this.oLogger.Output(CAT("[[[", url, "]]]<br/>", EOL));
             var rss = Internal.FetchRss(url);
             if (rss == null) {
-                this.oLogger.Output("-- problems --<br/>\r\n");
+                this.oLogger.Output(CAT("-- problems --<br/>", EOL));
                 //problems++;
                 //if (problems == 5) {
-                //    this.oLogger.Output("<br/>\r\nToo many problems... Stopped.<br/>\r\n");
+                //    this.oLogger.Output(CAT("<br/>", EOL, "Too many problems... Stopped.<br/>", EOL));
                 //    break;
                 //}
                 return null;
@@ -147,7 +147,7 @@ namespace Bula.Fetcher.Controller {
         /// Main logic.
         /// </summary>
         public void FetchFromSources() {
-            this.oLogger.Output("Start logging<br/>\r\n");
+            this.oLogger.Output(CAT("Start logging<br/>", EOL));
 
             //TODO -- Purge old items
             //doItem = new DOItem();
@@ -157,7 +157,7 @@ namespace Bula.Fetcher.Controller {
             var dsSources = doSource.EnumFetchedSources();
 
             var totalCounter = 0;
-            this.oLogger.Output(CAT("<br/>\r\nChecking ", dsSources.GetSize(), " sources..."));
+            this.oLogger.Output(CAT("<br/>", EOL, "Checking ", dsSources.GetSize(), " sources..."));
 
             // Loop through sources
             for (int n = 0; n < dsSources.GetSize(); n++) {
@@ -189,13 +189,13 @@ namespace Bula.Fetcher.Controller {
                     DBConfig.Connection = null;
                 }
 
-                this.oLogger.Output(CAT(" (", itemsCounter, " items) end<br/>\r\n"));
+                this.oLogger.Output(CAT(" (", itemsCounter, " items) end<br/>", EOL));
             }
 
             // Re-count categories
             this.RecountCategories();
 
-            this.oLogger.Output(CAT("<hr/>Total items added - ", totalCounter, "<br/>\r\n"));
+            this.oLogger.Output(CAT("<hr/>Total items added - ", totalCounter, "<br/>", EOL));
 
             if (Config.CACHE_PAGES && totalCounter > 0) {
                 var doCleanCache = new DoCleanCache(this.context);
@@ -207,7 +207,7 @@ namespace Bula.Fetcher.Controller {
         /// Execute re-counting of categories.
         /// </summary>
         private void RecountCategories() {
-            this.oLogger.Output(CAT("Recount categories ... <br/>\r\n"));
+            this.oLogger.Output(CAT("Recount categories ... <br/>", EOL));
             var doCategory = new DOCategory();
             var dsCategories = doCategory.EnumCategories();
             for (int n = 0; n < dsCategories.GetSize(); n++) {
@@ -221,9 +221,9 @@ namespace Bula.Fetcher.Controller {
                 fields["i_Counter"] = dsItems.GetSize();
                 var result = doCategory.UpdateById(id, fields);
                 if (result < 0)
-                    this.oLogger.Output("-- problems --<br/>\r\n");
+                    this.oLogger.Output(CAT("-- problems --<br/>", EOL));
             }
-            this.oLogger.Output(CAT(" ... Done<br/>\r\n"));
+            this.oLogger.Output(CAT(" ... Done<br/>", EOL));
         }
     }
 }
