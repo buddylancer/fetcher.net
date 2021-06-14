@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
     using System.Text.RegularExpressions;
     using Bula.Objects;
     using Bula.Model;
@@ -40,36 +40,36 @@ namespace Bula.Fetcher.Controller {
             if (pagesArray == null)
                 Initialize();
 
-            DataAccess.SetErrorDelegate(Bula.Objects.Response.End);
+            DataAccess.SetErrorDelegate(context.Response.End);
 
-            var pageInfo = Request.TestPage(pagesArray, "home");
+            var pageInfo = this.context.Request.TestPage(pagesArray, "home");
 
             // Test action name
             if (!pageInfo.ContainsKey("page")) {
-                Response.End("Error in parameters -- no page");
+                this.context.Response.End("Error in parameters -- no page");
                 return;
             }
 
             var pageName = (String)pageInfo["page"];
             var className = (String)pageInfo["class"];
 
-            Request.Initialize();
+            //this.context.Request.Initialize();
             if (INT(pageInfo["post_required"]) == 1)
-                Request.ExtractPostVars();
+                this.context.Request.ExtractPostVars();
             else
-                Request.ExtractAllVars();
+                this.context.Request.ExtractAllVars();
             //echo "In Index -- " . Print_r(this, true);
             this.context["Page"] = pageName;
 
-            var apiName = pageInfo["api"];
-            this.context.Api = BLANK(apiName) ? "" : (String)apiName; // Blank (html) or "rest" for now
+            var apiName = (String)pageInfo["api"];
+            this.context.Api = BLANK(apiName) ? "" : apiName; // Blank (html) or "rest" for now
 
             var engine = this.context.PushEngine(true);
 
             var prepare = new Hashtable();
             prepare["[#Site_Name]"] = Config.SITE_NAME;
-            var pFromVars = Request.Contains("p") ? Request.Get("p") : "home";
-            var idFromVars = Request.Contains("id") ? Request.Get("id") : null;
+            var pFromVars = this.context.Request.Contains("p") ? this.context.Request["p"] : "home";
+            var idFromVars = this.context.Request.Contains("id") ? this.context.Request["id"] : null;
             var title = Config.SITE_NAME;
             if (pFromVars != "home")
                 title = CAT(title, " :: ", pFromVars, (!NUL(idFromVars) ? CAT(" :: ", idFromVars) : null));
@@ -104,7 +104,7 @@ namespace Bula.Fetcher.Controller {
                     prepare["[#Bottom]"] = engine.IncludeTemplate("Bottom");
             }
 
-            Response.WriteHeader("Content-type", CAT(
+            this.context.Response.WriteHeader("Content-type", CAT(
                 (BLANK(apiName) ? "text/html" : Config.API_CONTENT), "; charset=UTF-8")
             );
             this.Write("index", prepare);
@@ -115,8 +115,8 @@ namespace Bula.Fetcher.Controller {
             //if (!BLANK(newTitle))
             //    content = Regex.Replace(content, "<title>(.*?)</title>", CAT("<title>", Config.SITE_NAME, " -- ", newTitle, "</title>"), RegexOptions.IgnoreCase);
 
-            Response.Write(engine.GetPrintString());
-            Response.End("");
+            this.context.Response.Write(engine.GetPrintString());
+            this.context.Response.End();
 
             if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();

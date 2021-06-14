@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Model {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
     using Bula.Objects;
     using Bula.Model;
 
@@ -79,12 +79,12 @@ namespace Bula.Fetcher.Model {
             var includeFilter = "";
             for (int n = 0; n < SIZE(includeChunks); n++) {
                 if (includeFilter.Length != 0)
-                    includeFilter += (" OR ");
-                includeFilter += ("(_this.s_Title LIKE '%");
-                    includeFilter += (includeChunks[n]);
-                includeFilter += ("%' OR _this.t_FullDescription LIKE '%");
-                    includeFilter += (includeChunks[n]);
-                includeFilter += ("%')");
+                    includeFilter += " OR ";
+                includeFilter += "(_this.s_Title LIKE '%";
+                    includeFilter += includeChunks[n];
+                includeFilter += "%' OR _this.t_FullDescription LIKE '%";
+                    includeFilter += includeChunks[n];
+                includeFilter += "%')";
             }
             if (includeFilter.Length != 0)
                 includeFilter = Strings.Concat(" (", includeFilter, ") ");
@@ -134,9 +134,9 @@ namespace Bula.Fetcher.Model {
             for (int n = 0; n < ds1.GetSize(); n++) {
                 var o = ds1.GetRow(n);
                 if (n != 0)
-                    inList += (", ");
+                    inList += ", ";
                 var id = o[this.idField];
-                inList += (id);
+                inList += STR(id);
             }
 
             String query2 = Strings.Concat(
@@ -199,7 +199,7 @@ namespace Bula.Fetcher.Model {
                 (BLANK(source) ? null : Strings.Concat(" AND s.s_SourceName = '", source, "' ")),
                 (BLANK(realFilter) ? null : Strings.Concat(" AND (", realFilter, ") ")),
                 " ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC ",
-                " LIMIT ", maxItems
+                " LIMIT ", STR(maxItems)
             );
             Object[] pars1 = ARR();
             DataSet ds1 = this.GetDataSet(query1, pars1);
@@ -214,7 +214,7 @@ namespace Bula.Fetcher.Model {
                 " AND _this.d_Date > ? ",
                 (BLANK(realFilter) ? null : Strings.Concat(" AND (", realFilter, ") ")),
                 " ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC ",
-                " LIMIT ", maxItems
+                " LIMIT ", STR(maxItems)
             );
             Object[] pars2 = ARR("SetDate", fromDate);
             DataSet ds2 = this.GetDataSet(query2, pars2);

@@ -5,10 +5,10 @@
 
 namespace Bula.Model {
     using System;
+    using System.Collections;
 
     using System.Data;
     using MySql.Data.MySqlClient;
-    using System.Collections;
 
     using Bula.Objects;
 
@@ -141,7 +141,7 @@ namespace Bula.Model {
         /// Get real value from the record.
         /// </summary>
         /// <param name="par">Number of value.</param>
-        public Double GetFloat(int par) {
+        public float GetFloat(int par) {
             return FLOAT(this.record[par]);
         }
 

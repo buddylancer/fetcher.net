@@ -5,10 +5,10 @@
 
 namespace Bula.Model {
     using System;
+    using System.Collections;
 
     using System.Data;
     using MySql.Data.MySqlClient;
-    using System.Collections;
 
     using Bula.Objects;
 
@@ -101,8 +101,8 @@ namespace Bula.Model {
                 var value = (String)this.pars[n];
                 var before = str.Substring(0, questionIndex);
                 var after = str.Substring(questionIndex + 1);
-                str = before; str += (value); startFrom = str.Length;
-                str += (after);
+                str = before; str += value; startFrom = str.Length;
+                str += after;
                 n++;
             }
             this.query = str;
@@ -141,11 +141,11 @@ namespace Bula.Model {
         /// <param name="n">Parameter number.</param>
         /// <param name="val">Parameter value.</param>
         public void SetDate(int n, String val) {
-            SetValue(n, CAT("'", DateTimes.Format(DBConfig.SQL_DTS, DateTimes.GetTime(val)), "'"));
+            SetValue(n, CAT("'", DateTimes.Format(DateTimes.SQL_DTS, DateTimes.GetTime(val)), "'"));
         }
 
         /// <summary>
-        /// Set Float parameter.
+        /// Set float parameter.
         /// </summary>
         /// <param name="n">Parameter number.</param>
         /// <param name="val">Parameter value.</param>

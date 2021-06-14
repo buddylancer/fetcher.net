@@ -1,1 +1,1 @@
-﻿<%@ Page Language="C#" %><% (new Bula.Fetcher.Controller.Action(new Bula.Fetcher.Context())).Execute(); %>
+﻿<%@ Page Language="C#" %><% (new Bula.Fetcher.Controller.Action(new Bula.Fetcher.Context(Request, Response))).Execute(); %>

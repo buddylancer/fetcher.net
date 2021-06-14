@@ -5,6 +5,7 @@
 
 namespace Bula.Model {
     using System;
+    using System.Collections;
 
     using MySql.Data.MySqlClient;
     using Bula.Model;
@@ -14,7 +15,7 @@ namespace Bula.Model {
     /// Implement operations with connection to the database.
     /// </summary>
     public class Connection : Bula.Meta {
-        private MySqlConnection link;
+        private MySqlConnection link = null;
         private PreparedStatement stmt; // Prepared statement to use with connection
 
         /// <summary>

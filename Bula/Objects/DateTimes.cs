@@ -5,6 +5,7 @@
 
 namespace Bula.Objects {
     using System;
+    using System.Collections;
 
     using System.Globalization;
 
@@ -14,9 +15,15 @@ namespace Bula.Objects {
     /// Helper class to manipulate with Date and Times.
     /// </summary>
     public class DateTimes : Bula.Meta {
-        /// <summary>
-        /// Format of date/time in RSS-feeds.
-        /// </summary>
+        /// Date/time format for processing GMT date/times 
+        public const String GMT_DTS = "dd-MMM-yyyy HH:mm \\G\\M\\T";
+        /// Date/time format for RSS operations 
+        public const String XML_DTS = "ddd, dd MMM yyyy HH:mm:ss \\G\\M\\T";
+        /// Date/time format for DB operations 
+        public const String SQL_DTS = "yyyy-MM-dd HH:mm:ss";
+        /// Format of log-file name. 
+        public const String LOG_DTS = "yyyy-MM-dd_HH-mm-ss";
+        /// Format of date/time in RSS-feeds. 
         public const String RSS_DTS = "ddd, dd MMM yyyy HH:mm:ss zzz";
         private static DateTime unix = new DateTime(1970, 1, 1);
 
@@ -24,7 +31,7 @@ namespace Bula.Objects {
         /// Get current time as Unix timestamp.
         /// </summary>
         /// <returns>Resulting time (Unix timestamp).</returns>
-        public static int GetTime() {
+        public static long GetTime() {
             return (int)DateTime.Now.Subtract(unix).TotalSeconds;
         }
 
@@ -33,8 +40,8 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="timeString">Input string.</param>
         /// <returns>Resulting time (Unix timestamp).</returns>
-        public static int GetTime(String timeString) {
-            return (int)DateTime.Parse(timeString).Subtract(unix).TotalSeconds;
+        public static long GetTime(String timeString) {
+            return (long)DateTime.Parse(timeString).Subtract(unix).TotalSeconds;
         }
 
         /// <summary>
@@ -42,7 +49,7 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="timeString">Input string.</param>
         /// <returns>Resulting timestamp.</returns>
-        public static int FromRss(String timeString) {
+        public static long FromRss(String timeString) {
             timeString = timeString.Replace("PDT", "-07:00");
             timeString = timeString.Replace("PST", "-08:00");
             return (int)DateTime.ParseExact(timeString, RSS_DTS,
@@ -64,7 +71,7 @@ namespace Bula.Objects {
         /// <param name="formatString">Format to apply.</param>
         /// <param name="timeValue">Input time value (Unix timestamp).</param>
         /// <returns>Resulting string.</returns>
-        public static String Format(String formatString, int timeValue) {
+        public static String Format(String formatString, long timeValue) {
             return (timeValue == 0 ? DateTime.Now : unix.AddSeconds((double)timeValue)).ToString(formatString);
         }
 
@@ -83,7 +90,7 @@ namespace Bula.Objects {
         /// <param name="formatString">Format to apply.</param>
         /// <param name="timeValue">Input time value (Unix timestamp).</param>
         /// <returns>Resulting string.</returns>
-        public static String GmtFormat(String formatString, int timeValue) {
+        public static String GmtFormat(String formatString, long timeValue) {
             return (timeValue == 0 ? DateTime.UtcNow : unix.AddSeconds((double)timeValue)).ToString(formatString);
         }
     }

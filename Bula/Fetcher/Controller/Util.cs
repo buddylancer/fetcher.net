@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
 
     using Bula.Objects;
 
@@ -48,7 +48,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="input">Input date/time.</param>
         /// <returns>Resulting date/time.</returns>
         public static String ShowTime(String input) {
-            return DateTimes.Format(Config.GMT_DTS, DateTimes.GetTime(input));
+            return DateTimes.Format(DateTimes.GMT_DTS, DateTimes.GetTime(input));
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Bula.Fetcher.Controller {
                 query = pageName;
             else {
                 if (query == null)
-                    query = Request.GetVar(Request.INPUT_SERVER, "QUERY_STRING");
+                    query = engine.context.Request.GetVar(Request.INPUT_SERVER, "QUERY_STRING");
                 if (BLANK(query))
                     query = "p=home";
             }
@@ -141,9 +141,19 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="source">Input string.</param>
         /// <param name="after">Substring to extract info "After".</param>
+        /// <returns>Resulting string.</returns>
+        public static String ExtractInfo(String source, String after) {
+            return ExtractInfo(source, after, null);
+        }
+
+        /// <summary>
+        /// Extract info from a string.
+        /// </summary>
+        /// <param name="source">Input string.</param>
+        /// <param name="after">Substring to extract info "After".</param>
         /// <param name="to">Substring to extract info "To".</param>
         /// <returns>Resulting string.</returns>
-        public static String ExtractInfo(String source, String after, String to = null) {
+        public static String ExtractInfo(String source, String after, String to) {
             var result = (String)null;
             if (!NUL(source)) {
                 int index1 = 0;
@@ -172,9 +182,19 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="source">Input string.</param>
         /// <param name="from">Substring to remove "From".</param>
+        /// <returns>Resulting string.</returns>
+        public static String RemoveInfo(String source, String from) {
+            return RemoveInfo(source, from, null);
+        }
+
+        /// <summary>
+        /// Remove some content from a string.
+        /// </summary>
+        /// <param name="source">Input string.</param>
+        /// <param name="from">Substring to remove "From".</param>
         /// <param name="to">Substring to remove "To".</param>
         /// <returns>Resulting string.</returns>
-        public static String RemoveInfo(String source, String from, String to = null) {
+        public static String RemoveInfo(String source, String from, String to) {
             var result = (String)null;
             int index1 = from == null ? 0 : source.IndexOf(from);
             if (index1 != -1) {

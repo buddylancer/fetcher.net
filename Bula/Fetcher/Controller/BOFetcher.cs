@@ -5,15 +5,12 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula;
     using Bula.Fetcher;
-
     using Bula.Objects;
-    using System.Collections;
-
     using Bula.Model;
-    using Bula.Objects;
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller.Actions;
 
@@ -38,12 +35,14 @@ namespace Bula.Fetcher.Controller {
         private void InitializeLog() {
             this.oLogger = new Logger();
             this.context["Log_Object"] = this.oLogger;
-            var log = Request.GetOptionalInteger("log");
+            var log = this.context.Request.GetOptionalInteger("log");
             if (!NUL(log) && log != -99999) { //TODO
                 var filenameTemplate = (String)CAT(this.context.LocalRoot, "local/logs/{0}_{1}.html");
-                var filename = Util.FormatString(filenameTemplate, ARR("fetch_items", DateTimes.Format(Config.LOG_DTS)));
-                this.oLogger.Init(filename);
+                var filename = Util.FormatString(filenameTemplate, ARR("fetch_items", DateTimes.Format(DateTimes.LOG_DTS)));
+                this.oLogger.InitFile(filename);
             }
+            else
+                this.oLogger.InitResponse(this.context.Response);
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace Bula.Fetcher.Controller {
                 return null;
 
             var source = STR(oSource["s_SourceName"]);
-            if (Request.Contains("m") && !source.Equals(Request.Get("m")))
+            if (this.context.Request.Contains("m") && !source.Equals(this.context.Request["m"]))
                 return null;
 
             this.oLogger.Output(CAT("<br/>", EOL, "Started "));
@@ -76,7 +75,7 @@ namespace Bula.Fetcher.Controller {
             //    url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", encUrl);
             //}
             this.oLogger.Output(CAT("[[[", url, "]]]<br/>", EOL));
-            var rss = Internal.FetchRss(url);
+            Object[] rss = Internal.FetchRss(url);
             if (rss == null) {
                 this.oLogger.Output(CAT("-- problems --<br/>", EOL));
                 //problems++;
@@ -101,8 +100,8 @@ namespace Bula.Fetcher.Controller {
             var sourceName = STR(oSource["s_SourceName"]);
             var sourceId = INT(oSource["i_SourceId"]);
             var boItem = new BOItem(sourceName, item);
-            var pubdate = STR(item["pubdate"]);
-            var date = DateTimes.Format(Config.SQL_DTS, DateTimes.FromRss(pubdate));
+            var pubDate = STR(item["pubdate"]);
+            var date = DateTimes.Format(DateTimes.SQL_DTS, DateTimes.FromRss(pubDate));
 
             // Check whether item with the same link exists already
             var doItem = new DOItem();

@@ -5,9 +5,11 @@
 
 namespace Bula.Objects {
     using System;
+    using System.Collections;
 
     using System.Text.RegularExpressions;
-    using System.Collections;
+
+    using Bula;
     using Bula.Objects;
 
     /// <summary>
@@ -42,8 +44,8 @@ namespace Bula.Objects {
             var count = 0;
             foreach (String string1 in strings) {
                 if (count > 0)
-                    output += (divider);
-                output += (string1);
+                    output += divider;
+                output += string1;
                 count++;
             }
             return output;
@@ -110,7 +112,7 @@ namespace Bula.Objects {
                 foreach (object arg in args) {
                     if (arg == null)
                         continue;
-                    output = output += (arg);
+                    output += (String)arg;
                 }
             }
             return output;

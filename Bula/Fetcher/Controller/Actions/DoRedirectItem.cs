@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Controller.Actions {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
     using Bula.Objects;
     using Bula.Model;
     using Bula.Fetcher.Model;
@@ -26,10 +26,10 @@ namespace Bula.Fetcher.Controller.Actions {
         public override void Execute() {
             var errorMessage = (String)null;
             var linkToRedirect = (String)null;
-            if (!Request.Contains("id"))
+            if (!this.context.Request.Contains("id"))
                 errorMessage = "Item ID is required!";
             else {
-                var id = Request.Get("id");
+                var id = this.context.Request["id"];
                 if (!Request.IsInteger(id) || INT(id) <= 0)
                     errorMessage = "Incorrect item ID!";
                 else {

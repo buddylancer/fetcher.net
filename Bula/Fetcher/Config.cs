@@ -5,6 +5,7 @@
 
 namespace Bula.Fetcher {
     using System;
+    using System.Collections;
 
     /// <summary>
     /// Main class for configuring data.
@@ -22,6 +23,8 @@ namespace Bula.Fetcher {
         public const String API_FORMAT = "Json";
         /// Current API output content type (can be "application/json" or "text/xml" for now) 
         public const String API_CONTENT = "application/json";
+        /// File prefix for constructing real path 
+        public const String FILE_PREFIX = "";
 
         /// Security code 
         public const String SECURITY_CODE = "1234";
@@ -50,13 +53,6 @@ namespace Bula.Fetcher {
         public const int DB_HOME_ROWS = 15;
         /// Default number of rows on "Items" page 
         public const int DB_ITEMS_ROWS = 25;
-        /// Date/time format for processing GMT date/times 
-        public const String GMT_DTS = "dd-MMM-yyyy HH:mm \\G\\M\\T";
-        /// Date/time format for RSS operations 
-        public const String XML_DTS = "ddd, dd MMM yyyy HH:mm:ss \\G\\M\\T";
-        /// Date/time format for DB operations 
-        public const String SQL_DTS = "yyyy-MM-dd HH:mm:ss";
-        public const String LOG_DTS = "yyyy-MM-dd_HH-mm-ss";
 
         // Fill these fields by your site data
         /// Site name 

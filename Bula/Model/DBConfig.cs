@@ -5,6 +5,7 @@
 
 namespace Bula.Model {
     using System;
+    using System.Collections;
 
     /// <summary>
     /// Set info for database connection here.

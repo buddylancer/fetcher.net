@@ -5,10 +5,10 @@
 
 namespace Bula.Fetcher.Controller.Actions {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
     using Bula.Objects;
-    using System.Collections;
     using Bula.Fetcher.Model;
 
     /// <summary>
@@ -25,10 +25,10 @@ namespace Bula.Fetcher.Controller.Actions {
         public override void Execute() {
             var errorMessage = (String)null;
             var linkToRedirect = (String)null;
-            if (!Request.Contains("source"))
+            if (!this.context.Request.Contains("source"))
                 errorMessage = "Source name is required!";
             else {
-                var sourceName = Request.Get("source");
+                var sourceName = this.context.Request["source"];
                 if (!Request.IsDomainName(sourceName))
                     errorMessage = "Incorrect source name!";
                 else {

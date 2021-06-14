@@ -5,10 +5,10 @@
 
 namespace Bula.Fetcher.Controller.Testing {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
     using Bula.Fetcher.Controller;
-    using System.Collections;
     using Bula.Objects;
     using Bula.Model;
 
@@ -24,28 +24,28 @@ namespace Bula.Fetcher.Controller.Testing {
 
         /// Execute method using parameters from request. 
         public override void Execute() {
-            Request.Initialize();
-            Request.ExtractAllVars();
+            //this.context.Request.Initialize();
+            this.context.Request.ExtractAllVars();
 
             // Check security code
-            if (!Request.Contains("code")) {
-                Response.End("Code is required!");
+            if (!this.context.Request.Contains("code")) {
+                this.context.Response.End("Code is required!");
                 return;
             }
-            var code = Request.Get("code");
+            var code = this.context.Request["code"];
             if (!EQ(code, Config.SECURITY_CODE)) {
-                Response.End("Incorrect code!");
+                this.context.Response.End("Incorrect code!");
                 return;
             }
 
             // Check package
-            if (!Request.Contains("package")) {
-                Response.End("Package is required!");
+            if (!this.context.Request.Contains("package")) {
+                this.context.Response.End("Package is required!");
                 return;
             }
-            var package = Request.Get("package");
+            var package = this.context.Request["package"];
             if (BLANK(package)) {
-                Response.End("Empty package!");
+                this.context.Response.End("Empty package!");
                 return;
             }
             String[] packageChunks = Strings.Split("-", package);
@@ -54,24 +54,24 @@ namespace Bula.Fetcher.Controller.Testing {
             package = Strings.Join("/", packageChunks);
 
             // Check class
-            if (!Request.Contains("class")) {
-                Response.End("Class is required!");
+            if (!this.context.Request.Contains("class")) {
+                this.context.Response.End("Class is required!");
                 return;
             }
-            var className = Request.Get("class");
+            var className = this.context.Request["class"];
             if (BLANK(className)) {
-                Response.End("Empty class!");
+                this.context.Response.End("Empty class!");
                 return;
             }
 
             // Check method
-            if (!Request.Contains("method")) {
-                Response.End("Method is required!");
+            if (!this.context.Request.Contains("method")) {
+                this.context.Response.End("Method is required!");
                 return;
             }
-            var method = Request.Get("method");
+            var method = this.context.Request["method"];
             if (BLANK(method)) {
-                Response.End("Empty method!");
+                this.context.Response.End("Empty method!");
                 return;
             }
 
@@ -80,9 +80,9 @@ namespace Bula.Fetcher.Controller.Testing {
             var pars = new ArrayList();
             for (int n = 1; n <= 6; n++) {
                 var parName = CAT("par", n);
-                if (!Request.Contains(parName))
+                if (!this.context.Request.Contains(parName))
                     break;
-                var parValue = Request.Get(parName);
+                var parValue = this.context.Request[parName];
                 if (EQ(parValue, "_"))
                     parValue = "";
                 //parsArray[] = parValue;
@@ -102,10 +102,10 @@ namespace Bula.Fetcher.Controller.Testing {
             if (result == null)
                 buffer = "NULL";
             else if (result is DataSet)
-                buffer = ((DataSet)result).ToXml();
+                buffer = ((DataSet)result).ToXml(EOL);
             else
                 buffer = STR(result);
-            Response.Write(buffer);
+            this.context.Response.Write(buffer);
         }
     }
 }

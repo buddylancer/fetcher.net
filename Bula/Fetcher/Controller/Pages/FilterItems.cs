@@ -5,10 +5,10 @@
 
 namespace Bula.Fetcher.Controller.Pages {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
     using Bula.Objects;
-    using System.Collections;
     using Bula.Model;
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller;
@@ -28,13 +28,13 @@ namespace Bula.Fetcher.Controller.Pages {
             var doSource = new DOSource();
 
             var source = (String)null;
-            if (Request.Contains("source"))
-                source = Request.Get("source");
+            if (this.context.Request.Contains("source"))
+                source = this.context.Request["source"];
 
             var prepare = new Hashtable();
             if (this.context.FineUrls)
                 prepare["[#Fine_Urls]"] = 1;
-            prepare["[#Selected]"] = BLANK(source) ? " selected=\"selected\" " : null;
+            prepare["[#Selected]"] = BLANK(source) ? " selected=\"selected\" " : "";
             var dsSources = (DataSet)null;
             //TODO -- This can be too long on big databases... Switch off counters for now.
             var useCounters = true;

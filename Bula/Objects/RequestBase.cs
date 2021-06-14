@@ -5,14 +5,18 @@
 
 namespace Bula.Objects {
     using System;
+    using System.Collections;
 
     using Bula.Objects;
-    using System.Collections;
 
     /// <summary>
     /// Base helper class for processing query/form request.
     /// </summary>
     public class RequestBase : Bula.Meta {
+        /// Current Http request 
+        public System.Web.HttpRequest HttpRequest = null;
+        /// Current response 
+        public Response response = null;
 
         /// Enum value (type) for getting POST parameters 
         public const int INPUT_POST = 0;
@@ -25,8 +29,12 @@ namespace Bula.Objects {
         /// Enum value (type) for getting SERVER parameters 
         public const int INPUT_SERVER = 5;
 
-        private static System.Web.HttpRequest CurrentRequest() {
-            return System.Web.HttpContext.Current.Request;
+        public RequestBase () { }
+
+        public RequestBase (Object currentRequest) {
+            if (NUL(currentRequest))
+                return;
+            HttpRequest = (System.Web.HttpRequest)currentRequest;
         }
 
         /// <summary>
@@ -34,19 +42,19 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="type">Required type.</param>
         /// <returns>Requested variables.</returns>
-        public static Hashtable GetVars(int type) {
+        public Hashtable GetVars(int type) {
             Hashtable hash = new Hashtable();
             System.Collections.Specialized.NameValueCollection vars = null;
             switch (type) {
                 case Request.INPUT_GET:
                 default:
-                    vars = CurrentRequest().QueryString;
+                    vars = HttpRequest.QueryString;
                     break;
                 case Request.INPUT_POST:
-                    vars = CurrentRequest().Form;
+                    vars = HttpRequest.Form;
                     break;
                 case Request.INPUT_SERVER:
-                    vars = CurrentRequest().ServerVariables;
+                    vars = HttpRequest.ServerVariables;
                     break;
             }
             IEnumerator keys = vars.AllKeys.GetEnumerator();
@@ -69,21 +77,9 @@ namespace Bula.Objects {
         /// <param name="type">Required type.</param>
         /// <param name="name">Variable name.</param>
         /// <returns>Requested variable.</returns>
-        public static String GetVar(int type, String name) {
-            System.Collections.Specialized.NameValueCollection vars = null;
-            switch (type) {
-                case Request.INPUT_GET:
-                default:
-                    vars = CurrentRequest().QueryString;
-                    break;
-                case Request.INPUT_POST:
-                    vars = CurrentRequest().Form;
-                    break;
-                case Request.INPUT_SERVER:
-                    vars = CurrentRequest().ServerVariables;
-                    break;
-            }
-            return vars[name];
+        public String GetVar(int type, String name) {
+            var vars = GetVars(type);
+            return (String)vars[name];
         }
     }
 

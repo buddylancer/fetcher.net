@@ -5,10 +5,10 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
     using Bula.Objects;
-    using System.Collections;
 
     /// <summary>
     /// Logic for generating Menu block.

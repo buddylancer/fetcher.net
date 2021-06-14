@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Controller.Actions {
     using System;
+    using System.Collections;
 
     using Bula.Objects;
-    using System.Collections;
     using Bula.Model;
     using Bula.Fetcher;
     using Bula.Fetcher.Model;
@@ -17,6 +17,12 @@ namespace Bula.Fetcher.Controller.Actions {
     /// Testing sources for necessary fetching.
     /// </summary>
     public class DoTestItems : Page {
+        /// <summary>
+        /// Public default constructor.
+        /// </summary>
+        /// <param name="context">Context instance.</param>
+        public DoTestItems(Context context) : base(context) { Initialize(); }
+
         private static String TOP = null;
         private static String BOTTOM = null;
 
@@ -39,12 +45,6 @@ namespace Bula.Fetcher.Controller.Actions {
             );
         }
 
-        /// <summary>
-        /// Public default constructor.
-        /// </summary>
-        /// <param name="context">Context instance.</param>
-        public DoTestItems(Context context) : base(context) { Initialize(); }
-
         /// Execute main logic for DoTestItems action 
         public override void Execute() {
             var insertRequired = false;
@@ -63,16 +63,16 @@ namespace Bula.Fetcher.Controller.Actions {
             else
                 insertRequired = true;
 
-            Response.Write(TOP);
+            this.context.Response.Write(TOP);
             if (updateRequired || insertRequired) {
-                Response.Write(CAT("Fetching new items... Please wait...<br/>", EOL));
+                this.context.Response.Write(CAT("Fetching new items... Please wait...<br/>", EOL));
 
                 var boFetcher = new BOFetcher(this.context);
                 boFetcher.FetchFromSources();
 
                 doTime = new DOTime(); // Need for DB reopen
                 var fields = new Hashtable();
-                fields["d_Time"] = DateTimes.Format(Config.SQL_DTS, DateTimes.GetTime());
+                fields["d_Time"] = DateTimes.Format(DateTimes.SQL_DTS, DateTimes.GetTime());
                 if (insertRequired) {
                     fields["i_Id"] = 1;
                     doTime.Insert(fields);
@@ -81,8 +81,8 @@ namespace Bula.Fetcher.Controller.Actions {
                     doTime.UpdateById(1, fields);
             }
             else
-                Response.Write(CAT("<hr/>Fetch is not required<br/>", EOL));
-            Response.Write(BOTTOM);
+                this.context.Response.Write(CAT("<hr/>Fetch is not required<br/>", EOL));
+            this.context.Response.Write(BOTTOM);
         }
     }
 }

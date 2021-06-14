@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Model {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
     using Bula.Objects;
     using Bula.Model;
 

@@ -5,8 +5,8 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
-
     using System.Collections;
+
     using Bula.Fetcher;
     using Bula.Objects;
 
@@ -39,14 +39,52 @@ namespace Bula.Fetcher.Controller {
             engine.Write(engine.ShowTemplate(template, prepare));
         }
 
-        public String GetLink(String page, String ordinaryUrl, String fineUrl, Object extraData = null) {
+        /// <summary>
+        /// Get link for the page.
+        /// </summary>
+        /// <param name="page">Page to get link for.</param>
+        /// <param name="ordinaryUrl">Url portion of full Url.</param>
+        /// <param name="fineUrl">Url portion of fine Url.</param>
+        /// <returns>Resulting link.</returns>
+        public String GetLink(String page, String ordinaryUrl, String fineUrl) {
+            return GetLink(page, ordinaryUrl, fineUrl, null);
+        }
+
+        /// <summary>
+        /// Get link for the page.
+        /// </summary>
+        /// <param name="page">Page to get link for.</param>
+        /// <param name="ordinaryUrl">Url portion of full Url.</param>
+        /// <param name="fineUrl">Url portion of fine Url.</param>
+        /// <param name="extraData">Optional prefix.</param>
+        /// <returns>Resulting link.</returns>
+        public String GetLink(String page, String ordinaryUrl, String fineUrl, Object extraData) {
             if (!BLANK(this.context.Api))
                 return this.GetAbsoluteLink(page, ordinaryUrl, fineUrl, extraData);
             else
                 return this.GetRelativeLink(page, ordinaryUrl, fineUrl, extraData);
         }
 
-        public String GetRelativeLink(String page, String ordinaryUrl, String fineUrl, Object extraData = null) {
+        /// <summary>
+        /// Get relative link for the page.
+        /// </summary>
+        /// <param name="page">Page to get link for.</param>
+        /// <param name="ordinaryUrl">Url portion of full Url.</param>
+        /// <param name="fineUrl">Url portion of fine Url.</param>
+        /// <returns>Resulting relative link.</returns>
+        public String GetRelativeLink(String page, String ordinaryUrl, String fineUrl) {
+            return GetRelativeLink(page, ordinaryUrl, fineUrl, null);
+        }
+
+        /// <summary>
+        /// Get relative link for the page.
+        /// </summary>
+        /// <param name="page">Page to get link for.</param>
+        /// <param name="ordinaryUrl">Url portion of full Url.</param>
+        /// <param name="fineUrl">Url portion of fine Url.</param>
+        /// <param name="extraData">Optional prefix.</param>
+        /// <returns>Resulting relative link.</returns>
+         public String GetRelativeLink(String page, String ordinaryUrl, String fineUrl, Object extraData) {
             var link = CAT(
                 Config.TOP_DIR,
                 (this.context.FineUrls ? fineUrl : CAT(page, this.QuoteLink(ordinaryUrl))),
@@ -54,14 +92,57 @@ namespace Bula.Fetcher.Controller {
             return link;
         }
 
-        public String GetAbsoluteLink(String page, String ordinaryUrl, String fineUrl, Object extraData = null) {
+        /// <summary>
+        /// Get absolute link for the page.
+        /// </summary>
+        /// <param name="page">Page to get link for.</param>
+        /// <param name="ordinaryUrl">Url portion of full Url.</param>
+        /// <param name="fineUrl">Url portion of fine Url.</param>
+        /// <returns>Resulting absolute link.</returns>
+        public String GetAbsoluteLink(String page, String ordinaryUrl, String fineUrl) {
+            return GetAbsoluteLink(page, ordinaryUrl, fineUrl, null);
+        }
+
+        /// <summary>
+        /// Get absolute link for the page.
+        /// </summary>
+        /// <param name="page">Page to get link for.</param>
+        /// <param name="ordinaryUrl">Url portion of full Url.</param>
+        /// <param name="fineUrl">Url portion of fine Url.</param>
+        /// <param name="extraData">Optional prefix.</param>
+        /// <returns>Resulting absolute link.</returns>
+         public String GetAbsoluteLink(String page, String ordinaryUrl, String fineUrl, Object extraData) {
             return CAT(this.context.Site, this.GetRelativeLink(page, ordinaryUrl, fineUrl, extraData));
         }
 
-        public String AppendLink(String link, String ordinaryUrl, String fineUrl, Object extraData = null) {
+        /// <summary>
+        /// Append info to a link.
+        /// </summary>
+        /// <param name="link">Link to append info to.</param>
+        /// <param name="ordinaryUrl">Url portion of full Url.</param>
+        /// <param name="fineUrl">Url portion of fine Url.</param>
+        /// <returns>Resulting link.</returns>
+        public String AppendLink(String link, String ordinaryUrl, String fineUrl) {
+            return AppendLink(link, ordinaryUrl, fineUrl, null);
+        }
+
+        /// <summary>
+        /// Append info to a link.
+        /// </summary>
+        /// <param name="link">Link to append info to.</param>
+        /// <param name="ordinaryUrl">Url portion of full Url.</param>
+        /// <param name="fineUrl">Url portion of fine Url.</param>
+        /// <param name="extraData">Optional prefix.</param>
+        /// <returns>Resulting link.</returns>
+        public String AppendLink(String link, String ordinaryUrl, String fineUrl, Object extraData) {
             return CAT(link, (this.context.FineUrls ? fineUrl : this.QuoteLink(ordinaryUrl)), extraData);
         }
 
+        /// <summary>
+        /// Quote (escape special characters) a link.
+        /// </summary>
+        /// <param name="link">Source link.</param>
+        /// <returns>Target (quoted) link.</returns>
         public String QuoteLink(String link) {
             return !BLANK(this.context.Api) && EQ(Config.API_FORMAT, "Xml") ? Util.Safe(link) : link;
         }

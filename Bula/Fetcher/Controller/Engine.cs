@@ -5,18 +5,18 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula;
     using Bula.Fetcher;
 
-    using System.Collections;
     using Bula.Objects;
 
     /// <summary>
     /// Engine for processing templates.
     /// </summary>
     public class Engine : Bula.Meta {
-        private Context context = null;
+        public Context context = null;
         private Boolean printFlag = false;
         private String printString = "";
 
@@ -65,7 +65,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="val">String to write.</param>
         public void Write(String val) {
             if (this.printFlag)
-                Response.Write(val);
+                this.context.Response.Write(val);
             else
                 this.printString += val;
         }
@@ -74,11 +74,19 @@ namespace Bula.Fetcher.Controller {
         /// Include file with class and generate content by calling method Execute().
         /// </summary>
         /// <param name="className">Class name to include.</param>
+        public String IncludeTemplate(String className) {
+            return IncludeTemplate(className, "Execute");
+        }
+
+        /// <summary>
+        /// Include file with class and generate content by calling method.
+        /// </summary>
+        /// <param name="className">Class name to include.</param>
         /// <param name="defaultMethod">Default method to call.</param>
         /// <returns>Resulting content.</returns>
-        public String IncludeTemplate(String className, String defaultMethod = "Execute") {
+        public String IncludeTemplate(String className, String defaultMethod) {
             var engine = this.context.PushEngine(false);
-            var prefix = "Bula/Fetcher/Controller/";
+            var prefix = CAT(Config.FILE_PREFIX, "Bula/Fetcher/Controller/");
             var fileName =
                 CAT(prefix, className, ".cs");
 
@@ -110,17 +118,19 @@ namespace Bula.Fetcher.Controller {
         /// <returns>Resulting content.</returns>
         public String ShowTemplate(String id, Hashtable hash) {
             var ext = BLANK(this.context.Api) ? ".html" : (Config.API_FORMAT == "Xml"? ".xml" : ".txt");
-            var filename = 
-                    CAT("Bula/Fetcher/View/", (BLANK(this.context.Api) ? "Html/" : (Config.API_FORMAT == "Xml"? "Xml/" : "Rest/")), id, ext);
+            var prefix = CAT(Config.FILE_PREFIX, "Bula/Fetcher/View/");
+
+            var filename =
+                    CAT(prefix, (BLANK(this.context.Api) ? "Html/" : (Config.API_FORMAT == "Xml"? "Xml/" : "Rest/")), id, ext);
             var template = this.GetTemplate(filename);
 
             var content = "";
             if (BLANK(this.context.Api))
-                content += (CAT(EOL, "<!-- BEGIN ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL));
+                content += CAT(EOL, "<!-- BEGIN ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL);
             if (!BLANK(template))
-                content += (this.ProcessTemplate(template, hash));
+                content += this.ProcessTemplate(template, hash);
             if (BLANK(this.context.Api))
-                content += (CAT("<!-- END ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL));
+                content += CAT("<!-- END ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL);
             return content;
         }
 
@@ -150,8 +160,9 @@ namespace Bula.Fetcher.Controller {
         public String FormatTemplate(String template, Hashtable hash) {
             if (hash == null)
                 hash = new Hashtable();
-            var content = Strings.ReplaceInTemplate(template, hash);
-            return Strings.ReplaceInTemplate(content, this.context.GlobalConstants);
+            String content1 = Strings.ReplaceInTemplate(template, hash);
+            String content2 = Strings.ReplaceInTemplate(content1, this.context.GlobalConstants);
+            return content2;
         }
 
         /// <summary>
@@ -159,7 +170,17 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="str">Input string.</param>
         /// <returns>Resulting string.</returns>
-        private static String TrimComments(String str, Boolean trim = true) {
+        private static String TrimComments(String str) {
+            return TrimComments(str, true);
+        }
+
+        /// <summary>
+        /// Trim comments from input string.
+        /// </summary>
+        /// <param name="str">Input string.</param>
+        /// <param name="trim">Whether to trim spaces in resulting string.</param>
+        /// <returns>Resulting string.</returns>
+        private static String TrimComments(String str, Boolean trim) {
             var line = (String)str;
             var trimmed = false;
             if (line.IndexOf("<!--#") != -1) {
@@ -233,7 +254,7 @@ namespace Bula.Fetcher.Controller {
                             }
 
                             if (processFlag)
-                                content += (ProcessTemplate(ifBuf, hash));
+                                content += ProcessTemplate(ifBuf, hash);
                             ifBuf = new ArrayList();
                         }
                         else
@@ -251,7 +272,7 @@ namespace Bula.Fetcher.Controller {
                             if (hash.ContainsKey(repeatWhat)) {
                                 var rows = (ArrayList)hash[repeatWhat];
                                 for (int r = 0; r < rows.Count; r++)
-                                    content += (ProcessTemplate(repeatBuf, (Hashtable)rows[r]));
+                                    content += ProcessTemplate(repeatBuf, (Hashtable)rows[r]);
                                 hash.Remove(repeatWhat);
                             }
                             repeatBuf = new ArrayList();
@@ -276,9 +297,9 @@ namespace Bula.Fetcher.Controller {
                     else {
                         if (trimLine) {
                             line = line.Trim();
-                            line += (trimEnd);
+                            line += trimEnd;
                         }
-                        content += (line);
+                        content += line;
                     }
                 }
             }

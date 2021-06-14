@@ -5,10 +5,10 @@
 
 namespace Bula.Fetcher.Controller.Pages {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
     using Bula.Objects;
-    using System.Collections;
     using Bula.Model;
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller;
@@ -29,12 +29,12 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <returns>Parsed parameters (or null in case of any error).</returns>
         public Hashtable Check() {
             var prepare = new Hashtable();
-            if (!Request.Contains("id")) {
+            if (!this.context.Request.Contains("id")) {
                 prepare["[#ErrMessage]"] = "Item ID is required!";
                 this.Write("error", prepare);
                 return null;
             }
-            var id = Request.Get("id");
+            var id = this.context.Request["id"];
             if (!Request.IsInteger(id)) {
                 prepare["[#ErrMessage]"] = "Item ID must be positive integer!";
                 this.Write("error", prepare);

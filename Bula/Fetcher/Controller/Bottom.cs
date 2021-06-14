@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
     using Bula.Model;
     using Bula.Fetcher.Model;
 
@@ -38,6 +38,8 @@ namespace Bula.Fetcher.Controller {
                 var rows = new ArrayList();
                 for (int n = INT(nn[td]); n < INT(nn[td+1]); n++) {
                     var oCategory = dsCategory.GetRow(n);
+                    if (NUL(oCategory))
+                        continue;
                     var counter = INT(oCategory["i_Counter"]);
                     if (INT(counter) == 0)
                         continue;
@@ -68,6 +70,8 @@ namespace Bula.Fetcher.Controller {
                     var rows = new ArrayList();
                     for (int n = INT(nn[td]); n < INT(nn[td+1]); n++) {
                         var oCategory = dsCategory.GetRow(n);
+                        if (NUL(oCategory))
+                            continue;
                         var key = STR(oCategory["s_CatId"]);
                         var name = STR(oCategory["s_Name"]);
                         //counter = INT(oCategory["i_Counter"]);

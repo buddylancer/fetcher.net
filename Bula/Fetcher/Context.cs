@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher {
     using System;
+    using System.Collections;
 
     using Bula.Objects;
-    using System.Collections;
 
     using Bula.Fetcher.Controller;
 
@@ -15,10 +15,25 @@ namespace Bula.Fetcher {
     /// Class for request context.
     /// </summary>
     public class Context : Config {
-        /// Default constructor. 
-        public Context () {
+        /** Default constructor. */
+        public Context() { Initialize(); }
+
+        /// <summary>
+        /// Constructor for injecting Request and Response.
+        /// </summary>
+        /// <param name="request">Current request.</param>
+        /// <param name="response">Current response.</param>
+        public Context (Object request, Object response) {
+            this.Request = new Request(request);
+            this.Response = new Response(response);
+            this.Request.response = this.Response;
             this.Initialize();
         }
+
+        /// Current request 
+        public Request Request = null;
+        /// Current response 
+        public Response Response = null;
 
         /// Storage for internal variables 
         protected Hashtable Values = new Hashtable();
@@ -55,7 +70,7 @@ namespace Bula.Fetcher {
         /// <param name="name">Name of internal variable.</param>
         /// <returns>True - variable exists, False - not exists.</returns>
         public Boolean Contains(String name) {
-            return this.Values.Contains(name);
+            return this.Values.ContainsKey(name);
         }
 
         /// Project root (where Bula folder is located) 
@@ -100,7 +115,7 @@ namespace Bula.Fetcher {
         /// Check whether current request is from test script?
         /// </summary>
         public void CheckTestRun() {
-            var httpTester = Request.GetVar(Request.INPUT_SERVER, "HTTP_USER_AGENT");
+            var httpTester = this.Request.GetVar(Request.INPUT_SERVER, "HTTP_USER_AGENT");
             if (httpTester == null)
                 return;
             if (EQ(httpTester, "TestFull")) {
@@ -130,15 +145,15 @@ namespace Bula.Fetcher {
             //------------------------------------------------------------------------------
             // You can change something below this line if you know what are you doing :)
             var rootDir = Request.GetVar(Request.INPUT_SERVER, "APPL_PHYSICAL_PATH");
-    		rootDir = rootDir.Replace("\\", "/"); // Fix for IIS
+            rootDir = rootDir.Replace("\\", "/"); // Fix for IIS
             // Regarding that we have the ordinary local website (not virtual directory)
             for (int n = 0; n <= 3; n++) {
                 var lastSlashIndex = rootDir.LastIndexOf("/");
                 rootDir = rootDir.Substring(0, lastSlashIndex);
             }
-            this.LocalRoot = rootDir += ("/");
+            this.LocalRoot = rootDir += "/";
 
-            this.Host = Request.GetVar(Request.INPUT_SERVER, "HTTP_HOST");
+            this.Host = this.Request.GetVar(Request.INPUT_SERVER, "HTTP_HOST");
             this.Site = Strings.Concat("http://", this.Host);
             this.IsMobile = this.Host.IndexOf("m.") == 0;
             this.Lang = this.Host.LastIndexOf(".ru") != -1 ? "ru" : "en";

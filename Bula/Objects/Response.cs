@@ -5,22 +5,25 @@
 
 namespace Bula.Objects {
     using System;
+    using System.Collections;
 
     /// <summary>
     /// Helper class for processing server response.
     /// </summary>
     public class Response : Bula.Meta {
+        /// Current response 
+        private System.Web.HttpResponse httpResponse = null;
 
-        private static System.Web.HttpResponse CurrentResponse() {
-            return System.Web.HttpContext.Current.Response;
+        public Response (Object response) {
+            httpResponse = (System.Web.HttpResponse)response;
         }
 
         /// <summary>
         /// Write text to current response.
         /// </summary>
         /// <param name="input">Text to write.</param>
-        public static void Write(String input) {
-            CurrentResponse().Write(input);
+        public void Write(String input) {
+            httpResponse.Write(input);
         }
 
         /// <summary>
@@ -28,18 +31,26 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Header name.</param>
         /// <param name="value">Header value.</param>
-        public static void WriteHeader(String name, String value) {
-            CurrentResponse().AppendHeader(name, value);
+        public void WriteHeader(String name, String value) {
+            httpResponse.AppendHeader(name, value);
+        }
+
+        /// <summary>
+        /// End current response.
+        /// </summary>
+        public void End() {
+            End(null);
         }
 
         /// <summary>
         /// End current response.
         /// </summary>
         /// <param name="input">Text to write before ending response.</param>
-        public static void End(String input) {
-            Write(input);
-            CurrentResponse().Flush();
-            CurrentResponse().End();
+        public void End(String input) {
+            if (!NUL(input))
+                Write(input);
+            httpResponse.Flush();
+            httpResponse.End();
         }
     }
 

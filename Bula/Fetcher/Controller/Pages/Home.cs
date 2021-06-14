@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Controller.Pages {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
     using Bula.Model;
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller;

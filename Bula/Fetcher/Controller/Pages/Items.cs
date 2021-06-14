@@ -5,9 +5,9 @@
 
 namespace Bula.Fetcher.Controller.Pages {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
 
     using Bula.Objects;
     using Bula.Model;
@@ -32,39 +32,39 @@ namespace Bula.Fetcher.Controller.Pages {
         public Hashtable Check() {
             var errorMessage = "";
 
-            var list = Request.Get("list");
+            var list = this.context.Request["list"];
             if (!NUL(list)) {
                 if (BLANK(list))
-                    errorMessage += ("Empty list number!");
+                    errorMessage += "Empty list number!";
                 else if (!Request.IsInteger(list))
-                    errorMessage += ("Incorrect list number!");
+                    errorMessage += "Incorrect list number!";
             }
 
-            var sourceName = Request.Get("source");
+            var sourceName = this.context.Request["source"];
             if (!NUL(sourceName)) {
                 if (BLANK(sourceName)) {
                     if (errorMessage.Length > 0)
-                        errorMessage += ("<br/>");
-                    errorMessage += ("Empty source name!");
+                        errorMessage += "<br/>";
+                    errorMessage += "Empty source name!";
                 }
                 else if (!Request.IsDomainName(sourceName)) {
                     if (errorMessage.Length > 0)
-                        errorMessage += ("<br/>");
-                    errorMessage += ("Incorrect source name!");
+                        errorMessage += "<br/>";
+                    errorMessage += "Incorrect source name!";
                 }
             }
 
-            var filterName = Request.Get("filter");
+            var filterName = this.context.Request["filter"];
             if (!NUL(filterName)) {
                 if (BLANK(filterName)) {
                     if (errorMessage.Length > 0)
-                        errorMessage += ("<br/>");
-                    errorMessage += ("Empty filter name!");
+                        errorMessage += "<br/>";
+                    errorMessage += "Empty filter name!";
                 }
                 else if (!Request.IsName(filterName)) {
                     if (errorMessage.Length > 0)
-                        errorMessage += ("<br/>");
-                    errorMessage += ("Incorrect filter name!");
+                        errorMessage += "<br/>";
+                    errorMessage += "Incorrect filter name!";
                 }
             }
 
@@ -104,7 +104,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 Hashtable[] oCategory =
                     {new Hashtable()};
                 if (!doCategory.CheckFilterName(filterName, oCategory))
-                    errorMessage += ("Non-existing filter name!");
+                    errorMessage += "Non-existing filter name!";
                 else
                     filter = STR(oCategory[0]["s_Filter"]);
             }
@@ -115,8 +115,8 @@ namespace Bula.Fetcher.Controller.Pages {
                     {new Hashtable()};
                 if (!doSource.CheckSourceName(sourceName, oSource)) {
                     if (errorMessage.Length > 0)
-                        errorMessage += ("<br/>");
-                    errorMessage += ("Non-existing source name!");
+                        errorMessage += "<br/>";
+                    errorMessage += "Non-existing source name!";
                 }
             }
 

@@ -5,10 +5,9 @@
 
 namespace Bula.Fetcher.Controller.Pages {
     using System;
-
     using System.Collections;
-    using System.Text.RegularExpressions;
 
+    using System.Text.RegularExpressions;
     using Bula.Fetcher;
     using Bula.Objects;
     using Bula.Fetcher.Controller;
@@ -28,8 +27,8 @@ namespace Bula.Fetcher.Controller.Pages {
         /// </summary>
         /// <returns>True - checked OK, False - error.</returns>
         public Boolean CheckList() {
-            if (Request.Contains("list")) {
-                if (!Request.IsInteger(Request.Get("list"))) {
+            if (this.context.Request.Contains("list")) {
+                if (!Request.IsInteger(this.context.Request["list"])) {
                     var prepare = new Hashtable();
                     prepare["[#ErrMessage]"] = "Incorrect list number!";
                     this.Write("error", prepare);
@@ -37,7 +36,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 }
             }
             else
-                Request.Set("list", "1");
+                this.context.Request["list"] = "1";
             return true;
         }
 
@@ -47,12 +46,12 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <returns>True - source exists, False - error.</returns>
         public Boolean CheckSource() {
             var errMessage = "";
-            if (Request.Contains("source")) {
-                var source = Request.Get("source");
+            if (this.context.Request.Contains("source")) {
+                var source = this.context.Request["source"];
                 if (BLANK(source))
-                    errMessage += ("Empty source name!<br/>");
+                    errMessage += "Empty source name!<br/>";
                 else if (!Request.IsDomainName("source"))
-                    errMessage += ("Incorrect source name!<br/>");
+                    errMessage += "Incorrect source name!<br/>";
             }
             if (errMessage.Length == 0)
                 return true;
@@ -166,8 +165,8 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <returns>Resulting internal link to the page.</returns>
         protected String GetPageLink(int listNo) {
             var link = this.GetLink(Config.INDEX_PAGE, "?p=items", "items");
-            if (Request.Contains("source") && !BLANK(Request.Get("source")))
-                link = this.AppendLink(link, "&source=", "/source/", Request.Get("source"));
+            if (this.context.Request.Contains("source") && !BLANK(this.context.Request["source"]))
+                link = this.AppendLink(link, "&source=", "/source/", this.context.Request["source"]);
             if (this.context.Contains("filter") && !BLANK(this.context["filter"]))
                 link = this.AppendLink(link, "&amp;filter=", "/filter/", this.context["filter"]);
             if (listNo > 1)

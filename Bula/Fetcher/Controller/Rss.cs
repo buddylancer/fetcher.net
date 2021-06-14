@@ -5,6 +5,7 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
     using Bula.Objects;
@@ -19,12 +20,23 @@ namespace Bula.Fetcher.Controller {
         /// <param name="context">Context instance.</param>
         public Rss(Context context) : base(context) { }
 
+        /// <summary>
+        /// Write error message.
+        /// </summary>
+        /// <param name="errorMessage">Error message.</param>
         public override void WriteErrorMessage(String errorMessage) {
-            Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
-            Response.Write(CAT("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", EOL));
-            Response.Write(CAT("<data>", errorMessage, "</data>"));
+            this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
+            this.context.Response.Write(CAT("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", EOL));
+            this.context.Response.Write(CAT("<data>", errorMessage, "</data>"));
         }
 
+        /// <summary>
+        /// Write starting block of RSS-feed.
+        /// </summary>
+        /// <param name="source">RSS-feed source name.</param>
+        /// <param name="filterName">RSS-feed 'filtered by' value.</param>
+        /// <param name="pubDate">Publication date.</param>
+        /// <returns>Resulting XML-content of starting block.</returns>
         public override String WriteStart(String source, String filterName, String pubDate) {
             var rssTitle = CAT(
                 "Items for ", (BLANK(source) ? "ALL sources" : CAT("'", source, "'")),
@@ -42,21 +54,29 @@ namespace Bula.Fetcher.Controller {
                 "<lastBuildDate>", pubDate, "</lastBuildDate>", EOL,
                 "<generator>", Config.SITE_NAME, "</generator>", EOL
             );
-            Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
-            Response.Write(CAT("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", EOL));
-            Response.Write(xmlContent);
+            this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
+            this.context.Response.Write(CAT("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", EOL));
+            this.context.Response.Write(xmlContent);
             return xmlContent;
         }
 
+        /// <summary>
+        /// Write ending block of RSS-feed.
+        /// </summary>
         public override String WriteEnd() {
             var xmlContent = Strings.Concat(
                 "</channel>", EOL,
                 "</rss>", EOL);
-            Response.Write(xmlContent);
-            Response.End("");
+            this.context.Response.Write(xmlContent);
+            this.context.Response.End();
             return xmlContent;
         }
 
+        /// <summary>
+        /// Write an item of RSS-feed.
+        /// </summary>
+        /// <param name="args">Array of item parameters.</param>
+        /// <returns>Resulting XML-content of an item.</returns>
         public override String WriteItem(Object[] args) {
             var xmlTemplate = Strings.Concat(
                 "<item>", EOL,
@@ -69,7 +89,7 @@ namespace Bula.Fetcher.Controller {
                 "</item>", EOL
             );
             var itemContent = Util.FormatString(xmlTemplate, args);
-            Response.Write(itemContent);
+            this.context.Response.Write(itemContent);
             return itemContent;
         }
     }

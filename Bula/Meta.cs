@@ -24,10 +24,10 @@ namespace Bula
         /// Stop executiong.
         /// </summary>
         /// <param name="str">Error message</param>
-        public static void STOP(Object str) {
-            Response.Write(str.ToString());
-            Response.End("");
-        }
+        //public static void STOP(Object str) {
+        //    Response.Write(str.ToString());
+        //    Response.End("");
+        //}
 
         // Common functions
 

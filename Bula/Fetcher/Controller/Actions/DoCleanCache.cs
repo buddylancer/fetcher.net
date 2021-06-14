@@ -5,8 +5,10 @@
 
 namespace Bula.Fetcher.Controller.Actions {
     using System;
+    using System.Collections;
 
     using Bula.Objects;
+    using Bula.Fetcher;
     using Bula.Fetcher.Controller;
 
     /// <summary>
@@ -22,12 +24,14 @@ namespace Bula.Fetcher.Controller.Actions {
         /// Execute main logic for DoCleanCache action 
         public override void Execute() {
             var oLogger = new Logger();
-            var log = Request.GetOptionalInteger("log");
+            var log = this.context.Request.GetOptionalInteger("log");
             if (!NUL(log) && log != -99999) {
                 var filenameTemplate = (String)"C:/Temp/Log_{0}_{1}.html";
-                var filename = Util.FormatString(filenameTemplate, ARR("do_clean_cache", DateTimes.Format(Config.SQL_DTS)));
-                oLogger.Init(filename);
+                var filename = Util.FormatString(filenameTemplate, ARR("do_clean_cache", DateTimes.Format(DateTimes.SQL_DTS)));
+                oLogger.InitFile(filename);
             }
+            else
+                oLogger.InitResponse(this.context.Response);
             this.CleanCache(oLogger);
         }
 

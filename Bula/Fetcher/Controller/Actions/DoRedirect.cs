@@ -5,10 +5,11 @@
 
 namespace Bula.Fetcher.Controller.Actions {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
     using Bula.Objects;
-    using System.Collections;
+
     using Bula.Fetcher.Controller;
 
     /// <summary>
@@ -40,7 +41,7 @@ namespace Bula.Fetcher.Controller.Actions {
             }
 
             var engine = this.context.PushEngine(true);
-            Response.Write(engine.ShowTemplate(templateName, prepare));
+            this.context.Response.Write(engine.ShowTemplate(templateName, prepare));
         }
     }
 }

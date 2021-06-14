@@ -5,9 +5,11 @@
 
 namespace Bula.Fetcher.Controller.Testing {
     using System;
+    using System.Collections;
 
-    using Bula.Objects;
+    using Bula.Fetcher;
     using Bula.Fetcher.Controller;
+    using Bula.Objects;
 
     /// <summary>
     /// Logic for getting test feed.
@@ -21,23 +23,23 @@ namespace Bula.Fetcher.Controller.Testing {
 
         /// Get test feed using parameters from request. 
         public override void Execute() {
-            Request.Initialize();
-            Request.ExtractAllVars();
+            //this.context.Request.Initialize();
+            this.context.Request.ExtractAllVars();
 
             // Check source
-            if (!Request.Contains("source")) {
-                Response.End("Source is required!");
+            if (!this.context.Request.Contains("source")) {
+                this.context.Response.End("Source is required!");
                 return;
             }
-            var source = Request.Get("source");
+            var source = this.context.Request["source"];
             if (BLANK(source)) {
-                Response.End("Empty source!");
+                this.context.Response.End("Empty source!");
                 return;
             }
 
-            Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
-            Response.Write(Helper.ReadAllText(CAT(this.context.LocalRoot, "local/tests/input/U.S. News - ", source, ".xml")));
-            Response.End("");
+            this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
+            this.context.Response.Write(Helper.ReadAllText(CAT(this.context.LocalRoot, "local/tests/input/U.S. News - ", source, ".xml")));
+            this.context.Response.End();
         }
     }
 }

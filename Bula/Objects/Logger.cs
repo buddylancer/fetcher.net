@@ -5,6 +5,7 @@
 
 namespace Bula.Objects {
     using System;
+    using System.Collections;
 
     using Bula.Objects;
 
@@ -13,12 +14,14 @@ namespace Bula.Objects {
     /// </summary>
     public class Logger : Bula.Meta {
         private String fileName = null;
+        private Response response = null;
 
         /// <summary>
         /// Initialize logging into file.
         /// </summary>
         /// <param name="filename">Log file name.</param>
-        public void Init(String filename) {
+        public void InitFile(String filename) {
+            this.response = null;
             this.fileName = filename;
             if (filename.Length != 0) {
                 if (Helper.FileExists(filename))
@@ -27,12 +30,22 @@ namespace Bula.Objects {
         }
 
         /// <summary>
+        /// Initialize logging into file.
+        /// </summary>
+        /// <param name="filename">Log file name.</param>
+        public void InitResponse(Response response) {
+            this.fileName = null;
+            if (!NUL(response))
+                this.response = response;
+        }
+
+        /// <summary>
         /// Log text string.
         /// </summary>
         /// <param name="text">Content to log.</param>
         public void Output(String text) {
             if (this.fileName == null) {
-                Response.Write(text);
+                this.response.Write(text);
                 return;
             }
             if (Helper.FileExists(this.fileName))

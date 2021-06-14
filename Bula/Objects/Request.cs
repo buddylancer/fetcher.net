@@ -5,9 +5,9 @@
 
 namespace Bula.Objects {
     using System;
+    using System.Collections;
 
     using Bula.Objects;
-    using System.Collections;
     using System.Text.RegularExpressions;
 
     /// <summary>
@@ -15,23 +15,23 @@ namespace Bula.Objects {
     /// </summary>
     public class Request : RequestBase {
         /// Internal storage for GET/POST variables 
-        private static Hashtable Vars = null;
+        private Hashtable Vars = null;
         /// Internal storage for SERVER variables 
-        private static Hashtable ServerVars = null;
+        private Hashtable ServerVars = null;
 
-        static Request() { Initialize(); }
+        public Request(Object currentRequest) : base(currentRequest) { Initialize(); }
 
         /// Initialize internal variables for new request. 
-        public static void Initialize() {
-            Vars = Arrays.NewHashtable();
-            ServerVars = Arrays.NewHashtable();
+        private void Initialize() {
+            this.Vars = Arrays.NewHashtable();
+            this.ServerVars = Arrays.NewHashtable();
         }
 
         /// <summary>
         /// Get private variables.
         /// </summary>
-        public static Hashtable GetPrivateVars() {
-            return Vars;
+        public Hashtable GetPrivateVars() {
+            return this.Vars;
         }
 
         /// <summary>
@@ -39,8 +39,8 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Variable name.</param>
         /// <returns>True - variable exists, False - not exists.</returns>
-        public static Boolean Contains(String name) {
-            return Vars.ContainsKey(name);
+        public Boolean Contains(String name) {
+            return this.Vars.ContainsKey(name);
         }
 
         /// <summary>
@@ -48,14 +48,19 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Variable name.</param>
         /// <returns>Variable value.</returns>
-        public static String Get(String name) {
+        public String Get(String name) {
             //return (String)(Vars.ContainsKey(name) ? Vars[name] : null);
-            if (!Vars.ContainsKey(name))
+            if (!this.Vars.ContainsKey(name))
                 return null;
-            var value = (String)Vars[name];
+            var value = (String)this.Vars[name];
             if (NUL(value))
                 value = "";
             return value;
+        }
+
+        public String this[String name] {
+            get { return Get(name); }
+            set { Set(name, value); }
         }
 
         /// <summary>
@@ -63,35 +68,35 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Variable name.</param>
         /// <param name="value">Variable value.</param>
-        public static void Set(String name, String value) {
-            Vars[name] = value;
+        public void Set(String name, String value) {
+            this.Vars[name] = value;
         }
 
         /// <summary>
         /// Get all variable keys from request.
         /// </summary>
         /// <returns>All keys enumeration.</returns>
-        public static IEnumerator GetKeys() {
-            return Vars.Keys.GetEnumerator();
+        public IEnumerator GetKeys() {
+            return this.Vars.Keys.GetEnumerator();
         }
 
         /// Extract all POST variables into internal variables. 
-        public static void ExtractPostVars() {
-            var vars = GetVars(INPUT_POST);
-            Vars = Arrays.MergeHashtable(Vars, vars);
+        public void ExtractPostVars() {
+            var vars = this.GetVars(INPUT_POST);
+            this.Vars = Arrays.MergeHashtable(this.Vars, vars);
         }
 
         /// Extract all SERVER variables into internal storage. 
-        public static void ExtractServerVars() {
-            var vars = GetVars(INPUT_SERVER);
-            Vars = Arrays.MergeHashtable(ServerVars, vars);
+        public void ExtractServerVars() {
+            var vars = this.GetVars(INPUT_SERVER);
+            this.Vars = Arrays.MergeHashtable(this.ServerVars, vars);
         }
 
         /// Extract all GET and POST variables into internal storage. 
-        public static void ExtractAllVars() {
-            var vars = GetVars(INPUT_GET);
-            Vars = Arrays.MergeHashtable(Vars, vars);
-            ExtractPostVars();
+        public void ExtractAllVars() {
+            var vars = this.GetVars(INPUT_GET);
+            this.Vars = Arrays.MergeHashtable(this.Vars, vars);
+            this.ExtractPostVars();
         }
 
         /// <summary>
@@ -99,9 +104,9 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="text">Text to check.</param>
         /// <returns>True - referer contains provided text, False - not contains.</returns>
-        public static Boolean CheckReferer(String text) {
+        public Boolean CheckReferer(String text) {
             //return true; //TODO
-            var httpReferer = GetVar(INPUT_SERVER, "HTTP_REFERER");
+            var httpReferer = this.GetVar(INPUT_SERVER, "HTTP_REFERER");
             if (httpReferer == null)
                 return false;
             return httpReferer.IndexOf(text) != -1;
@@ -111,8 +116,8 @@ namespace Bula.Objects {
         /// Check that request was originated from test script.
         /// </summary>
         /// <returns>True - from test script, False - from ordinary user agent.</returns>
-        public static Boolean CheckTester() {
-            var httpTester = GetVar(INPUT_SERVER, "HTTP_USER_AGENT");
+        public Boolean CheckTester() {
+            var httpTester = this.GetVar(INPUT_SERVER, "HTTP_USER_AGENT");
             if (httpTester == null)
                 return false;
             return httpTester.IndexOf("Wget") != -1;
@@ -123,12 +128,14 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Parameter name.</param>
         /// <returns>Resulting value.</returns>
-        public static String GetRequiredParameter(String name) {
+        public String GetRequiredParameter(String name) {
             var val = (String)null;
-            if (Contains(name))
-                val = Get(name);
-            else
-                STOP(CAT("Parameter '", name, "' is required!"));
+            if (this.Contains(name))
+                val = this[name];
+            else {
+                var error = CAT("Parameter '", name, "' is required!");
+                this.response.End(error);
+            }
             return val;
         }
 
@@ -137,10 +144,10 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Parameter name.</param>
         /// <returns>Resulting value or null.</returns>
-        public static String GetOptionalParameter(String name) {
+        public String GetOptionalParameter(String name) {
             var val = (String)null;
-            if (Contains(name))
-                val = Get(name);
+            if (this.Contains(name))
+                val = this[name];
             return val;
         }
 
@@ -149,10 +156,12 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Parameter name.</param>
         /// <returns>Resulting value.</returns>
-        public static int GetRequiredInteger(String name) {
-            var str = GetRequiredParameter(name);
-            if (str == "" || !IsInteger(str))
-                STOP(CAT("Error in parameter '", name, "'!"));
+        public int GetRequiredInteger(String name) {
+            var str = this.GetRequiredParameter(name);
+            if (str == "" || !IsInteger(str)) {
+                var error = CAT("Error in parameter '", name, "'!");
+                this.response.End(error);
+            }
             return INT(str);
         }
 
@@ -161,14 +170,16 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Parameter name.</param>
         /// <returns>Resulting value or null.</returns>
-        public static int GetOptionalInteger(String name) {
-            var val = GetOptionalParameter(name);
+        public int GetOptionalInteger(String name) {
+            var val = this.GetOptionalParameter(name);
             if (val == null)
                 return -99999; //TODO
 
             var str = STR(val);
-            if (str == "" || !IsInteger(str))
-                STOP(CAT("Error in parameter '", name, "'!"));
+            if (str == "" || !IsInteger(str)) {
+                var error = CAT("Error in parameter '", name, "'!");
+                this.response.End(error);
+            }
             return INT(val);
         }
 
@@ -177,8 +188,8 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Parameter name.</param>
         /// <returns>Resulting value.</returns>
-        public static String GetRequiredString(String name) {
-            var val = GetRequiredParameter(name);
+        public String GetRequiredString(String name) {
+            var val = this.GetRequiredParameter(name);
             return val;
         }
 
@@ -187,8 +198,8 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="name">Parameter name.</param>
         /// <returns>Resulting value or null.</returns>
-        public static String GetOptionalString(String name) {
-            var val = GetOptionalParameter(name);
+        public String GetOptionalString(String name) {
+            var val = this.GetOptionalParameter(name);
             return val;
         }
 
@@ -197,7 +208,7 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="pages">Array of allowed pages (and their parameters).</param>
         /// <returns>Resulting page parameters.</returns>
-        public static Hashtable TestPage(Object[] pages) {
+        public Hashtable TestPage(Object[] pages) {
             return TestPage(pages, null); }
 
         /// <summary>
@@ -206,7 +217,7 @@ namespace Bula.Objects {
         /// <param name="pages">Array of allowed pages (and their parameters).</param>
         /// <param name="defaultPage">Default page to use for testing.</param>
         /// <returns>Resulting page parameters.</returns>
-        public static Hashtable TestPage(Object[] pages, String defaultPage) {
+        public Hashtable TestPage(Object[] pages, String defaultPage) {
             var pageInfo = new Hashtable();
 
             // Get page name
@@ -214,18 +225,18 @@ namespace Bula.Objects {
             pageInfo["from_get"] = 0;
             pageInfo["from_post"] = 0;
 
-            var apiValue = GetVar(INPUT_GET, "api");
+            var apiValue = this.GetVar(INPUT_GET, "api");
             if (apiValue != null) {
                 if (EQ(apiValue, "rest")) // Only Rest for now
                     pageInfo["api"] = apiValue;
             }
 
-            var pValue = GetVar(INPUT_GET, "p");
+            var pValue = this.GetVar(INPUT_GET, "p");
             if (pValue != null) {
                 page = pValue;
                 pageInfo["from_get"] = 1;
             }
-            pValue = GetVar(INPUT_POST, "p");
+            pValue = this.GetVar(INPUT_POST, "p");
             if (pValue != null) {
                 page = pValue;
                 pageInfo["from_post"] = 1;

@@ -5,7 +5,6 @@
 
 namespace Bula.Objects {
     using System;
-
     using System.Collections;
 
     /// <summary>
@@ -53,7 +52,8 @@ namespace Bula.Objects {
                 return input;
 
             var output = (Hashtable)input.Clone();
-            var keys = extra.Keys.GetEnumerator();
+            var keys =
+                extra.Keys.GetEnumerator();
             while (keys.MoveNext()) {
                 var key = (String)keys.Current;
                 output[key] = extra[key];

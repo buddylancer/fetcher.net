@@ -5,15 +5,13 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula.Fetcher;
-    using System.Collections;
     using System.Text.RegularExpressions;
     using Bula.Objects;
-
     using Bula.Model;
     using Bula.Fetcher.Model;
-
     using Bula.Fetcher.Controller;
 
     /// <summary>
@@ -30,28 +28,28 @@ namespace Bula.Fetcher.Controller {
         /// Execute main logic for generating RSS-feeds.
         /// </summary>
         public override void Execute() {
-            Request.Initialize();
-            Request.ExtractAllVars();
+            //this.context.Request.Initialize();
+            this.context.Request.ExtractAllVars();
 
             var errorMessage = "";
 
             // Check source
-            var source = Request.Get("source");
+            var source = this.context.Request["source"];
             if (!NUL(source)) {
                 if (BLANK(source))
-                    errorMessage += ("Empty source!");
+                    errorMessage += "Empty source!";
                 else {
                     var doSource = new DOSource();
                     Hashtable[] oSource =
                         {new Hashtable()};
                     if (!doSource.CheckSourceName(source, oSource))
-                        errorMessage += (CAT("Incorrect source '", source, "'!"));
+                        errorMessage += CAT("Incorrect source '", source, "'!");
                 }
             }
 
             var anyFilter = false;
-            if (Request.Contains("code")) {
-                if (EQ(Request.Get("code"), Config.SECURITY_CODE))
+            if (this.context.Request.Contains("code")) {
+                if (EQ(this.context.Request["code"], Config.SECURITY_CODE))
                     anyFilter = true;
             }
 
@@ -61,12 +59,12 @@ namespace Bula.Fetcher.Controller {
             var doCategory = new DOCategory();
             var dsCategories = doCategory.EnumCategories();
             if (dsCategories.GetSize() > 0) {
-                filterName = Request.Get("filter");
+                filterName = this.context.Request["filter"];
                 if (!NUL(filterName)) {
                     if (BLANK(filterName)) {
                         if (errorMessage.Length > 0)
-                            errorMessage += (" ");
-                        errorMessage += ("Empty filter!");
+                            errorMessage += " ";
+                        errorMessage += "Empty filter!";
                     }
                     else {
                         Hashtable[] oCategory =
@@ -78,8 +76,8 @@ namespace Bula.Fetcher.Controller {
                                 filter = filterName;
                             else {
                                 if (errorMessage.Length > 0)
-                                    errorMessage += (" ");
-                                errorMessage += (CAT("Incorrect filter '", filterName, "'!"));
+                                    errorMessage += " ";
+                                errorMessage += CAT("Incorrect filter '", filterName, "'!");
                             }
                         }
                     }
@@ -87,13 +85,17 @@ namespace Bula.Fetcher.Controller {
             }
 
             // Check that parameters contain only 'source' or/and 'filter'
-            var keys = Request.GetKeys();
+            var keys = this.context.Request.GetKeys();
             while (keys.MoveNext()) {
                 var key = (String)keys.Current;
-                if (key != "source" && key != "filter" && key != "code" && key != "count") {
+                if (EQ(key, "source") || EQ(key, "filter") || EQ(key, "code") || EQ(key, "count")) {
+                    //OK
+                }
+                else {
+                    //Not OK
                     if (errorMessage.Length > 0)
-                        errorMessage += (" ");
-                    errorMessage += (CAT("Incorrect parameter '", key, "'!"));
+                        errorMessage += " ";
+                    errorMessage += CAT("Incorrect parameter '", key, "'!");
                 }
             }
 
@@ -103,14 +105,14 @@ namespace Bula.Fetcher.Controller {
             }
 
             var fullTitle = false;
-            if (Request.Contains("title") && STR(Request.Get("title")) == "full")
+            if (this.context.Request.Contains("title") && STR(this.context.Request["title"]) == "full")
                 fullTitle = true;
 
             var count = Config.MAX_RSS_ITEMS;
             var countSet = false;
-            if (Request.Contains("count")) {
-                if (INT(Request.Get("count")) > 0) {
-                    count = INT(Request.Get("count"));
+            if (this.context.Request.Contains("count")) {
+                if (INT(this.context.Request["count"]) > 0) {
+                    count = INT(this.context.Request["count"]);
                     if (count < Config.MIN_RSS_ITEMS)
                         count = Config.MIN_RSS_ITEMS;
                     if (count > Config.MAX_RSS_ITEMS)
@@ -128,10 +130,10 @@ namespace Bula.Fetcher.Controller {
                     (BLANK(filterName) ? null : CAT("-f=", filterName)),
                     (fullTitle ? "-full" : null), ".xml");
                 if (Helper.FileExists(cachedFile)) {
-                    Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
+                    this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
                     var tempContent = Helper.ReadAllText(cachedFile);
-                    //Response.Write(tempContent.Substring(3)); //TODO -- BOM?
-                    Response.Write(tempContent); //TODO -- BOM?
+                    //this.context.Response.Write(tempContent.Substring(3)); //TODO -- BOM?
+                    this.context.Response.Write(tempContent); //TODO -- BOM?
                     return;
                 }
             }
@@ -146,9 +148,10 @@ namespace Bula.Fetcher.Controller {
             // 5 - description
             // 6 - category
 
-            var pubDate = DateTimes.Format(Config.XML_DTS);
-            var nowTime = DateTimes.GetTime(pubDate);
-            var fromDate = DateTimes.GmtFormat(Config.XML_DTS, nowTime - 6*60*60);
+            var pubDate = DateTimes.Format(DateTimes.XML_DTS);
+            var nowDate = DateTimes.Format(DateTimes.SQL_DTS);
+            var nowTime = DateTimes.GetTime(nowDate);
+            var fromDate = DateTimes.GmtFormat(DateTimes.SQL_DTS, nowTime - 6*60*60);
             var dsItems = doItem.EnumItemsFromSource(fromDate, source, filter, count);
             var current = 0;
 
@@ -164,7 +167,7 @@ namespace Bula.Fetcher.Controller {
 
                 if (current == 0) {
                     // Get puDate from the first item and write starting block
-                    pubDate = DateTimes.Format(Config.XML_DTS, DateTimes.GetTime(date));
+                    pubDate = DateTimes.Format(DateTimes.XML_DTS, DateTimes.GetTime(date));
                     contentToCache = this.WriteStart(source, filterName, pubDate);
                 }
 
@@ -210,7 +213,7 @@ namespace Bula.Fetcher.Controller {
                 args[1] = itemTitle;
                 args[2] = this.GetAbsoluteLink(Config.ACTION_PAGE, "?p=do_redirect_source&amp;source=", "redirect/source/", sourceName);
                 args[3] = sourceName;
-                args[4] = DateTimes.Format(Config.XML_DTS, DateTimes.GetTime(date));
+                args[4] = DateTimes.Format(DateTimes.XML_DTS, DateTimes.GetTime(date));
                 var additional = CAT(
                     (BLANK(creator) ? null : CAT(this.context["Name_Creator"], ": ", creator, "<br/>")),
                     (BLANK(category) ? null : CAT(this.context["Name_Categories"], ": ", category, "<br/>")),
@@ -231,14 +234,14 @@ namespace Bula.Fetcher.Controller {
 
                 var itemContent = this.WriteItem(args);
                 if (!BLANK(itemContent))
-                    contentToCache += (itemContent);
+                    contentToCache += itemContent;
 
                 current++;
             }
 
             var endContent = this.WriteEnd();
             if (!BLANK(endContent))
-                contentToCache += (endContent);
+                contentToCache += endContent;
 
             // Save content to cache (if applicable)
             if (Config.CACHE_RSS && !countSet) {

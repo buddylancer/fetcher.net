@@ -5,11 +5,11 @@
 
 namespace Bula.Fetcher.Controller {
     using System;
+    using System.Collections;
 
     using Bula;
     using Bula.Fetcher;
     using Bula.Objects;
-    using System.Collections;
     using Bula.Model;
 
     /// <summary>
@@ -39,33 +39,33 @@ namespace Bula.Fetcher.Controller {
             if (actionsArray == null)
                 Initialize();
 
-            var actionInfo = Request.TestPage(actionsArray);
+            var actionInfo = this.context.Request.TestPage(actionsArray);
 
             // Test action name
             if (!actionInfo.ContainsKey("page")) {
-                Response.End("Error in parameters -- no page");
+                this.context.Response.End("Error in parameters -- no page");
                 return;
             }
 
             // Test action context
             if (INT(actionInfo["post_required"]) == 1 && INT(actionInfo["from_post"]) == 0) {
-                Response.End("Error in parameters -- inconsistent pars");
+                this.context.Response.End("Error in parameters -- inconsistent pars");
                 return;
             }
 
-            Request.Initialize();
+            //this.context.Request.Initialize();
             if (INT(actionInfo["post_required"]) == 1)
-                Request.ExtractPostVars();
+                this.context.Request.ExtractPostVars();
             else
-                Request.ExtractAllVars();
+                this.context.Request.ExtractAllVars();
 
             //TODO!!!
-            //if (!Request.CheckReferer(Config.Site))
+            //if (!this.context.Request.CheckReferer(Config.Site))
             //    err404();
 
             if (INT(actionInfo["code_required"]) == 1) {
-                if (!Request.Contains("code") || !EQ(Request.Get("code"), Config.SECURITY_CODE)) { //TODO -- hardcoded!!!
-                    Response.End("No access.");
+                if (!this.context.Request.Contains("code") || !EQ(this.context.Request["code"], Config.SECURITY_CODE)) { //TODO -- hardcoded!!!
+                    this.context.Response.End("No access.");
                     return;
                 }
             }

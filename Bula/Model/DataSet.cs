@@ -5,8 +5,8 @@
 
 namespace Bula.Model {
     using System;
-
     using System.Collections;
+
     using Bula.Objects;
 
     /// <summary>
@@ -84,7 +84,7 @@ namespace Bula.Model {
         private String AddSpaces(int level) {
             var spaces = "";
             for (int n = 0; n < level; n++)
-                spaces += ("    ");
+                spaces += "    ";
             return spaces;
         }
 
@@ -92,28 +92,29 @@ namespace Bula.Model {
         /// Get serialized (XML) representation of the DataSet.
         /// </summary>
         /// <returns>Resulting representation.</returns>
-        public String ToXml() {
+        public String ToXml(String EOL) {
             var level = 0;
             var spaces = (String)null;
             var output = "";
-            output += (CAT("<DataSet Rows=\"", this.rows.Count, "\">", EOL));
+            output += CAT("<DataSet Rows=\"", this.rows.Count, "\">", EOL);
             for (int n = 0; n < this.GetSize(); n++) {
                 var row = this.GetRow(n);
                 level++; spaces = this.AddSpaces(level);
-                output += (CAT(spaces, "<Row>", EOL));
-                var keys = row.Keys.GetEnumerator();
+                output += CAT(spaces, "<Row>", EOL);
+                var keys =
+                        row.Keys.GetEnumerator();
                 while (keys.MoveNext()) {
                     level++; spaces = this.AddSpaces(level);
                     var key = (String)keys.Current;
-                    output += (CAT(spaces, "<Item Name=\"", key, "\">"));
-                    output += (row[key]);
-                    output += (CAT("</Item>", EOL));
+                    output += CAT(spaces, "<Item Name=\"", key, "\">");
+                    output += STR(row[key]);
+                    output += CAT("</Item>", EOL);
                     level--; spaces = this.AddSpaces(level);
                 }
-                output += (CAT(spaces, "</Row>", EOL));
+                output += CAT(spaces, "</Row>", EOL);
                 level--; spaces = this.AddSpaces(level);
             }
-            output += (CAT("</DataSet>", EOL));
+            output += CAT("</DataSet>", EOL);
             return output;
         }
     }

@@ -5,8 +5,8 @@
 
 namespace Bula.Model {
     using System;
-
     using System.Collections;
+
     using Bula.Objects;
 
     /// <summary>
@@ -413,7 +413,8 @@ namespace Bula.Model {
         /// <param name="fields">The set of fields.</param>
         /// <returns>Result of SQL-query execution.</returns>
         public int Insert(Hashtable fields) {
-            var keys = fields.Keys.GetEnumerator();
+            var keys =
+                fields.Keys.GetEnumerator();
             var fieldNames = "";
             var fieldValues = "";
             Object[] pars = ARR();
@@ -421,10 +422,10 @@ namespace Bula.Model {
             var n = 0;
             while (keys.MoveNext()) {
                 var key = (String)keys.Current;
-                if (n != 0) fieldNames += (", ");
-                if (n != 0) fieldValues += (", ");
-                fieldNames += (key);
-                fieldValues += ("?");
+                if (n != 0) fieldNames += ", ";
+                if (n != 0) fieldValues += ", ";
+                fieldNames += key;
+                fieldValues += "?";
                 pars = ADD(pars, this.SetFunction(key), fields[key]);
                 n++;
             }
@@ -442,7 +443,8 @@ namespace Bula.Model {
         /// <param name="fields">The set of fields.</param>
         /// <returns>Result of SQL-query execution.</returns>
         public int UpdateById(Object id, Hashtable fields) {
-            var keys = fields.Keys.GetEnumerator();
+            var keys =
+                fields.Keys.GetEnumerator();
             var setValues = "";
             Object[] pars = ARR();
             var n = 0;
@@ -451,8 +453,8 @@ namespace Bula.Model {
                 if (key == this.idField) //TODO PHP
                     continue;
                 if (n != 0)
-                    setValues += (", ");
-                setValues += (CAT(key, " = ?"));
+                    setValues += ", ";
+                setValues += CAT(key, " = ?");
                 pars = ADD(pars, this.SetFunction(key), fields[key]);
                 n++;
             }
