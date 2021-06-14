@@ -125,12 +125,15 @@ namespace Bula.Fetcher.Controller {
             var template = this.GetTemplate(filename);
 
             var content = "";
+            var short_name = Strings.Replace("Bula/Fetcher/View/Html", "View", filename);
+            if (!BLANK(Config.FILE_PREFIX))
+                short_name = Strings.Replace(Config.FILE_PREFIX, "", short_name);
             if (BLANK(this.context.Api))
-                content += CAT(EOL, "<!-- BEGIN ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL);
+                content += CAT(EOL, "<!-- BEGIN ", short_name, " -->", EOL);
             if (!BLANK(template))
                 content += this.ProcessTemplate(template, hash);
             if (BLANK(this.context.Api))
-                content += CAT("<!-- END ", Strings.Replace("Bula/Fetcher/View/Html", "View", filename), " -->", EOL);
+                content += CAT("<!-- END ", short_name, " -->", EOL);
             return content;
         }
 

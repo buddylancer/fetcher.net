@@ -27,6 +27,8 @@ namespace Bula.Fetcher.Controller.Testing {
             //this.context.Request.Initialize();
             this.context.Request.ExtractAllVars();
 
+            this.context.Response.WriteHeader("Content-type", "text/html; charset=UTF-8");
+
             // Check security code
             if (!this.context.Request.Contains("code")) {
                 this.context.Response.End("Code is required!");
@@ -97,7 +99,7 @@ namespace Bula.Fetcher.Controller.Testing {
 
             fullClass = Strings.Replace("/", ".", fullClass);
             method = Strings.FirstCharToUpper(method);
-            result = Internal.CallMethod(fullClass, new ArrayList(), method, pars);
+            result = Bula.Internal.CallMethod(fullClass, new ArrayList(), method, pars);
 
             if (result == null)
                 buffer = "NULL";
@@ -106,6 +108,7 @@ namespace Bula.Fetcher.Controller.Testing {
             else
                 buffer = STR(result);
             this.context.Response.Write(buffer);
+            this.context.Response.End();
         }
     }
 }

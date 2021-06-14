@@ -38,7 +38,7 @@ namespace Bula.Fetcher.Controller.Testing {
             }
 
             this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
-            this.context.Response.Write(Helper.ReadAllText(CAT(this.context.LocalRoot, "local/tests/input/U.S. News - ", source, ".xml")));
+            this.context.Response.Write(Helper.ReadAllText(CAT(this.context.LocalRoot, "local/tests/input/U.S. News - ", source, ".xml"), "UTF-8"));
             this.context.Response.End();
         }
     }
