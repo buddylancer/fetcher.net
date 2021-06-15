@@ -106,9 +106,15 @@ namespace Bula.Model {
                 while (keys.MoveNext()) {
                     level++; spaces = this.AddSpaces(level);
                     var key = (String)keys.Current;
-                    output += CAT(spaces, "<Item Name=\"", key, "\">");
-                    output += STR(row[key]);
-                    output += CAT("</Item>", EOL);
+                    var value = row[key];
+                    if (NUL(value)) {
+                        output += CAT(spaces, "<Item Name=\"", key, "\" IsNull=\"True\" />", EOL);
+                    }
+                    else {
+                        output += CAT(spaces, "<Item Name=\"", key, "\">");
+                        output += STR(row[key]);
+                        output += CAT("</Item>", EOL);
+                    }
                     level--; spaces = this.AddSpaces(level);
                 }
                 output += CAT(spaces, "</Row>", EOL);

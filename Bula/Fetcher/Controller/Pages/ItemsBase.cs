@@ -89,10 +89,10 @@ namespace Bula.Fetcher.Controller.Pages {
             row["[#Title]"] = Util.Show(STR(oItem["s_Title"]));
             row["[#SourceLink]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&source=", "items/source/", sourceName);
 
-            if (this.context.Contains("Name_Category") && oItem.ContainsKey("s_Category") && STR(oItem["s_Category"]) != "")
+            if (this.context.Contains("Name_Category") && oItem.ContainsKey("s_Category") && !NUL(oItem["s_Category"]))
                 row["[#Category]"] = STR(oItem["s_Category"]);
 
-            if (this.context.Contains("Name_Creator") && oItem.ContainsKey("s_Creator") && STR(oItem["s_Creator"]) != "") {
+            if (this.context.Contains("Name_Creator") && oItem.ContainsKey("s_Creator") && !NUL(oItem["s_Creator"])) {
                 var s_Creator = STR(oItem["s_Creator"]);
                 if (s_Creator != null) {
                     if (s_Creator.IndexOf("(") != -1)
@@ -102,9 +102,9 @@ namespace Bula.Fetcher.Controller.Pages {
                     s_Creator = (String)" "; //TODO -- "" doesn't works somehow, need to investigate
                 row["[#Creator]"] = s_Creator;
             }
-            if (this.context.Contains("Name_Custom1") && oItem.Contains("s_Custom1") && STR(oItem["s_Custom1"]) != "")
+            if (this.context.Contains("Name_Custom1") && oItem.Contains("s_Custom1") && !NUL(oItem["s_Custom1"]))
                 row["[#Custom1]"] = oItem["s_Custom1"];
-            if (this.context.Contains("Name_Custom2") && oItem.Contains("s_Custom2") && STR(oItem["s_Custom2"]) != "")
+            if (this.context.Contains("Name_Custom2") && oItem.Contains("s_Custom2") && !NUL(oItem["s_Custom2"]))
                 row["[#Custom2]"] = oItem["s_Custom2"];
 
             var d_Date = Util.ShowTime(STR(oItem["d_Date"]));

@@ -87,7 +87,11 @@ namespace Bula.Fetcher.Controller.Pages {
             prepare["[#Creator]"] = STR(oItem["s_Creator"]);
             prepare["[#Description]"] = oItem.ContainsKey("t_Description") ? Util.Show(STR(oItem["t_Description"])) : "";
             prepare["[#ItemID]"] = oItem[idField];
-            if (this.context.Contains("Name_Category")) prepare["[#Category]"] = STR(oItem["s_Category"]);
+            if (this.context.Contains("Name_Category")) {
+                var category = STR(oItem["s_Category"]);
+                if (!BLANK(category))
+                    prepare["[#Category]"] = category;
+            }
             if (this.context.Contains("Name_Custom1")) prepare["[#Custom1]"] = oItem["s_Custom1"];
             if (this.context.Contains("Name_Custom2")) prepare["[#Custom2]"] = oItem["s_Custom2"];
 

@@ -37,7 +37,7 @@ namespace Bula
         /// <param name="value">Input object</param>
         /// <returns></returns>
         public static bool NUL(object value) {
-            return value == null;
+            return value == null || value == System.DBNull.Value;
         }
 
         /// <summary>
