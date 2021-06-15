@@ -129,6 +129,9 @@ namespace Bula.Fetcher.Controller.Pages {
                 return;
             }
 
+            if (Config.SHOW_IMAGES)
+                prepare["[#Show_Images]"] = 1;
+
             // Uncomment to enable filtering by source and/or category
             prepare["[#FilterItems]"] = engine.IncludeTemplate("Pages/FilterItems");
 

@@ -82,8 +82,12 @@ namespace Bula.Fetcher.Controller.Pages {
 
             if (Config.SHOW_FROM)
                 row["[#Show_From]"] = 1;
-            row["[#Source]"] = STR(oItem["s_SourceName"]);
+            if (Config.SHOW_IMAGES)
+                row["[#Show_Images]"] = 1;
+            var sourceName = STR(oItem["s_SourceName"]);
+            row["[#SourceName]"] = sourceName;
             row["[#Title]"] = Util.Show(STR(oItem["s_Title"]));
+            row["[#SourceLink]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&source=", "items/source/", sourceName);
 
             if (this.context.Contains("Name_Category") && oItem.ContainsKey("s_Category") && STR(oItem["s_Category"]) != "")
                 row["[#Category]"] = STR(oItem["s_Category"]);

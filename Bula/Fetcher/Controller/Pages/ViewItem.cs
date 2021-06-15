@@ -74,12 +74,15 @@ namespace Bula.Fetcher.Controller.Pages {
                 leftWidth = "20%";
 
             var idField = doItem.GetIdField();
+            if (Config.SHOW_IMAGES)
+                prepare["[#Show_Images]"] = 1;
             prepare["[#RedirectLink]"] = this.GetLink(Config.ACTION_PAGE, "?p=do_redirect_item&id=", "redirect/item/", oItem[idField]);
             prepare["[#LeftWidth]"] = leftWidth;
             prepare["[#Title]"] = Util.Show(title);
             prepare["[#InputTitle]"] = Util.Safe(title);
             prepare["[#RedirectSource]"] = this.GetLink(Config.ACTION_PAGE, "?p=do_redirect_source&source=", "redirect/source/", sourceName);
             prepare["[#SourceName]"] = sourceName;
+            prepare["[#SourceLink]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&source=", "items/source/", sourceName);
             prepare["[#Date]"] = Util.ShowTime(STR(oItem["d_Date"]));
             prepare["[#Creator]"] = STR(oItem["s_Creator"]);
             prepare["[#Description]"] = oItem.ContainsKey("t_Description") ? Util.Show(STR(oItem["t_Description"])) : "";

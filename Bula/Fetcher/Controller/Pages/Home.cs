@@ -41,6 +41,8 @@ namespace Bula.Fetcher.Controller.Pages {
             var doItem = new DOItem();
 
             prepare["[#BrowseItemsLink]"] = this.GetLink(Config.INDEX_PAGE, "?p=", null, "items");
+            if (Config.SHOW_IMAGES)
+                prepare["[#Show_Images]"] = 1;
 
             var source = (String)null;
             var search = (String)null;

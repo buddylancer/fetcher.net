@@ -33,6 +33,8 @@ namespace Bula.Fetcher.Controller.Pages {
         /// Execute main logic for Source block. 
         public override void Execute() {
             var prepare = new Hashtable();
+            if (Config.SHOW_IMAGES)
+                prepare["[#Show_Images]"] = 1;
 
             var doSource = new DOSource();
             var doItem = new DOItem();
@@ -45,6 +47,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 var sourceName = STR(oSource["s_SourceName"]);
 
                 var sourceRow = new Hashtable();
+                sourceRow["[#ColSpan]"] = Config.SHOW_IMAGES ? 4 : 3;
                 sourceRow["[#SourceName]"] = sourceName;
                 //sourceRow["[#RedirectSource]"] = Config.TOP_DIR .
                 //    (Config.FINE_URLS ? "redirect/source/" : "action.php?p=do_redirect_source&source=") .
@@ -56,7 +59,10 @@ namespace Bula.Fetcher.Controller.Pages {
                 var itemCount = 0;
                 for (int ni = 0; ni < dsItems.GetSize(); ni++) {
                     var oItem = dsItems.GetRow(ni);
-                    items.Add(FillItemRow(oItem, doItem.GetIdField(), itemCount));
+                    var item = FillItemRow(oItem, doItem.GetIdField(), itemCount);
+                    if (Config.SHOW_IMAGES)
+                        item["[#Show_Images]"] = 1;
+                    items.Add(item);
                     itemCount++;
                 }
                 sourceRow["[#Items]"] = items;

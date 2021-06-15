@@ -38,6 +38,8 @@ namespace Bula.Fetcher {
         public const Boolean CACHE_RSS = false;
         /// Show what source an item is originally from 
         public const Boolean SHOW_FROM = false;
+        /// Whether to show images for sources 
+        public const Boolean SHOW_IMAGES = false;
         /// Show an item or immediately redirect to external source item 
         public const Boolean IMMEDIATE_REDIRECT = false;
         /// How much items to show on "Sources" page 
