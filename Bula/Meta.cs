@@ -76,8 +76,10 @@ namespace Bula
         {
             if (NUL(value))
                 return null;
-	        if (value is String)
+            if (value is String)
                 return (String)value;
+            else if (value is DateTime)
+                return ((DateTime)value).ToString(DateTimes.SQL_DTS);
             return value.ToString();
         }
 
@@ -181,8 +183,8 @@ namespace Bula
         public static int SIZE(object val) {
             if (val == null) return 0;
             else if (val is Object[]) return ((Object[])val).Length;
-            else if (val is ArrayList) return ((ArrayList)val).Count;
-            else if (val is Hashtable) return ((Hashtable)val).Count;
+            else if (val is DataList) return ((DataList)val).Count;
+            else if (val is DataRange) return ((DataRange)val).Count;
             else if (val is String) return ((String)val).Length;
             return 0;
         }

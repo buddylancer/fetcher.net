@@ -8,7 +8,6 @@ namespace Bula.Fetcher.Controller.Pages {
     using System.Collections;
 
     using Bula.Fetcher;
-
     using Bula.Objects;
     using Bula.Model;
 
@@ -29,7 +28,7 @@ namespace Bula.Fetcher.Controller.Pages {
         /// Fast check of input query parameters.
         /// </summary>
         /// <returns>Parsed parameters (or null in case of any error).</returns>
-        public Hashtable Check() {
+        public DataRange Check() {
             var errorMessage = "";
 
             var list = this.context.Request["list"];
@@ -69,13 +68,13 @@ namespace Bula.Fetcher.Controller.Pages {
             }
 
             if (errorMessage.Length > 0) {
-                var prepare = new Hashtable();
+                var prepare = new DataRange();
                 prepare["[#ErrMessage]"] = errorMessage;
                 this.Write("error", prepare);
                 return null;
             }
 
-            var pars = new Hashtable();
+            var pars = new DataRange();
             if (!NUL(list))
                 pars["list"] = list;
             if (!NUL(sourceName))
@@ -101,8 +100,8 @@ namespace Bula.Fetcher.Controller.Pages {
 
             if (!NUL(filterName)) {
                 var doCategory = new DOCategory();
-                Hashtable[] oCategory =
-                    {new Hashtable()};
+                DataRange[] oCategory =
+                    {new DataRange()};
                 if (!doCategory.CheckFilterName(filterName, oCategory))
                     errorMessage += "Non-existing filter name!";
                 else
@@ -111,8 +110,8 @@ namespace Bula.Fetcher.Controller.Pages {
 
             if (!NUL(sourceName)) {
                 var doSource = new DOSource();
-                Hashtable[] oSource =
-                    {new Hashtable()};
+                DataRange[] oSource =
+                    {new DataRange()};
                 if (!doSource.CheckSourceName(sourceName, oSource)) {
                     if (errorMessage.Length > 0)
                         errorMessage += "<br/>";
@@ -122,7 +121,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var engine = this.context.GetEngine();
 
-            var prepare = new Hashtable();
+            var prepare = new DataRange();
             if (errorMessage.Length > 0) {
                 prepare["[#ErrMessage]"] = errorMessage;
                 this.Write("error", prepare);
@@ -162,7 +161,7 @@ namespace Bula.Fetcher.Controller.Pages {
             }
 
             var count = 1;
-            var rows = new ArrayList();
+            var rows = new DataList();
             for (int n = 0; n < dsItems.GetSize(); n++) {
                 var oItem = dsItems.GetRow(n);
                 var row = FillItemRow(oItem, doItem.GetIdField(), count);
@@ -176,16 +175,16 @@ namespace Bula.Fetcher.Controller.Pages {
                 var before = false;
                 var after = false;
 
-                var pages = new ArrayList();
+                var pages = new DataList();
                 for (int n = 1; n <= listTotal; n++) {
-                    var page = new Hashtable();
+                    var page = new DataRange();
                     if (n < listNumber - chunk) {
                         if (!before) {
                             before = true;
                             page["[#Text]"] = "1";
                             page["[#Link]"] = GetPageLink(1);
                             pages.Add(page);
-                            page = new Hashtable();
+                            page = new DataRange();
                             page["[#Text]"] = " ... ";
                             //row.Remove("[#Link]");
                             pages.Add(page);
@@ -197,7 +196,7 @@ namespace Bula.Fetcher.Controller.Pages {
                             after = true;
                             page["[#Text]"] = " ... ";
                             pages.Add(page);
-                            page = new Hashtable();
+                            page = new DataRange();
                             page["[#Text]"] = listTotal;
                             page["[#Link]"] = GetPageLink(listTotal);
                             pages.Add(page);

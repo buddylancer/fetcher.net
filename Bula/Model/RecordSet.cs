@@ -9,7 +9,6 @@ namespace Bula.Model {
 
     using System.Data;
     using MySql.Data.MySqlClient;
-
     using Bula.Objects;
 
     /// <summary>
@@ -19,7 +18,7 @@ namespace Bula.Model {
         /// Current result 
         public Object result = null;
         /// Current record 
-        public Hashtable record = null;
+        public DataRange record = null;
 
         private int numRows = 0;
         private int numPages = 0;
@@ -98,7 +97,7 @@ namespace Bula.Model {
             var arr = DataAccess.FetchArray(this.result);
 
             if (arr != null) {
-                this.record = (Hashtable)arr;
+                this.record = (DataRange)arr;
                 return 1;
             }
             else

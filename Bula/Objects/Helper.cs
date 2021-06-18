@@ -236,9 +236,9 @@ namespace Bula.Objects
             String[] entries = Directory.GetDirectories(path);
             String[] files = Directory.GetFiles(path);
 
-            ArrayList allEntries = Arrays.CreateArrayList(entries);
-            ArrayList fileEntries = Arrays.CreateArrayList(files);
-            allEntries = Arrays.MergeArrayList(allEntries, fileEntries);
+            DataList allEntries = Arrays.CreateDataList(entries);
+            DataList fileEntries = Arrays.CreateDataList(files);
+            allEntries = Arrays.MergeDataList(allEntries, fileEntries);
 
             return allEntries.ToArray(typeof(String)).GetEnumerator();
         }

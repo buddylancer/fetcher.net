@@ -7,6 +7,7 @@ namespace Bula.Fetcher.Controller.Pages {
     using System;
     using System.Collections;
 
+    using Bula.Objects;
     using System.Text.RegularExpressions;
     using Bula.Fetcher;
     using Bula.Objects;
@@ -29,7 +30,7 @@ namespace Bula.Fetcher.Controller.Pages {
         public Boolean CheckList() {
             if (this.context.Request.Contains("list")) {
                 if (!Request.IsInteger(this.context.Request["list"])) {
-                    var prepare = new Hashtable();
+                    var prepare = new DataRange();
                     prepare["[#ErrMessage]"] = "Incorrect list number!";
                     this.Write("error", prepare);
                     return false;
@@ -56,7 +57,7 @@ namespace Bula.Fetcher.Controller.Pages {
             if (errMessage.Length == 0)
                 return true;
 
-            var prepare = new Hashtable();
+            var prepare = new DataRange();
             prepare["[#ErrMessage]"] = errMessage;
             this.Write("error", prepare);
             return false;
@@ -69,8 +70,8 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <param name="idField">Name of ID field.</param>
         /// <param name="count">The number of inserted Row in HTML table.</param>
         /// <returns>Resulting Row.</returns>
-        protected Hashtable FillItemRow(Hashtable oItem, String idField, int count) {
-            var row = new Hashtable();
+        protected DataRange FillItemRow(DataRange oItem, String idField, int count) {
+            var row = new DataRange();
             var itemId = INT(oItem[idField]);
             var urlTitle = STR(oItem["s_Url"]);
             var itemHref = this.context.ImmediateRedirect ?

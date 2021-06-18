@@ -33,8 +33,8 @@ namespace Bula.Fetcher.Controller.Actions {
                     errorMessage = "Incorrect source name!";
                 else {
                     var doSource = new DOSource();
-                    Hashtable[] oSource =
-                        {new Hashtable()};
+                    DataRange[] oSource =
+                        {new DataRange()};
                     if (!doSource.CheckSourceName(sourceName, oSource))
                         errorMessage = "No such source name!";
                     else

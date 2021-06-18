@@ -7,6 +7,7 @@ namespace Bula.Fetcher.Controller {
     using System;
     using System.Collections;
 
+    using Bula.Objects;
     using Bula.Fetcher;
     using Bula.Objects;
 
@@ -22,7 +23,7 @@ namespace Bula.Fetcher.Controller {
 
         /// Execute main logic for Top block 
         public override void Execute() {
-            var prepare = new Hashtable();
+            var prepare = new DataRange();
             prepare["[#ImgWidth]"] = this.context.IsMobile ? 234 : 468;
             prepare["[#ImgHeight]"] = this.context.IsMobile ? 30 : 60;
             if (this.context.TestRun)

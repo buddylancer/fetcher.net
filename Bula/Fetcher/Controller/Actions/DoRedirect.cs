@@ -9,7 +9,6 @@ namespace Bula.Fetcher.Controller.Actions {
 
     using Bula.Fetcher;
     using Bula.Objects;
-
     using Bula.Fetcher.Controller;
 
     /// <summary>
@@ -28,7 +27,7 @@ namespace Bula.Fetcher.Controller.Actions {
         /// <param name="linkToRedirect">Link to redirect (or null if there were some errors).</param>
         /// <param name="errorMessage">Error to show (or null if no errors).</param>
         public void ExecuteRedirect(String linkToRedirect, String errorMessage) {
-            var prepare = new Hashtable();
+            var prepare = new DataRange();
             var templateName = (String)null;
             if (!NUL(errorMessage)) {
                 prepare["[#Title]"] = "Error";

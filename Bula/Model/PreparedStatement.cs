@@ -9,6 +9,7 @@ namespace Bula.Model {
 
     using System.Data;
     using MySql.Data.MySqlClient;
+    using Bula.Objects;
 
     using Bula.Objects;
 
@@ -21,7 +22,7 @@ namespace Bula.Model {
         /// Initial SQL-query 
         private String sql;
         /// List of parameters 
-        private ArrayList pars;
+        private DataList pars;
         /// Formed (prepared) SQL-query 
         private String query;
 
@@ -33,7 +34,7 @@ namespace Bula.Model {
 
         /// Default public constructor 
         public PreparedStatement () {
-            this.pars = new ArrayList();
+            this.pars = new DataList();
             this.pars.Add("dummy"); // Parameter number will start from 1.
         }
 

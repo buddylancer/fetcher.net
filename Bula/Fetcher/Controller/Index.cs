@@ -8,6 +8,7 @@ namespace Bula.Fetcher.Controller {
     using System.Collections;
 
     using Bula.Fetcher;
+    using Bula.Objects;
     using System.Text.RegularExpressions;
     using Bula.Objects;
     using Bula.Model;
@@ -66,7 +67,7 @@ namespace Bula.Fetcher.Controller {
 
             var engine = this.context.PushEngine(true);
 
-            var prepare = new Hashtable();
+            var prepare = new DataRange();
             prepare["[#Site_Name]"] = Config.SITE_NAME;
             var pFromVars = this.context.Request.Contains("p") ? this.context.Request["p"] : "home";
             var idFromVars = this.context.Request.Contains("id") ? this.context.Request["id"] : null;

@@ -22,7 +22,7 @@ namespace Bula.Fetcher.Controller {
 
         /// Execute main logic for Menu block 
         public override void Execute() {
-            var publicPages = new ArrayList();
+            var publicPages = new DataList();
 
             publicPages.Add("Home");
             publicPages.Add("home");
@@ -51,9 +51,9 @@ namespace Bula.Fetcher.Controller {
                 publicPages.Add("sources");
             }
 
-            var menuItems = new ArrayList();
+            var menuItems = new DataList();
             for (int n = 0; n < publicPages.Count; n += 2) {
-                var row = new Hashtable();
+                var row = new DataRange();
                 var title = STR(publicPages[n+0]);
                 var page = STR(publicPages[n+1]);
                 var href = (String)null;
@@ -72,7 +72,7 @@ namespace Bula.Fetcher.Controller {
                 menuItems.Add(row);
             }
 
-            var prepare = new Hashtable();
+            var prepare = new DataRange();
             prepare["[#MenuItems]"] = menuItems;
             this.Write("menu", prepare);
         }

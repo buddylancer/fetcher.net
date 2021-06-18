@@ -8,6 +8,7 @@ namespace Bula.Fetcher.Controller {
     using System.Collections;
 
     using Bula.Fetcher;
+    using Bula.Objects;
     using System.Text.RegularExpressions;
     using Bula.Objects;
     using Bula.Model;
@@ -40,8 +41,8 @@ namespace Bula.Fetcher.Controller {
                     errorMessage += "Empty source!";
                 else {
                     var doSource = new DOSource();
-                    Hashtable[] oSource =
-                        {new Hashtable()};
+                    DataRange[] oSource =
+                        {new DataRange()};
                     if (!doSource.CheckSourceName(source, oSource))
                         errorMessage += CAT("Incorrect source '", source, "'!");
                 }
@@ -67,8 +68,8 @@ namespace Bula.Fetcher.Controller {
                         errorMessage += "Empty filter!";
                     }
                     else {
-                        Hashtable[] oCategory =
-                            {new Hashtable()};
+                        DataRange[] oCategory =
+                            {new DataRange()};
                         if (doCategory.CheckFilterName(filterName, oCategory))
                             filter = STR(oCategory[0]["s_Filter"]);
                         else {

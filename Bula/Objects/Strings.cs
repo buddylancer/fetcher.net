@@ -127,7 +127,7 @@ namespace Bula.Objects {
         public static String[] Split(String divider, String input) {
             String[] chunks =
                 Regex.Split(input, Regex.Escape(divider));
-            var result = new ArrayList();
+            var result = new DataList();
             for (int n = 0; n < SIZE(chunks); n++)
                 result.Add(chunks[n]);
             return (String[])result.ToArray(typeof(String));
@@ -184,7 +184,7 @@ namespace Bula.Objects {
         /// <param name="template">Input template.</param>
         /// <param name="hash">Set of key/value pairs.</param>
         /// <returns>Resulting string.</returns>
-        public static String ReplaceInTemplate(String template, Hashtable hash) {
+        public static String ReplaceInTemplate(String template, DataRange hash) {
             System.Text.StringBuilder sb = new System.Text.StringBuilder(template);
             IEnumerator keys = hash.Keys.GetEnumerator();
             while (keys.MoveNext()) {

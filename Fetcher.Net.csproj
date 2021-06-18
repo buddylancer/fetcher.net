@@ -102,6 +102,8 @@
     <Compile Include="Bula\Model\PreparedStatement.cs" />
     <Compile Include="Bula\Model\RecordSet.cs" />
     <Compile Include="Bula\Objects\Arrays.cs" />
+    <Compile Include="Bula\Objects\DataRange.cs" />
+    <Compile Include="Bula\Objects\DataList.cs" />
     <Compile Include="Bula\Objects\DateTimes.cs" />
     <Compile Include="Bula\Objects\Helper.cs" />
     <Compile Include="Bula\Objects\Logger.cs" />

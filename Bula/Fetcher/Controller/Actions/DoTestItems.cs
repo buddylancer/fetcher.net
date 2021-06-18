@@ -71,7 +71,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 boFetcher.FetchFromSources();
 
                 doTime = new DOTime(); // Need for DB reopen
-                var fields = new Hashtable();
+                var fields = new DataRange();
                 fields["d_Time"] = DateTimes.Format(DateTimes.SQL_DTS, DateTimes.GetTime());
                 if (insertRequired) {
                     fields["i_Id"] = 1;

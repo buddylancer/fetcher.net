@@ -135,14 +135,14 @@ namespace Bula.Model {
         /// </summary>
         /// <param name="result">Query result</param>
         /// <returns>Next record</returns>
-        public static Hashtable FetchArray(Object result)
+        public static DataRange FetchArray(Object result)
         {
             int pointer = (int)((Object[])result)[0];
             System.Data.DataSet ds = (System.Data.DataSet)((Object[])result)[1];
             if (pointer >= ds.Tables[0].Rows.Count)
                 return null; // No more rows to fetch
 
-            Hashtable hash = new Hashtable();
+            DataRange hash = new DataRange();
             System.Data.DataRow row = ds.Tables[0].Rows[pointer];
             for (int n = 0; n < row.Table.Columns.Count; n++)
             {

@@ -15,22 +15,22 @@ namespace Bula.Objects {
     /// </summary>
     public class Request : RequestBase {
         /// Internal storage for GET/POST variables 
-        private Hashtable Vars = null;
+        private DataRange Vars = null;
         /// Internal storage for SERVER variables 
-        private Hashtable ServerVars = null;
+        private DataRange ServerVars = null;
 
         public Request(Object currentRequest) : base(currentRequest) { Initialize(); }
 
         /// Initialize internal variables for new request. 
         private void Initialize() {
-            this.Vars = Arrays.NewHashtable();
-            this.ServerVars = Arrays.NewHashtable();
+            this.Vars = Arrays.NewDataRange();
+            this.ServerVars = Arrays.NewDataRange();
         }
 
         /// <summary>
         /// Get private variables.
         /// </summary>
-        public Hashtable GetPrivateVars() {
+        public DataRange GetPrivateVars() {
             return this.Vars;
         }
 
@@ -83,19 +83,19 @@ namespace Bula.Objects {
         /// Extract all POST variables into internal variables. 
         public void ExtractPostVars() {
             var vars = this.GetVars(INPUT_POST);
-            this.Vars = Arrays.MergeHashtable(this.Vars, vars);
+            this.Vars = Arrays.MergeDataRange(this.Vars, vars);
         }
 
         /// Extract all SERVER variables into internal storage. 
         public void ExtractServerVars() {
             var vars = this.GetVars(INPUT_SERVER);
-            this.Vars = Arrays.MergeHashtable(this.ServerVars, vars);
+            this.Vars = Arrays.MergeDataRange(this.ServerVars, vars);
         }
 
         /// Extract all GET and POST variables into internal storage. 
         public void ExtractAllVars() {
             var vars = this.GetVars(INPUT_GET);
-            this.Vars = Arrays.MergeHashtable(this.Vars, vars);
+            this.Vars = Arrays.MergeDataRange(this.Vars, vars);
             this.ExtractPostVars();
         }
 
@@ -208,7 +208,7 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="pages">Array of allowed pages (and their parameters).</param>
         /// <returns>Resulting page parameters.</returns>
-        public Hashtable TestPage(Object[] pages) {
+        public DataRange TestPage(Object[] pages) {
             return TestPage(pages, null); }
 
         /// <summary>
@@ -217,8 +217,8 @@ namespace Bula.Objects {
         /// <param name="pages">Array of allowed pages (and their parameters).</param>
         /// <param name="defaultPage">Default page to use for testing.</param>
         /// <returns>Resulting page parameters.</returns>
-        public Hashtable TestPage(Object[] pages, String defaultPage) {
-            var pageInfo = new Hashtable();
+        public DataRange TestPage(Object[] pages, String defaultPage) {
+            var pageInfo = new DataRange();
 
             // Get page name
             var page = (String)null;

@@ -21,7 +21,7 @@ namespace Bula.Fetcher.Controller {
         /// Source name 
         private String source = null;
         /// RSS-item 
-        private Hashtable item = null;
+        private DataRange item = null;
 
         /// Link to external item 
         public String link = null;
@@ -51,7 +51,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="source">Current processed source.</param>
         /// <param name="item">Current processed RSS-item from given source.</param>
-        public BOItem (String source, Hashtable item) {
+        public BOItem (String source, DataRange item) {
             this.Initialize(source, item);
         }
 
@@ -60,7 +60,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="source">Current processed source.</param>
         /// <param name="item">Current processed RSS-item from given source.</param>
-        private void Initialize(String source, Hashtable item) {
+        private void Initialize(String source, DataRange item) {
             this.source = source;
             this.item = item;
 
@@ -180,7 +180,7 @@ namespace Bula.Fetcher.Controller {
             var category = (String)null;
             if (categoryItem.Length != 0) {
                 String[] categoriesArr = categoryItem.Replace(",&,", " & ").Split(new char[] {','});
-                var categoriesNew = new ArrayList();
+                var categoriesNew = new DataList();
                 for (int c = 0; c < SIZE(categoriesArr); c++) {
                     var temp = categoriesArr[c];
                     if (BLANK(temp.Trim()))
@@ -251,7 +251,7 @@ namespace Bula.Fetcher.Controller {
                         includeFlag &= false;
                 }
                 if (includeFlag) {
-                    var arrayList = Arrays.CreateArrayList(categoryTags); arrayList.Add(name);
+                    var arrayList = Arrays.CreateDataList(categoryTags); arrayList.Add(name);
                     categoryTags = (String[])arrayList.ToArray(typeof(String));
                  }
             }
@@ -259,7 +259,7 @@ namespace Bula.Fetcher.Controller {
                 return;
 
             //TODO
-            //ArrayList uniqueCategories = this.NormalizeList(categoryTags, lang);
+            //DataList uniqueCategories = this.NormalizeList(categoryTags, lang);
             //category = String.Join(", ", uniqueCategories);
 
             this.category = Strings.Join(", ", categoryTags);
@@ -276,7 +276,7 @@ namespace Bula.Fetcher.Controller {
                 else if (!BLANK(this.item["source"]))
                     this.creator = STR(this.item["source"]);
                 else if (!BLANK(this.item["dc"])) { //TODO implement [dc][creator]
-                    var temp = (Hashtable)this.item["dc"];
+                    var temp = (DataRange)this.item["dc"];
                     if (!BLANK(temp["creator"]))
                         this.creator = STR(temp["creator"]);
                 }

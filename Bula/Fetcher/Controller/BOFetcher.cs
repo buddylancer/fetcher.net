@@ -58,7 +58,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="oSource">Source object.</param>
         /// <returns>Resulting items.</returns>
-        private Object[] FetchFromSource(Hashtable oSource) {
+        private Object[] FetchFromSource(DataRange oSource) {
             var url = STR(oSource["s_Feed"]);
             if (url.Length == 0)
                 return null;
@@ -94,7 +94,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="oSource">Source object.</param>
         /// <param name="item">Item object.</param>
         /// <returns>Result of executing SQL-query.</returns>
-        private int ParseItemData(Hashtable oSource, Hashtable item) {
+        private int ParseItemData(DataRange oSource, DataRange item) {
             // Load original values
 
             var sourceName = STR(oSource["s_SourceName"]);
@@ -118,7 +118,7 @@ namespace Bula.Fetcher.Controller {
             boItem.AddStandardCategories(this.dsCategories, this.context.Lang);
 
             var url = boItem.GetUrlTitle(true); //TODO -- Need to pass true if transliteration is required
-            var fields = new Hashtable();
+            var fields = new DataRange();
             fields["s_Link"] = boItem.link;
             fields["s_Title"] = boItem.title;
             fields["s_FullTitle"] = boItem.fullTitle;
@@ -172,7 +172,7 @@ namespace Bula.Fetcher.Controller {
                 var itemsCounter = 0;
                 // Loop through fetched items and parse their data
                 for (int i = SIZE(itemsArray) - 1; i >= 0; i--) {
-                    var hash = (Hashtable)itemsArray[i];
+                    var hash = (DataRange)itemsArray[i];
                     if (BLANK(hash["link"]))
                         continue;
                     var itemid = this.ParseItemData(oSource, hash);
@@ -216,7 +216,7 @@ namespace Bula.Fetcher.Controller {
                 var doItem = new DOItem();
                 var sqlFilter = doItem.BuildSqlFilter(filter);
                 var dsItems = doItem.EnumIds(sqlFilter);
-                var fields = new Hashtable();
+                var fields = new DataRange();
                 fields["i_Counter"] = dsItems.GetSize();
                 var result = doCategory.UpdateById(id, fields);
                 if (result < 0)

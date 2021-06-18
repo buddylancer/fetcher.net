@@ -9,7 +9,6 @@ namespace Bula.Fetcher.Controller {
 
     using Bula;
     using Bula.Fetcher;
-
     using Bula.Objects;
 
     /// <summary>
@@ -92,7 +91,7 @@ namespace Bula.Fetcher.Controller {
 
             var content = (String)null;
             if (Helper.FileExists(CAT(this.context.LocalRoot, fileName))) {
-                ArrayList args0 = new ArrayList(); args0.Add(this.context);
+                DataList args0 = new DataList(); args0.Add(this.context);
                 Internal.CallMethod(CAT(prefix, className), args0, defaultMethod, null);
                 content = engine.GetPrintString();
             }
@@ -114,9 +113,9 @@ namespace Bula.Fetcher.Controller {
         /// Show template content by merging template and data.
         /// </summary>
         /// <param name="id">Template ID to use for merging.</param>
-        /// <param name="hash">Data in the form of Hashtable to use for merging.</param>
+        /// <param name="hash">Data in the form of DataRange to use for merging.</param>
         /// <returns>Resulting content.</returns>
-        public String ShowTemplate(String id, Hashtable hash) {
+        public String ShowTemplate(String id, DataRange hash) {
             var ext = BLANK(this.context.Api) ? ".html" : (Config.API_FORMAT == "Xml"? ".xml" : ".txt");
             var prefix = CAT(Config.FILE_PREFIX, "Bula/Fetcher/View/");
 
@@ -142,13 +141,13 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="filename">File name.</param>
         /// <returns>Resulting array with lines.</returns>
-        private ArrayList GetTemplate(String filename) {
+        private DataList GetTemplate(String filename) {
             if (Helper.FileExists(CAT(this.context.LocalRoot, filename))) {
                 Object[] lines = Helper.ReadAllLines(CAT(this.context.LocalRoot, filename));
-                return Arrays.CreateArrayList(lines);
+                return Arrays.CreateDataList(lines);
             }
             else {
-                var temp = new ArrayList();
+                var temp = new DataList();
                 temp.Add(CAT("File not found -- '", filename, "'<hr/>"));
                 return temp;
             }
@@ -160,9 +159,9 @@ namespace Bula.Fetcher.Controller {
         /// <param name="template">Template content.</param>
         /// <param name="hash">Data for merging with template.</param>
         /// <returns>Resulting content.</returns>
-        public String FormatTemplate(String template, Hashtable hash) {
+        public String FormatTemplate(String template, DataRange hash) {
             if (hash == null)
-                hash = new Hashtable();
+                hash = new DataRange();
             String content1 = Strings.ReplaceInTemplate(template, hash);
             String content2 = Strings.ReplaceInTemplate(content1, this.context.GlobalConstants);
             return content2;
@@ -206,18 +205,18 @@ namespace Bula.Fetcher.Controller {
         /// <param name="template">Template in form of the list of lines.</param>
         /// <param name="hash">Data for merging with template.</param>
         /// <returns>Resulting content.</returns>
-        private String ProcessTemplate(ArrayList template, Hashtable hash) {
+        private String ProcessTemplate(DataList template, DataRange hash) {
             if (this.context.IsMobile) {
                 if (hash == null)
-                    hash = new Hashtable();
+                    hash = new DataRange();
                 hash["[#Is_Mobile]"] = 1;
             }
             var trimLine = true;
             var trimEnd = EOL;
             var ifMode = 0;
             var repeatMode = 0;
-            var ifBuf = new ArrayList();
-            var repeatBuf = new ArrayList();
+            var ifBuf = new DataList();
+            var repeatBuf = new DataList();
             var ifWhat = "";
             var repeatWhat = "";
             var content = "";
@@ -258,7 +257,7 @@ namespace Bula.Fetcher.Controller {
 
                             if (processFlag)
                                 content += ProcessTemplate(ifBuf, hash);
-                            ifBuf = new ArrayList();
+                            ifBuf = new DataList();
                         }
                         else
                             ifBuf.Add(line);
@@ -273,12 +272,12 @@ namespace Bula.Fetcher.Controller {
                     if (lineNoComments.IndexOf("#end repeat") == 0) {
                         if (repeatMode == 1) {
                             if (hash.ContainsKey(repeatWhat)) {
-                                var rows = (ArrayList)hash[repeatWhat];
+                                var rows = (DataList)hash[repeatWhat];
                                 for (int r = 0; r < rows.Count; r++)
-                                    content += ProcessTemplate(repeatBuf, (Hashtable)rows[r]);
+                                    content += ProcessTemplate(repeatBuf, (DataRange)rows[r]);
                                 hash.Remove(repeatWhat);
                             }
-                            repeatBuf = new ArrayList();
+                            repeatBuf = new DataList();
                         }
                         else
                             repeatBuf.Add(line);
@@ -295,7 +294,7 @@ namespace Bula.Fetcher.Controller {
                     else if (lineNoComments.IndexOf("#repeat") == 0) {
                         repeatMode++;
                         repeatWhat = lineNoComments.Substring(8).Trim();
-                        repeatBuf = new ArrayList();
+                        repeatBuf = new DataList();
                     }
                     else {
                         if (trimLine) {

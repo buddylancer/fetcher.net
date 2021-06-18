@@ -13,13 +13,13 @@ namespace Bula.Model {
     /// Non-typed data set implementation.
     /// </summary>
     public class DataSet : Bula.Meta {
-        private ArrayList rows;
+        private DataList rows;
         private int pageSize;
         private int totalPages;
 
         /// Default public constructor 
         public DataSet () {
-            this.rows = new ArrayList();
+            this.rows = new DataList();
             this.pageSize = 10;
             this.totalPages = 0;
         }
@@ -37,15 +37,15 @@ namespace Bula.Model {
         /// </summary>
         /// <param name="n">Number of the row.</param>
         /// <returns>Required row or null.</returns>
-        public Hashtable GetRow(int n) {
-            return (Hashtable) this.rows[n];
+        public DataRange GetRow(int n) {
+            return (DataRange) this.rows[n];
         }
 
         /// <summary>
         /// Add new row into the DataSet.
         /// </summary>
         /// <param name="row">New row to add.</param>
-        public void AddRow(Hashtable row) {
+        public void AddRow(DataRange row) {
             this.rows.Add(row);
         }
 

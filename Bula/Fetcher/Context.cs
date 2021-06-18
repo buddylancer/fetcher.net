@@ -8,7 +8,6 @@ namespace Bula.Fetcher {
     using System.Collections;
 
     using Bula.Objects;
-
     using Bula.Fetcher.Controller;
 
     /// <summary>
@@ -36,7 +35,7 @@ namespace Bula.Fetcher {
         public Response Response = null;
 
         /// Storage for internal variables 
-        protected Hashtable Values = new Hashtable();
+        protected DataRange Values = new DataRange();
 
         /// <summary>
         /// Get internal variable.
@@ -106,7 +105,7 @@ namespace Bula.Fetcher {
         public Boolean ImmediateRedirect = Config.IMMEDIATE_REDIRECT;
 
         /// Storage for global constants 
-        public Hashtable GlobalConstants = null;
+        public DataRange GlobalConstants = null;
 
         /// Is current request from test script? 
         public Boolean TestRun = false;
@@ -176,7 +175,7 @@ namespace Bula.Fetcher {
         /// Define global constants.
         /// </summary>
         private void DefineConstants() {
-            this.GlobalConstants = new Hashtable();
+            this.GlobalConstants = new DataRange();
             this.GlobalConstants["[#Site_Name]"] = Config.SITE_NAME;
             this.GlobalConstants["[#Site_Comments]"] = Config.SITE_COMMENTS;
             this.GlobalConstants["[#Top_Dir]"] = Config.TOP_DIR;
@@ -214,7 +213,7 @@ namespace Bula.Fetcher {
                 this.GlobalConstants["[#Name_Custom2]"] = this["Name_Custom2"];
         }
 
-        private ArrayList EngineInstances = null;
+        private DataList EngineInstances = null;
         private int EngineIndex = -1;
 
         /// <summary>
@@ -226,7 +225,7 @@ namespace Bula.Fetcher {
             engine.SetPrintFlag(printFlag);
             this.EngineIndex++;
             if (this.EngineInstances == null)
-                this.EngineInstances = new ArrayList();
+                this.EngineInstances = new DataList();
             if (this.EngineInstances.Count <= this.EngineIndex)
                 this.EngineInstances.Add(engine);
             else

@@ -13,6 +13,8 @@ namespace Bula
     using System.Collections;
     using System.Text.RegularExpressions;
 
+    using Bula.Objects;
+
     /// <summary>
     /// Various operations specific to C# version.
     /// </summary>
@@ -88,7 +90,7 @@ namespace Bula
         /// <param name="method_name">Method name</param>
         /// <param name="args">List of arguments</param>
         /// <returns>Result of method execution</returns>
-        public static Object CallStaticMethod(String class_name, String method_name, ArrayList args)
+        public static Object CallStaticMethod(String class_name, String method_name, DataList args)
         {
             Type type = Type.GetType(class_name.Replace('/', '.'));
             System.Reflection.MethodInfo methodInfo = type.GetMethod(method_name);
@@ -98,7 +100,7 @@ namespace Bula
                 return methodInfo.Invoke(null, null);
         }
 
-        private static Type[] GetTypes(ArrayList args) {
+        private static Type[] GetTypes(DataList args) {
             Type[] types = args != null && args.Count > 0 ? new Type[args.Count] : new Type[0];
             if (types.Length > 0)
             {
@@ -127,7 +129,7 @@ namespace Bula
         /// <param name="method_name">Method name</param>
         /// <param name="args">List of arguments</param>
         /// <returns>Result of method execution</returns>
-        public static Object CallMethod(String class_name, ArrayList args0, String method_name, ArrayList args)
+        public static Object CallMethod(String class_name, DataList args0, String method_name, DataList args)
         {
             Type type = Type.GetType(class_name.Replace('/', '.'));
 
@@ -155,7 +157,7 @@ namespace Bula
         /// <returns>Resulting array of items</returns>
         public static Object[] FetchRss(String url)
         {
-            var items = new ArrayList();
+            var items = new DataList();
 
             XmlDocument rssXmlDoc = new XmlDocument();
 
@@ -171,7 +173,7 @@ namespace Bula
             // Iterate through the items in the RSS file
             foreach (XmlNode rssNode in rssNodes)
             {
-                var item = new Hashtable();
+                var item = new DataRange();
 
                 XmlNode rssSubNode = rssNode.SelectSingleNode("title");
                 if (rssSubNode != null)
@@ -192,8 +194,8 @@ namespace Bula
                 rssSubNode = rssNode.SelectSingleNode("dc:creator", nsmgr);
                 if (rssSubNode != null)
                 {
-                    item["dc"] = new Hashtable();
-                    ((Hashtable)item["dc"])["creator"] = rssSubNode.InnerText;
+                    item["dc"] = new DataRange();
+                    ((DataRange)item["dc"])["creator"] = rssSubNode.InnerText;
                 }
                 items.Add(item);
             }

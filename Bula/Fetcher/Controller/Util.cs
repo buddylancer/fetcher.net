@@ -8,7 +8,6 @@ namespace Bula.Fetcher.Controller {
     using System.Collections;
 
     using Bula.Fetcher;
-
     using Bula.Objects;
 
     /// <summary>

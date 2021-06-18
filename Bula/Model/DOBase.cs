@@ -412,7 +412,7 @@ namespace Bula.Model {
         /// </summary>
         /// <param name="fields">The set of fields.</param>
         /// <returns>Result of SQL-query execution.</returns>
-        public int Insert(Hashtable fields) {
+        public int Insert(DataRange fields) {
             var keys =
                 fields.Keys.GetEnumerator();
             var fieldNames = "";
@@ -442,7 +442,7 @@ namespace Bula.Model {
         /// <param name="id">Unique record ID.</param>
         /// <param name="fields">The set of fields.</param>
         /// <returns>Result of SQL-query execution.</returns>
-        public int UpdateById(Object id, Hashtable fields) {
+        public int UpdateById(Object id, DataRange fields) {
             var keys =
                 fields.Keys.GetEnumerator();
             var setValues = "";

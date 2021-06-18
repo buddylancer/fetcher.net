@@ -42,8 +42,8 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="type">Required type.</param>
         /// <returns>Requested variables.</returns>
-        public Hashtable GetVars(int type) {
-            Hashtable hash = new Hashtable();
+        public DataRange GetVars(int type) {
+            DataRange hash = new DataRange();
             System.Collections.Specialized.NameValueCollection vars = null;
             switch (type) {
                 case Request.INPUT_GET:
