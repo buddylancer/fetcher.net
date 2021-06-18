@@ -82,18 +82,19 @@ namespace Bula.Fetcher.Controller.Pages {
             prepare["[#InputTitle]"] = Util.Safe(title);
             prepare["[#RedirectSource]"] = this.GetLink(Config.ACTION_PAGE, "?p=do_redirect_source&source=", "redirect/source/", sourceName);
             prepare["[#SourceName]"] = sourceName;
+            prepare["[#ExtImages]"] = Config.EXT_IMAGES;
             prepare["[#SourceLink]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&source=", "items/source/", sourceName);
             prepare["[#Date]"] = Util.ShowTime(STR(oItem["d_Date"]));
-            prepare["[#Creator]"] = STR(oItem["s_Creator"]);
+            if (!NUL(oItem["s_Creator"]))
+                prepare["[#Creator]"] = STR(oItem["s_Creator"]);
             prepare["[#Description]"] = oItem.ContainsKey("t_Description") ? Util.Show(STR(oItem["t_Description"])) : "";
             prepare["[#ItemID]"] = oItem[idField];
-            if (this.context.Contains("Name_Category")) {
-                var category = STR(oItem["s_Category"]);
-                if (!BLANK(category))
-                    prepare["[#Category]"] = category;
-            }
-            if (this.context.Contains("Name_Custom1")) prepare["[#Custom1]"] = oItem["s_Custom1"];
-            if (this.context.Contains("Name_Custom2")) prepare["[#Custom2]"] = oItem["s_Custom2"];
+            if (this.context.Contains("Name_Category") && !NUL(oItem["s_Category"]))
+                prepare["[#Category]"] = oItem["s_Category"];
+            if (this.context.Contains("Name_Custom1") && !NUL(oItem["s_Custom1"]))
+                prepare["[#Custom1]"] = oItem["s_Custom1"];
+            if (this.context.Contains("Name_Custom2") && !NUL(oItem["s_Custom2"]))
+                prepare["[#Custom2]"] = oItem["s_Custom2"];
 
             if (this.context.Lang == "ru" && !this.context.IsMobile)
                 prepare["[#Share]"] = 1;

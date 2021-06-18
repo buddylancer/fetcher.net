@@ -49,6 +49,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 var sourceRow = new Hashtable();
                 sourceRow["[#ColSpan]"] = Config.SHOW_IMAGES ? 4 : 3;
                 sourceRow["[#SourceName]"] = sourceName;
+                sourceRow["[#ExtImages]"] = Config.EXT_IMAGES;
                 //sourceRow["[#RedirectSource]"] = Config.TOP_DIR .
                 //    (Config.FINE_URLS ? "redirect/source/" : "action.php?p=do_redirect_source&source=") .
                 //        oSource["s_SourceName"];

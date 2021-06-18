@@ -86,6 +86,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 row["[#Show_Images]"] = 1;
             var sourceName = STR(oItem["s_SourceName"]);
             row["[#SourceName]"] = sourceName;
+            row["[#ExtImages]"] = Config.EXT_IMAGES;
             row["[#Title]"] = Util.Show(STR(oItem["s_Title"]));
             row["[#SourceLink]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&source=", "items/source/", sourceName);
 
@@ -171,8 +172,8 @@ namespace Bula.Fetcher.Controller.Pages {
             var link = this.GetLink(Config.INDEX_PAGE, "?p=items", "items");
             if (this.context.Request.Contains("source") && !BLANK(this.context.Request["source"]))
                 link = this.AppendLink(link, "&source=", "/source/", this.context.Request["source"]);
-            if (this.context.Contains("filter") && !BLANK(this.context["filter"]))
-                link = this.AppendLink(link, "&amp;filter=", "/filter/", this.context["filter"]);
+            if (this.context.Request.Contains("filter") && !BLANK(this.context.Request["filter"]))
+                link = this.AppendLink(link, "&amp;filter=", "/filter/", this.context.Request["filter"]);
             if (listNo > 1)
                 link = this.AppendLink(link, "&list=", "/list/", listNo);
             return link;

@@ -101,7 +101,7 @@ namespace Bula.Fetcher.Controller {
             var sourceId = INT(oSource["i_SourceId"]);
             var boItem = new BOItem(sourceName, item);
             var pubDate = STR(item["pubdate"]);
-            var date = DateTimes.Format(DateTimes.SQL_DTS, DateTimes.FromRss(pubDate));
+            var date = DateTimes.GmtFormat(DateTimes.SQL_DTS, DateTimes.FromRss(pubDate));
 
             // Check whether item with the same link exists already
             var doItem = new DOItem();

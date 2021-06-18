@@ -183,10 +183,14 @@ namespace Bula.Fetcher.Controller {
                 var categoriesNew = new ArrayList();
                 for (int c = 0; c < SIZE(categoriesArr); c++) {
                     var temp = categoriesArr[c];
-                    if (!BLANK(temp))
-                        categoriesNew.Add(temp);
+                    if (BLANK(temp.Trim()))
+                        continue;
+                    temp = Strings.FirstCharToUpper(temp);
+                    if (category == null)
+                        category = temp;
+                    else
+                        category += CAT(", ", temp);
                 }
-                category = Strings.Join(", ", (String[])categoriesNew.ToArray());
             }
 
             return category;
@@ -244,7 +248,7 @@ namespace Bula.Fetcher.Controller {
                     if (!BLANK(this.description) && Regex.IsMatch(this.description, excludeChunk, RegexOptions.IgnoreCase))
                         includeFlag &= false;
                     if (Regex.IsMatch(this.title, excludeChunk, RegexOptions.IgnoreCase))
-                        includeFlag |= true;
+                        includeFlag &= false;
                 }
                 if (includeFlag) {
                     var arrayList = Arrays.CreateArrayList(categoryTags); arrayList.Add(name);

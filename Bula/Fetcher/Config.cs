@@ -40,6 +40,8 @@ namespace Bula.Fetcher {
         public const Boolean SHOW_FROM = false;
         /// Whether to show images for sources 
         public const Boolean SHOW_IMAGES = false;
+        /// File extension for images 
+        public const String EXT_IMAGES = "gif";
         /// Show an item or immediately redirect to external source item 
         public const Boolean IMMEDIATE_REDIRECT = false;
         /// How much items to show on "Sources" page 
