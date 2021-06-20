@@ -10,11 +10,11 @@ namespace Bula.Objects {
     /// <summary>
     /// Helper class for processing server response.
     /// </summary>
-    public class Response : Bula.Meta {
+    public class TResponse : Bula.Meta {
         /// Current response 
         private System.Web.HttpResponse httpResponse = null;
 
-        public Response (Object response) {
+        public TResponse (Object response) {
             httpResponse = (System.Web.HttpResponse)response;
         }
 

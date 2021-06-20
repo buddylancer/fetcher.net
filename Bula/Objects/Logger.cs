@@ -14,7 +14,7 @@ namespace Bula.Objects {
     /// </summary>
     public class Logger : Bula.Meta {
         private String fileName = null;
-        private Response response = null;
+        private TResponse response = null;
 
         /// <summary>
         /// Initialize logging into file.
@@ -33,7 +33,7 @@ namespace Bula.Objects {
         /// Initialize logging into file.
         /// </summary>
         /// <param name="filename">Log file name.</param>
-        public void InitResponse(Response response) {
+        public void InitTResponse(TResponse response) {
             this.fileName = null;
             if (!NUL(response))
                 this.response = response;

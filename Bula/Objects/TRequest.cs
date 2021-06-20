@@ -13,24 +13,24 @@ namespace Bula.Objects {
     /// <summary>
     /// Helper class for processing query/form request.
     /// </summary>
-    public class Request : RequestBase {
+    public class TRequest : TRequestBase {
         /// Internal storage for GET/POST variables 
-        private DataRange Vars = null;
+        private THashtable Vars = null;
         /// Internal storage for SERVER variables 
-        private DataRange ServerVars = null;
+        private THashtable ServerVars = null;
 
-        public Request(Object currentRequest) : base(currentRequest) { Initialize(); }
+        public TRequest(Object currentRequest) : base(currentRequest) { Initialize(); }
 
         /// Initialize internal variables for new request. 
         private void Initialize() {
-            this.Vars = Arrays.NewDataRange();
-            this.ServerVars = Arrays.NewDataRange();
+            this.Vars = THashtable.Create();
+            this.ServerVars = THashtable.Create();
         }
 
         /// <summary>
         /// Get private variables.
         /// </summary>
-        public DataRange GetPrivateVars() {
+        public THashtable GetPrivateVars() {
             return this.Vars;
         }
 
@@ -76,26 +76,26 @@ namespace Bula.Objects {
         /// Get all variable keys from request.
         /// </summary>
         /// <returns>All keys enumeration.</returns>
-        public IEnumerator GetKeys() {
-            return this.Vars.Keys.GetEnumerator();
+        public TEnumerator GetKeys() {
+            return new TEnumerator(this.Vars.Keys.GetEnumerator());
         }
 
         /// Extract all POST variables into internal variables. 
         public void ExtractPostVars() {
             var vars = this.GetVars(INPUT_POST);
-            this.Vars = Arrays.MergeDataRange(this.Vars, vars);
+            this.Vars = this.Vars.Merge(vars);
         }
 
         /// Extract all SERVER variables into internal storage. 
         public void ExtractServerVars() {
             var vars = this.GetVars(INPUT_SERVER);
-            this.Vars = Arrays.MergeDataRange(this.ServerVars, vars);
+            this.Vars = this.ServerVars.Merge(vars);
         }
 
         /// Extract all GET and POST variables into internal storage. 
         public void ExtractAllVars() {
             var vars = this.GetVars(INPUT_GET);
-            this.Vars = Arrays.MergeDataRange(this.Vars, vars);
+            this.Vars = this.Vars.Merge(vars);
             this.ExtractPostVars();
         }
 
@@ -208,7 +208,7 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="pages">Array of allowed pages (and their parameters).</param>
         /// <returns>Resulting page parameters.</returns>
-        public DataRange TestPage(Object[] pages) {
+        public THashtable TestPage(Object[] pages) {
             return TestPage(pages, null); }
 
         /// <summary>
@@ -217,8 +217,8 @@ namespace Bula.Objects {
         /// <param name="pages">Array of allowed pages (and their parameters).</param>
         /// <param name="defaultPage">Default page to use for testing.</param>
         /// <returns>Resulting page parameters.</returns>
-        public DataRange TestPage(Object[] pages, String defaultPage) {
-            var pageInfo = new DataRange();
+        public THashtable TestPage(Object[] pages, String defaultPage) {
+            var pageInfo = new THashtable();
 
             // Get page name
             var page = (String)null;

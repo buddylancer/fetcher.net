@@ -97,7 +97,7 @@ namespace Bula.Fetcher.Controller {
                 query = pageName;
             else {
                 if (query == null)
-                    query = engine.context.Request.GetVar(Request.INPUT_SERVER, "QUERY_STRING");
+                    query = engine.context.Request.GetVar(TRequest.INPUT_SERVER, "QUERY_STRING");
                 if (BLANK(query))
                     query = "p=home";
             }

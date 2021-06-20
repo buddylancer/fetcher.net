@@ -22,7 +22,7 @@ namespace Bula.Model {
         /// Initial SQL-query 
         private String sql;
         /// List of parameters 
-        private DataList pars;
+        private TArrayList pars;
         /// Formed (prepared) SQL-query 
         private String query;
 
@@ -34,7 +34,7 @@ namespace Bula.Model {
 
         /// Default public constructor 
         public PreparedStatement () {
-            this.pars = new DataList();
+            this.pars = new TArrayList();
             this.pars.Add("dummy"); // Parameter number will start from 1.
         }
 

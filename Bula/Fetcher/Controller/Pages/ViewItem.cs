@@ -27,21 +27,21 @@ namespace Bula.Fetcher.Controller.Pages {
         /// Fast check of input query parameters.
         /// </summary>
         /// <returns>Parsed parameters (or null in case of any error).</returns>
-        public DataRange Check() {
-            var prepare = new DataRange();
+        public THashtable Check() {
+            var prepare = new THashtable();
             if (!this.context.Request.Contains("id")) {
                 prepare["[#ErrMessage]"] = "Item ID is required!";
                 this.Write("error", prepare);
                 return null;
             }
             var id = this.context.Request["id"];
-            if (!Request.IsInteger(id)) {
+            if (!TRequest.IsInteger(id)) {
                 prepare["[#ErrMessage]"] = "Item ID must be positive integer!";
                 this.Write("error", prepare);
                 return null;
             }
 
-            var pars = new DataRange();
+            var pars = new THashtable();
             pars["id"] = id;
             return pars;
         }
@@ -54,7 +54,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var id = (String)pars["id"];
 
-            var prepare = new DataRange();
+            var prepare = new THashtable();
 
             var doItem = new DOItem();
             var dsItems = doItem.GetById(INT(id));

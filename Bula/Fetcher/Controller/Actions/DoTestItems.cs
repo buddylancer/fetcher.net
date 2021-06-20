@@ -33,8 +33,8 @@ namespace Bula.Fetcher.Controller.Actions {
                 "<html xmlns=\"http://www.w3.org/1999/xhtml\">", EOL,
                 "    <head>", EOL,
                 "        <title>Buddy Fetcher -- Test for new items</title>", EOL,
-                "        <meta name=\"keywords\" content=\"Buddy Fetcher, rss, fetcher, aggregator, PHP, MySQL\" />", EOL,
-                "        <meta name=\"description\" content=\"Buddy Fetcher is a simple RSS Fetcher/aggregator written in PHP/MySQL\" />", EOL,
+                "        <meta name=\"keywords\" content=\"Buddy Fetcher, rss, fetcher, aggregator, ", Config.PLATFORM, ", MySQL\" />", EOL,
+                "        <meta name=\"description\" content=\"Buddy Fetcher is a simple RSS Fetcher/aggregator written in ", Config.PLATFORM, "/MySQL\" />", EOL,
                 "        <meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />", EOL,
                 "    </head>", EOL,
                 "    <body>", EOL
@@ -71,7 +71,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 boFetcher.FetchFromSources();
 
                 doTime = new DOTime(); // Need for DB reopen
-                var fields = new DataRange();
+                var fields = new THashtable();
                 fields["d_Time"] = DateTimes.Format(DateTimes.SQL_DTS, DateTimes.GetTime());
                 if (insertRequired) {
                     fields["i_Id"] = 1;

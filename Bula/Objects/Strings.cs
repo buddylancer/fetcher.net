@@ -127,7 +127,7 @@ namespace Bula.Objects {
         public static String[] Split(String divider, String input) {
             String[] chunks =
                 Regex.Split(input, Regex.Escape(divider));
-            var result = new DataList();
+            var result = new TArrayList();
             for (int n = 0; n < SIZE(chunks); n++)
                 result.Add(chunks[n]);
             return (String[])result.ToArray(typeof(String));
@@ -184,14 +184,31 @@ namespace Bula.Objects {
         /// <param name="template">Input template.</param>
         /// <param name="hash">Set of key/value pairs.</param>
         /// <returns>Resulting string.</returns>
-        public static String ReplaceInTemplate(String template, DataRange hash) {
-            System.Text.StringBuilder sb = new System.Text.StringBuilder(template);
-            IEnumerator keys = hash.Keys.GetEnumerator();
+        public static String ReplaceInTemplate(String template, THashtable hash) {
+            var keys = new TEnumerator(hash.Keys.GetEnumerator());
             while (keys.MoveNext()) {
-                String key = STR(keys.Current);
-                sb.Replace(key, STR(hash[key]));
+                var key = STR(keys.GetCurrent());
+                template = Strings.Replace(key, STR(hash[key]), template);
             }
-            return sb.ToString();
+            return template;
         }
+
+        public static String Trim(String input) {
+            return Trim(input, null);
+        }
+
+        /// <summary>
+        /// Trim this string.
+        /// </summary>
+        /// <param name="chars">Which chars to trim [optional].</param>
+        /// <returns>Resulting string.</returns>
+        public static String Trim(String input, String chars) {
+            if (chars == null)
+                chars = " \\n\\r\\t\\v\\0";
+            input = Regex.Replace(input, CAT("^", "[", chars, "]*"), "");
+            input = Regex.Replace(input, CAT("[", chars, "]*$"), "");
+            return input;
+        }
+
     }
 }

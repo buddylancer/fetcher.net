@@ -13,19 +13,6 @@ namespace Bula.Objects {
     /// Helper class for manipulating with arrays.
     /// </summary>
     public class Arrays : Bula.Meta {
-        /// Create new array list. 
-        public static DataList NewDataList() {
-            return new DataList();
-        }
-
-        /// <summary>
-        /// Create new hash table.
-        /// </summary>
-        /// <returns>New hash table.</returns>
-        public static DataRange NewDataRange() {
-            return new DataRange();
-        }
-
         /// <summary>
         /// Create new empty array.
         /// </summary>
@@ -39,71 +26,6 @@ namespace Bula.Objects {
         /// <returns>Resulting array.</returns>
         public static Object[] NewArray(int size) {
             return new Object[size];
-        }
-
-        /// <summary>
-        /// Merge hash tables.
-        /// </summary>
-        /// <param name="input">Original hash table.</param>
-        /// <param name="extra">Hash table to merge with original one.</param>
-        /// <returns>Merged hash table.</returns>
-        public static DataRange MergeDataRange(DataRange input, DataRange extra) {
-            if (input == null)
-                return null;
-            if (extra == null)
-                return input;
-
-            var output = (DataRange)input.Clone();
-            var keys =
-                extra.Keys.GetEnumerator();
-            while (keys.MoveNext()) {
-                var key = (String)keys.Current;
-                output[key] = extra[key];
-            }
-            return output;
-        }
-
-        /// <summary>
-        /// Merge array lists.
-        /// </summary>
-        /// <param name="input">Original array list.</param>
-        /// <param name="extra">Array list to merge with original one.</param>
-        /// <returns>Resulting array list.</returns>
-        public static DataList MergeDataList(DataList input, DataList extra) {
-            if (input == null)
-                return null;
-            if (extra == null)
-                return input;
-
-            var output = NewDataList();
-            for (int n = 0; n < SIZE(input); n++)
-                output.Add(input[n]);
-            for (int n = 0; n < SIZE(extra); n++)
-                output.Add(extra[n]);
-            return output;
-        }
-
-        /// <summary>
-        /// Merge arrays.
-        /// </summary>
-        /// <param name="input">Original array.</param>
-        /// <param name="extra">Array to merge with original one.</param>
-        /// <returns>Resulting array.</returns>
-        public static Object[] MergeArray(Object[] input, Object[] extra) {
-            if (input == null)
-                return null;
-            if (extra == null)
-                return input;
-
-            var inputSize = SIZE(input);
-            var extraSize = SIZE(extra);
-            var newSize = inputSize + extraSize;
-            Object[] output = NewArray(newSize);
-            for (int n = 0; n < inputSize; n++)
-                output[n] = input[n];
-            for (int n = 0; n < extraSize; n++)
-                output[inputSize + n] = extra[n];
-            return output;
         }
 
         /// <summary>
@@ -124,22 +46,6 @@ namespace Bula.Objects {
             for (int n = 0; n < inputSize; n++)
                 output[n] = input[n];
             output[inputSize] = element;
-            return output;
-        }
-
-        /// <summary>
-        /// Create array list from array of objects.
-        /// </summary>
-        /// <param name="input">Array of objects.</param>
-        /// <returns>Resulting array list.</returns>
-        public static DataList CreateDataList(Object[] input) {
-            if (input == null)
-                return null;
-            var output = new DataList();
-            if (SIZE(input) == 0)
-                return output;
-            foreach (Object obj in input)
-                output.Add(obj);
             return output;
         }
 

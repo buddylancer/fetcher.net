@@ -79,7 +79,7 @@ namespace Bula.Fetcher.Controller.Testing {
 
             // Fill array with parameters
             var count = 0;
-            var pars = new DataList();
+            var pars = new TArrayList();
             for (int n = 1; n <= 6; n++) {
                 var parName = CAT("par", n);
                 if (!this.context.Request.Contains(parName))
@@ -99,7 +99,7 @@ namespace Bula.Fetcher.Controller.Testing {
 
             fullClass = Strings.Replace("/", ".", fullClass);
             method = Strings.FirstCharToUpper(method);
-            result = Bula.Internal.CallMethod(fullClass, new DataList(), method, pars);
+            result = Bula.Internal.CallMethod(fullClass, new TArrayList(), method, pars);
 
             if (result == null)
                 buffer = "NULL";

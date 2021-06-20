@@ -23,7 +23,7 @@ namespace Bula.Fetcher.Controller {
 
         /// Execute main logic for Top block 
         public override void Execute() {
-            var prepare = new DataRange();
+            var prepare = new THashtable();
             prepare["[#ImgWidth]"] = this.context.IsMobile ? 234 : 468;
             prepare["[#ImgHeight]"] = this.context.IsMobile ? 30 : 60;
             if (this.context.TestRun)

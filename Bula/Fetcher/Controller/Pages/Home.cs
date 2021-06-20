@@ -27,8 +27,8 @@ namespace Bula.Fetcher.Controller.Pages {
         /// Fast check of input query parameters.
         /// </summary>
         /// <returns>Parsed parameters (or null in case of any error).</returns>
-        public DataRange Check() {
-            return new DataRange();
+        public THashtable Check() {
+            return new THashtable();
         }
 
         /// Execute main logic for Home block. 
@@ -37,7 +37,7 @@ namespace Bula.Fetcher.Controller.Pages {
             if (pars == null)
                 return;
 
-            var prepare = new DataRange();
+            var prepare = new THashtable();
 
             var doItem = new DOItem();
 
@@ -50,7 +50,7 @@ namespace Bula.Fetcher.Controller.Pages {
             var maxRows = Config.DB_HOME_ROWS;
             var dsItems = doItem.EnumItems(source, search, 1, maxRows);
             var rowCount = 1;
-            var items = new DataList();
+            var items = new TArrayList();
             for (int n = 0; n < dsItems.GetSize(); n++) {
                 var oItem = dsItems.GetRow(n);
                 var row = FillItemRow(oItem, doItem.GetIdField(), rowCount);

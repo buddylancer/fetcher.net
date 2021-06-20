@@ -412,16 +412,15 @@ namespace Bula.Model {
         /// </summary>
         /// <param name="fields">The set of fields.</param>
         /// <returns>Result of SQL-query execution.</returns>
-        public int Insert(DataRange fields) {
-            var keys =
-                fields.Keys.GetEnumerator();
+        public int Insert(THashtable fields) {
+            var keys = new TEnumerator(fields.Keys.GetEnumerator());
             var fieldNames = "";
             var fieldValues = "";
             Object[] pars = ARR();
             //pars.SetPullValues(true);
             var n = 0;
             while (keys.MoveNext()) {
-                var key = (String)keys.Current;
+                var key = (String)keys.GetCurrent();
                 if (n != 0) fieldNames += ", ";
                 if (n != 0) fieldValues += ", ";
                 fieldNames += key;
@@ -442,14 +441,13 @@ namespace Bula.Model {
         /// <param name="id">Unique record ID.</param>
         /// <param name="fields">The set of fields.</param>
         /// <returns>Result of SQL-query execution.</returns>
-        public int UpdateById(Object id, DataRange fields) {
-            var keys =
-                fields.Keys.GetEnumerator();
+        public int UpdateById(Object id, THashtable fields) {
+            var keys = new TEnumerator(fields.Keys.GetEnumerator());
             var setValues = "";
             Object[] pars = ARR();
             var n = 0;
             while (keys.MoveNext()) {
-                var key = (String)keys.Current;
+                var key = (String)keys.GetCurrent();
                 if (key == this.idField) //TODO PHP
                     continue;
                 if (n != 0)

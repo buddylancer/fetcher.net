@@ -12,11 +12,11 @@ namespace Bula.Objects {
     /// <summary>
     /// Base helper class for processing query/form request.
     /// </summary>
-    public class RequestBase : Bula.Meta {
+    public class TRequestBase : Bula.Meta {
         /// Current Http request 
         public System.Web.HttpRequest HttpRequest = null;
         /// Current response 
-        public Response response = null;
+        public TResponse response = null;
 
         /// Enum value (type) for getting POST parameters 
         public const int INPUT_POST = 0;
@@ -29,9 +29,9 @@ namespace Bula.Objects {
         /// Enum value (type) for getting SERVER parameters 
         public const int INPUT_SERVER = 5;
 
-        public RequestBase () { }
+        public TRequestBase () { }
 
-        public RequestBase (Object currentRequest) {
+        public TRequestBase (Object currentRequest) {
             if (NUL(currentRequest))
                 return;
             HttpRequest = (System.Web.HttpRequest)currentRequest;
@@ -42,18 +42,18 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="type">Required type.</param>
         /// <returns>Requested variables.</returns>
-        public DataRange GetVars(int type) {
-            DataRange hash = new DataRange();
+        public THashtable GetVars(int type) {
+            THashtable hash = new THashtable();
             System.Collections.Specialized.NameValueCollection vars = null;
             switch (type) {
-                case Request.INPUT_GET:
+                case TRequest.INPUT_GET:
                 default:
                     vars = HttpRequest.QueryString;
                     break;
-                case Request.INPUT_POST:
+                case TRequest.INPUT_POST:
                     vars = HttpRequest.Form;
                     break;
-                case Request.INPUT_SERVER:
+                case TRequest.INPUT_SERVER:
                     vars = HttpRequest.ServerVariables;
                     break;
             }

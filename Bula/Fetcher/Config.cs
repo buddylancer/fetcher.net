@@ -11,6 +11,8 @@ namespace Bula.Fetcher {
     /// Main class for configuring data.
     /// </summary>
     public class Config : Bula.Meta {
+        /// Platform 
+        public const String PLATFORM = "NET";
         /// Exactly the same as RewriteBase in .htaccess 
         public const String TOP_DIR = "/";
         /// Index page name 

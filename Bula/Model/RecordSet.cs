@@ -18,7 +18,7 @@ namespace Bula.Model {
         /// Current result 
         public Object result = null;
         /// Current record 
-        public DataRange record = null;
+        public THashtable record = null;
 
         private int numRows = 0;
         private int numPages = 0;
@@ -97,7 +97,7 @@ namespace Bula.Model {
             var arr = DataAccess.FetchArray(this.result);
 
             if (arr != null) {
-                this.record = (DataRange)arr;
+                this.record = (THashtable)arr;
                 return 1;
             }
             else
@@ -108,7 +108,7 @@ namespace Bula.Model {
         /// Get value from the record.
         /// </summary>
         /// <param name="par">Number of value.</param>
-        public Object GetValue(int par) {
+        public Object GetValue(String par) {
             return this.record[par];
         }
 
@@ -116,7 +116,7 @@ namespace Bula.Model {
         /// Get String value from the record.
         /// </summary>
         /// <param name="par">Number of value.</param>
-        public String GetString(int par) {
+        public String GetString(String par) {
             return STR(this.record[par]);
         }
 
@@ -124,7 +124,7 @@ namespace Bula.Model {
         /// Get DateTime value from the record.
         /// </summary>
         /// <param name="par">Number of value.</param>
-        public String GetDate(int par) {
+        public String GetDate(String par) {
             return STR(this.record[par]);
         }
 
@@ -132,7 +132,7 @@ namespace Bula.Model {
         /// Get integer value from the record.
         /// </summary>
         /// <param name="par">Number of value.</param>
-        public int GetInt(int par) {
+        public int GetInt(String par) {
             return INT(this.record[par]);
         }
 
@@ -140,7 +140,7 @@ namespace Bula.Model {
         /// Get real value from the record.
         /// </summary>
         /// <param name="par">Number of value.</param>
-        public float GetFloat(int par) {
+        public float GetFloat(String par) {
             return FLOAT(this.record[par]);
         }
 

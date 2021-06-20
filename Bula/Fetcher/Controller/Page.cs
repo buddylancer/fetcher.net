@@ -35,7 +35,7 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="template">Template name.</param>
         /// <param name="prepare">Prepared variables.</param>
-        public void Write(String template, DataRange prepare) {
+        public void Write(String template, THashtable prepare) {
             var engine = this.context.GetEngine();
             engine.Write(engine.ShowTemplate(template, prepare));
         }

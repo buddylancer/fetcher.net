@@ -41,8 +41,8 @@ namespace Bula.Fetcher.Controller {
                     errorMessage += "Empty source!";
                 else {
                     var doSource = new DOSource();
-                    DataRange[] oSource =
-                        {new DataRange()};
+                    THashtable[] oSource =
+                        {new THashtable()};
                     if (!doSource.CheckSourceName(source, oSource))
                         errorMessage += CAT("Incorrect source '", source, "'!");
                 }
@@ -68,8 +68,8 @@ namespace Bula.Fetcher.Controller {
                         errorMessage += "Empty filter!";
                     }
                     else {
-                        DataRange[] oCategory =
-                            {new DataRange()};
+                        THashtable[] oCategory =
+                            {new THashtable()};
                         if (doCategory.CheckFilterName(filterName, oCategory))
                             filter = STR(oCategory[0]["s_Filter"]);
                         else {
@@ -88,7 +88,7 @@ namespace Bula.Fetcher.Controller {
             // Check that parameters contain only 'source' or/and 'filter'
             var keys = this.context.Request.GetKeys();
             while (keys.MoveNext()) {
-                var key = (String)keys.Current;
+                var key = (String)keys.GetCurrent();
                 if (EQ(key, "source") || EQ(key, "filter") || EQ(key, "code") || EQ(key, "count")) {
                     //OK
                 }

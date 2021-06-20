@@ -27,13 +27,13 @@ namespace Bula.Fetcher.Controller.Pages {
         /// Fast check of input query parameters.
         /// </summary>
         /// <returns>Parsed parameters (or null in case of any error).</returns>
-        public DataRange Check() {
-            return new DataRange();
+        public THashtable Check() {
+            return new THashtable();
         }
 
         /// Execute main logic for Source block. 
         public override void Execute() {
-            var prepare = new DataRange();
+            var prepare = new THashtable();
             if (Config.SHOW_IMAGES)
                 prepare["[#Show_Images]"] = 1;
 
@@ -42,12 +42,12 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var dsSources = doSource.EnumSources();
             var count = 1;
-            var sources = new DataList();
+            var sources = new TArrayList();
             for (int ns = 0; ns < dsSources.GetSize(); ns++) {
                 var oSource = dsSources.GetRow(ns);
                 var sourceName = STR(oSource["s_SourceName"]);
 
-                var sourceRow = new DataRange();
+                var sourceRow = new THashtable();
                 sourceRow["[#ColSpan]"] = Config.SHOW_IMAGES ? 4 : 3;
                 sourceRow["[#SourceName]"] = sourceName;
                 sourceRow["[#ExtImages]"] = Config.EXT_IMAGES;
@@ -57,7 +57,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 sourceRow["[#RedirectSource]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&source=", "items/source/", sourceName);
 
                 var dsItems = doItem.EnumItemsFromSource(null, sourceName, null, 3);
-                var items = new DataList();
+                var items = new TArrayList();
                 var itemCount = 0;
                 for (int ni = 0; ni < dsItems.GetSize(); ni++) {
                     var oItem = dsItems.GetRow(ni);

@@ -29,12 +29,12 @@ namespace Bula.Fetcher.Controller.Actions {
                 errorMessage = "Source name is required!";
             else {
                 var sourceName = this.context.Request["source"];
-                if (!Request.IsDomainName(sourceName))
+                if (!TRequest.IsDomainName(sourceName))
                     errorMessage = "Incorrect source name!";
                 else {
                     var doSource = new DOSource();
-                    DataRange[] oSource =
-                        {new DataRange()};
+                    THashtable[] oSource =
+                        {new THashtable()};
                     if (!doSource.CheckSourceName(sourceName, oSource))
                         errorMessage = "No such source name!";
                     else

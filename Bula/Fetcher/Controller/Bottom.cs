@@ -24,19 +24,19 @@ namespace Bula.Fetcher.Controller {
 
         /// Execute main logic for Bottom block 
         public override void Execute() {
-            var prepare = new DataRange();
+            var prepare = new THashtable();
 
             var doCategory = new DOCategory();
-            var dsCategory = doCategory.EnumAll("_this.i_Counter <> 0");
+            var dsCategory = doCategory.EnumAll("_this.i_Counter <> 0"); //, "_this.s_CatId");
             var size = dsCategory.GetSize();
             int size3 = size % 3;
             int n1 = INT(size / 3) + (size3 == 0 ? 0 : 1);
             int n2 = n1 * 2;
             Object[] nn = ARR(0, n1, n2, size);
-            var filterBlocks = new DataList();
+            var filterBlocks = new TArrayList();
             for (int td = 0; td < 3; td++) {
-                var filterBlock = new DataRange();
-                var rows = new DataList();
+                var filterBlock = new THashtable();
+                var rows = new TArrayList();
                 for (int n = INT(nn[td]); n < INT(nn[td+1]); n++) {
                     var oCategory = dsCategory.GetRow(n);
                     if (NUL(oCategory))
@@ -46,7 +46,7 @@ namespace Bula.Fetcher.Controller {
                         continue;
                     var key = STR(oCategory["s_CatId"]);
                     var name = STR(oCategory["s_Name"]);
-                    var row = new DataRange();
+                    var row = new THashtable();
                     row["[#Link]"] = this.GetLink(Config.INDEX_PAGE, "?p=items&filter=", "items/filter/", key);
                     row["[#LinkText]"] = name;
                     //if (counter > 0)
@@ -59,16 +59,16 @@ namespace Bula.Fetcher.Controller {
             prepare["[#FilterBlocks]"] = filterBlocks;
 
             if (!this.context.IsMobile) {
-                dsCategory = doCategory.EnumAll();
+                dsCategory = doCategory.EnumAll(); //null, "_this.s_CatId");
                 size = dsCategory.GetSize(); //50
                 size3 = size % 3; //2
                 n1 = INT(size / 3) + (size3 == 0 ? 0 : 1); //17.3
                 n2 = n1 * 2; //34.6
                 nn = ARR(0, n1, n2, size);
-                var rssBlocks = new DataList();
+                var rssBlocks = new TArrayList();
                 for (int td = 0; td < 3; td++) {
-                    var rssBlock = new DataRange();
-                    var rows = new DataList();
+                    var rssBlock = new THashtable();
+                    var rows = new TArrayList();
                     for (int n = INT(nn[td]); n < INT(nn[td+1]); n++) {
                         var oCategory = dsCategory.GetRow(n);
                         if (NUL(oCategory))
@@ -76,7 +76,7 @@ namespace Bula.Fetcher.Controller {
                         var key = STR(oCategory["s_CatId"]);
                         var name = STR(oCategory["s_Name"]);
                         //counter = INT(oCategory["i_Counter"]);
-                        var row = new DataRange();
+                        var row = new THashtable();
                         row["[#Link]"] = this.GetLink(Config.RSS_PAGE, "?filter=", "rss/", CAT(key, (this.context.FineUrls ? ".xml" : null)));
                         row["[#LinkText]"] = name;
                         rows.Add(row);

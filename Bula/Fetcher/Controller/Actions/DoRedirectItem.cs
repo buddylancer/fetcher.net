@@ -30,7 +30,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 errorMessage = "Item ID is required!";
             else {
                 var id = this.context.Request["id"];
-                if (!Request.IsInteger(id) || INT(id) <= 0)
+                if (!TRequest.IsInteger(id) || INT(id) <= 0)
                     errorMessage = "Incorrect item ID!";
                 else {
                     var doItem = new DOItem();

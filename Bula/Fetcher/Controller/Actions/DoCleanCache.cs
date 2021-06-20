@@ -31,7 +31,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 oLogger.InitFile(filename);
             }
             else
-                oLogger.InitResponse(this.context.Response);
+                oLogger.InitTResponse(this.context.Response);
             this.CleanCache(oLogger);
         }
 
@@ -47,7 +47,7 @@ namespace Bula.Fetcher.Controller.Actions {
 
             var entries = Helper.ListDirEntries(pathName);
             while (entries.MoveNext()) {
-                var entry = (String)entries.Current;
+                var entry = (String)entries.GetCurrent();
 
                 if (Helper.IsFile(entry) && entry.EndsWith(ext)) {
                     oLogger.Output(CAT("Deleting of ", entry, " ...<br/>", EOL));

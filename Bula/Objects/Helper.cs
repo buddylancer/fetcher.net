@@ -3,28 +3,25 @@
 // Author - Buddy Lancer <http://www.buddylancer.com>.
 // Licensed under the MIT license.
 
-// Note: this class is not ported (is fully specific for NET-version).
-
-namespace Bula.Objects
-{
+namespace Bula.Objects {
     using System;
+    using System.Collections;
     using System.IO;
 
     using Bula.Objects;
-    using System.Collections;
 
     /// <summary>
     /// Helper class for manipulation with Files and Directories.
     /// </summary>
     public class Helper : Bula.Meta {
-        private static String last_error = null;
+        private static String lastError = null;
 
-    	/// <summary>
-    	/// Get last error (if any).
-    	/// </summary>
+        /// <summary>
+        /// Get last error (if any).
+        /// </summary>
         /// <returns>Last error message.</returns>
         public static String LastError() {
-            return last_error;
+            return lastError;
         }
 
         /// <summary>
@@ -33,15 +30,15 @@ namespace Bula.Objects
         /// <param name="path">File name.</param>
         public static Boolean FileExists(String path) {
             return File.Exists(path);
-    	}
+        }
 
-    	/// <summary>
-    	/// Check whether file exists.
-    	/// </summary>
+        /// <summary>
+        /// Check whether file exists.
+        /// </summary>
         /// <param name="path">File name.</param>
-    	public static Boolean DirExists(String path) {
+        public static Boolean DirExists(String path) {
             return Directory.Exists(path);
-    	}
+        }
 
         /// <summary>
         /// Create directory.
@@ -49,115 +46,91 @@ namespace Bula.Objects
         /// <param name="path">Directory path to create.</param>
         /// <returns>True - created OK, False - error.</returns>
         public static Boolean CreateDir(String path) {
-            try {
-                DirectoryInfo dirInfo = Directory.CreateDirectory(path);
-            }
-            catch (Exception ex) {
-                last_error = ex.Message.ToString();
-                return false;
-            }
-            return true;
-    	}
+            try { DirectoryInfo dirInfo = Directory.CreateDirectory(path); }
+            catch (Exception ex) { lastError = ex.Message.ToString(); return false;} return true;
+        }
 
-    	/// <summary>
-    	/// Delete file.
-    	/// </summary>
+        /// <summary>
+        /// Delete file.
+        /// </summary>
         /// <param name="path">File name.</param>
         /// <returns>True - OK, False - error.</returns>
         public static Boolean DeleteFile(String path) {
-            try {
-                File.Delete(path);
-            }
-            catch (Exception ex) {
-                last_error = ex.Message.ToString();
-                return false;
-            }
-            return true;
-    	}
+            try { File.Delete(path); }
+            catch (Exception ex) { lastError = ex.Message.ToString(); return false; } return true;
+        }
 
-    	/// <summary>
-    	/// Delete directory (recursively).
-    	/// </summary>
+        /// <summary>
+        /// Delete directory (recursively).
+        /// </summary>
         /// <param name="path">Directory name.</param>
         /// <returns>True - OK, False - error.</returns>
-    	public static Boolean DeleteDir(String path) {
+        public static Boolean DeleteDir(String path) {
 
             if (!DirExists(path))
                 return false;
 
             var entries = ListDirEntries(path);
             while (entries.MoveNext()) {
-                var entry = CAT(entries.Current);
+                var entry = CAT(entries.GetCurrent());
 
                 if (IsFile(entry))
                     DeleteFile(entry);
                 else if (IsDir(entry))
                     DeleteDir(entry);
             }
-    		return RemoveDir(path);
-    	}
+            return RemoveDir(path);
+        }
 
-    	/// <summary>
-    	/// Remove directory.
-    	/// </summary>
+        /// <summary>
+        /// Remove directory.
+        /// </summary>
         /// <param name="path">Directory name.</param>
         /// <returns>True - OK, False - error.</returns>
         public static Boolean RemoveDir(String path) {
-            try {
-                Directory.Delete(path);
-            }
-            catch (Exception ex) {
-                last_error = ex.Message.ToString();
-                return false;
-            }
-            return true;
+            try { Directory.Delete(path); }
+            catch (Exception ex) { lastError = ex.Message.ToString(); return false;} return true;
         }
 
-    	/// <summary>
-    	/// Read all content of text file.
-    	/// </summary>
+        /// <summary>
+        /// Read all content of text file.
+        /// </summary>
         /// <param name="filename">File name.</param>
         /// <returns>Resulting content.</returns>
         public static String ReadAllText(String filename) {
             return ReadAllText(filename, null); }
 
-    	/// <summary>
-    	/// Read all content of text file.
-    	/// </summary>
+        /// <summary>
+        /// Read all content of text file.
+        /// </summary>
         /// <param name="filename">File name.</param>
         /// <param name="encoding">Encoding name [optional].</param>
         /// <returns>Resulting content.</returns>
         public static String ReadAllText(String filename, String encoding) {
-            if (encoding == null)
-                return File.ReadAllText(filename);
-            else
-                return File.ReadAllText(filename, System.Text.Encoding.GetEncoding(encoding));
+            return File.ReadAllText(filename, System.Text.Encoding.GetEncoding(encoding));
         }
 
-      	/// <summary>
-      	/// Read all content of text file as list of lines.
-      	/// </summary>
+          /// <summary>
+          /// Read all content of text file as list of lines.
+          /// </summary>
         /// <param name="filename">File name.</param>
         /// <returns>Resulting content (lines).</returns>
         public static Object[] ReadAllLines(String filename) {
             return ReadAllLines(filename, null); }
 
-      	/// <summary>
-      	/// Read all content of text file as list of lines.
-      	/// </summary>
+          /// <summary>
+          /// Read all content of text file as list of lines.
+          /// </summary>
         /// <param name="filename">File name.</param>
         /// <param name="encoding">Encoding name [optional].</param>
         /// <returns>Resulting content (lines).</returns>
         public static Object[] ReadAllLines(String filename, String encoding) {
-            if (encoding == null)
-                return File.ReadAllLines(filename);
-            else
-                return File.ReadAllLines(filename, System.Text.Encoding.GetEncoding(encoding));
-    	}
+            return encoding == null ? File.ReadAllLines(filename) : File.ReadAllLines(filename, System.Text.Encoding.GetEncoding(encoding));
+        }
 
-    	/// <summary>
-    	/// Write content to text file.
-    	/// </summary>
+        /// <summary>
+        /// Write content to text file.
+        /// </summary>
         /// <param name="filename">File name.</param>
         /// <param name="text">Content to write.</param>
         /// <returns>Result of operation (true - OK, false - error).</returns>
@@ -165,9 +138,9 @@ namespace Bula.Objects
             File.WriteAllText(filename, text); /*, encoding); */ return true;
         }
 
-    	/// <summary>
-    	/// Append content to text file.
-    	/// </summary>
+        /// <summary>
+        /// Append content to text file.
+        /// </summary>
         /// <param name="filename">File name.</param>
         /// <param name="text">Content to append.</param>
         /// <returns>Result of operation (true - OK, false - error).</returns>
@@ -197,12 +170,10 @@ namespace Bula.Objects
         /// Test the chain of (sub)folder(s), create them if necessary.
         /// </summary>
         /// <param name="folder">Folder's full path.</param>
-        public static void TestFolder(String folder)
-        {
-            String[] chunks = folder.Split(new char[] { '/' });
+        public static void TestFolder(String folder) {
+            String[] chunks = folder.Split(new char[] {'/'});
             var pathname = (String)null;
-            for (int n = 0; n < SIZE(chunks); n++)
-            {
+            for (int n = 0; n < SIZE(chunks); n++) {
                 pathname = CAT(pathname, chunks[n]);
                 if (!Helper.DirExists(pathname))
                     Helper.CreateDir(pathname);
@@ -214,12 +185,10 @@ namespace Bula.Objects
         /// Test the chain of (sub)folder(s) and file, create if necessary.
         /// </summary>
         /// <param name="filename">Filename's full path</param>
-        public static void TestFileFolder(String filename)
-        {
-            String[] chunks = filename.Split(new char[] { '/' });
+        public static void TestFileFolder(String filename) {
+            String[] chunks = filename.Split(new char[] {'/'});
             var pathname = (String)null;
-            for (int n = 0; n < SIZE(chunks) - 1; n++)
-            {
+            for (int n = 0; n < SIZE(chunks) - 1; n++) {
                 pathname = CAT(pathname, chunks[n]);
                 if (!Helper.DirExists(pathname))
                     Helper.CreateDir(pathname);
@@ -232,15 +201,12 @@ namespace Bula.Objects
         /// </summary>
         /// <param name="path">Path of a directory.</param>
         /// <returns>Enumerated entries.</returns>
-        public static IEnumerator ListDirEntries(String path) {
-            String[] entries = Directory.GetDirectories(path);
-            String[] files = Directory.GetFiles(path);
+        public static TEnumerator ListDirEntries(String path) {
+            var entries = new TArrayList();
+            entries.AddAll(Directory.GetDirectories(path));
+            entries.AddAll(Directory.GetFiles(path));
 
-            DataList allEntries = Arrays.CreateDataList(entries);
-            DataList fileEntries = Arrays.CreateDataList(files);
-            allEntries = Arrays.MergeDataList(allEntries, fileEntries);
-
-            return allEntries.ToArray(typeof(String)).GetEnumerator();
+            return new TEnumerator(entries.ToArray());
         }
     }
 }

@@ -29,8 +29,8 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <returns>True - checked OK, False - error.</returns>
         public Boolean CheckList() {
             if (this.context.Request.Contains("list")) {
-                if (!Request.IsInteger(this.context.Request["list"])) {
-                    var prepare = new DataRange();
+                if (!TRequest.IsInteger(this.context.Request["list"])) {
+                    var prepare = new THashtable();
                     prepare["[#ErrMessage]"] = "Incorrect list number!";
                     this.Write("error", prepare);
                     return false;
@@ -51,13 +51,13 @@ namespace Bula.Fetcher.Controller.Pages {
                 var source = this.context.Request["source"];
                 if (BLANK(source))
                     errMessage += "Empty source name!<br/>";
-                else if (!Request.IsDomainName("source"))
+                else if (!TRequest.IsDomainName("source"))
                     errMessage += "Incorrect source name!<br/>";
             }
             if (errMessage.Length == 0)
                 return true;
 
-            var prepare = new DataRange();
+            var prepare = new THashtable();
             prepare["[#ErrMessage]"] = errMessage;
             this.Write("error", prepare);
             return false;
@@ -70,8 +70,8 @@ namespace Bula.Fetcher.Controller.Pages {
         /// <param name="idField">Name of ID field.</param>
         /// <param name="count">The number of inserted Row in HTML table.</param>
         /// <returns>Resulting Row.</returns>
-        protected DataRange FillItemRow(DataRange oItem, String idField, int count) {
-            var row = new DataRange();
+        protected THashtable FillItemRow(THashtable oItem, String idField, int count) {
+            var row = new THashtable();
             var itemId = INT(oItem[idField]);
             var urlTitle = STR(oItem["s_Url"]);
             var itemHref = this.context.ImmediateRedirect ?
@@ -104,9 +104,9 @@ namespace Bula.Fetcher.Controller.Pages {
                     s_Creator = (String)" "; //TODO -- "" doesn't works somehow, need to investigate
                 row["[#Creator]"] = s_Creator;
             }
-            if (this.context.Contains("Name_Custom1") && oItem.Contains("s_Custom1") && !NUL(oItem["s_Custom1"]))
+            if (this.context.Contains("Name_Custom1") && oItem.ContainsKey("s_Custom1") && !NUL(oItem["s_Custom1"]))
                 row["[#Custom1]"] = oItem["s_Custom1"];
-            if (this.context.Contains("Name_Custom2") && oItem.Contains("s_Custom2") && !NUL(oItem["s_Custom2"]))
+            if (this.context.Contains("Name_Custom2") && oItem.ContainsKey("s_Custom2") && !NUL(oItem["s_Custom2"]))
                 row["[#Custom2]"] = oItem["s_Custom2"];
 
             var d_Date = Util.ShowTime(STR(oItem["d_Date"]));

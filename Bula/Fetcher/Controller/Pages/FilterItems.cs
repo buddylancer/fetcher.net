@@ -31,7 +31,7 @@ namespace Bula.Fetcher.Controller.Pages {
             if (this.context.Request.Contains("source"))
                 source = this.context.Request["source"];
 
-            var prepare = new DataRange();
+            var prepare = new THashtable();
             if (this.context.FineUrls)
                 prepare["[#Fine_Urls]"] = 1;
             prepare["[#Selected]"] = BLANK(source) ? " selected=\"selected\" " : "";
@@ -42,10 +42,10 @@ namespace Bula.Fetcher.Controller.Pages {
                 dsSources = doSource.EnumSourcesWithCounters();
             else
                 dsSources = doSource.EnumSources();
-            var options = new DataList();
+            var options = new TArrayList();
             for (int n = 0; n < dsSources.GetSize(); n++) {
                 var oSource = dsSources.GetRow(n);
-                var option = new DataRange();
+                var option = new THashtable();
                 option["[#Selected]"] = (oSource["s_SourceName"].Equals(source) ? "selected=\"selected\"" : " ");
                 option["[#Id]"] = STR(oSource["s_SourceName"]);
                 option["[#Name]"] = STR(oSource["s_SourceName"]);

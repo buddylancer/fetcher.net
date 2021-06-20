@@ -102,15 +102,19 @@
     <Compile Include="Bula\Model\PreparedStatement.cs" />
     <Compile Include="Bula\Model\RecordSet.cs" />
     <Compile Include="Bula\Objects\Arrays.cs" />
-    <Compile Include="Bula\Objects\DataRange.cs" />
-    <Compile Include="Bula\Objects\DataList.cs" />
     <Compile Include="Bula\Objects\DateTimes.cs" />
     <Compile Include="Bula\Objects\Helper.cs" />
     <Compile Include="Bula\Objects\Logger.cs" />
-    <Compile Include="Bula\Objects\Request.cs" />
-    <Compile Include="Bula\Objects\RequestBase.cs" />
-    <Compile Include="Bula\Objects\Response.cs" />
     <Compile Include="Bula\Objects\Strings.cs" />
+    <Compile Include="Bula\Objects\TArray.cs" />
+    <Compile Include="Bula\Objects\TArrayList.cs" />
+    <Compile Include="Bula\Objects\TArrayListBase.cs" />
+    <Compile Include="Bula\Objects\TEnumerator.cs" />
+    <Compile Include="Bula\Objects\THashtable.cs" />
+    <Compile Include="Bula\Objects\THashtableBase.cs" />
+    <Compile Include="Bula\Objects\TRequest.cs" />
+    <Compile Include="Bula\Objects\TRequestBase.cs" />
+    <Compile Include="Bula\Objects\TResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

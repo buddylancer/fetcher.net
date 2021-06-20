@@ -67,7 +67,7 @@ namespace Bula.Fetcher.Controller {
 
             var engine = this.context.PushEngine(true);
 
-            var prepare = new DataRange();
+            var prepare = new THashtable();
             prepare["[#Site_Name]"] = Config.SITE_NAME;
             var pFromVars = this.context.Request.Contains("p") ? this.context.Request["p"] : "home";
             var idFromVars = this.context.Request.Contains("id") ? this.context.Request["id"] : null;
