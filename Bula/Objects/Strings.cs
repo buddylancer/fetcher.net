@@ -24,6 +24,10 @@ namespace Bula.Objects {
             return new String[0];
         }
 
+        public static int IndexOf(String sample, String input) {
+            return input.IndexOf(sample);
+        }
+
         /// <summary>
         /// Convert first char of a string to upper case.
         /// </summary>
@@ -126,7 +130,7 @@ namespace Bula.Objects {
         /// <returns>Array of resulting strings.</returns>
         public static String[] Split(String divider, String input) {
             String[] chunks =
-                Regex.Split(input, Regex.Escape(divider));
+                Regex.Split(input, divider);
             var result = new TArrayList();
             for (int n = 0; n < SIZE(chunks); n++)
                 result.Add(chunks[n]);
@@ -153,7 +157,7 @@ namespace Bula.Objects {
         /// <param name="limit">Max number of replacements [optional].</param>
         /// <returns>Resulting string.</returns>
         public static String Replace(String from, String to, String input, int limit) {
-            return limit != 0 ? (new Regex(Regex.Escape(from))).Replace(input, to, limit) : input.Replace(from, to);
+            return limit != 0 ? (new Regex(from)).Replace(input, to, limit) : input.Replace(from, to);
         }
 
         /// <summary>
@@ -188,7 +192,8 @@ namespace Bula.Objects {
             var keys = new TEnumerator(hash.Keys.GetEnumerator());
             while (keys.MoveNext()) {
                 var key = STR(keys.GetCurrent());
-                template = Strings.Replace(key, STR(hash[key]), template);
+                if (Strings.IndexOf(key, template) != -1)
+                    template = Strings.Replace(key, STR(hash[key]), template);
             }
             return template;
         }

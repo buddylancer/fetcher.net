@@ -93,7 +93,7 @@ namespace Bula.Fetcher.Controller {
         /// <param name="query">Query to process.</param>
         /// <returns>Resulting content.</returns>
         public static String ShowFromCache(Engine engine, String cacheFolder, String pageName, String className, String query) {
-            if (EQ(pageName, "bottom"))
+            if (EQ(pageName, "bottom") || EQ(pageName, "rest_bottom"))
                 query = pageName;
             else {
                 if (query == null)
@@ -120,7 +120,7 @@ namespace Bula.Fetcher.Controller {
                 //content = CAT("*** Got from cache ", Str_replace("/", " /", fileName), "***<br/>", content);
             }
             else {
-                var prefix = EQ(pageName, "bottom") ? null : "Pages/";
+                var prefix = EQ(pageName, "bottom") || EQ(pageName, "rest_bottom") ? null : "Pages/";
                 content = engine.IncludeTemplate(CAT(prefix, className));
 
                 Helper.TestFileFolder(fileName);

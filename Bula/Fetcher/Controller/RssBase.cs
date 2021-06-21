@@ -250,6 +250,8 @@ namespace Bula.Fetcher.Controller {
                 //Helper.WriteText(cachedFile, Strings.Concat("\xEF\xBB\xBF", xmlContent));
                 Helper.WriteText(cachedFile, contentToCache);
             }
+            this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
+            this.context.Response.Write(contentToCache); //TODO -- BOM?
 
             if (DBConfig.Connection != null) {
                 DBConfig.Connection.Close();

@@ -141,7 +141,7 @@ namespace Bula.Fetcher.Controller {
                 description = description.Replace(" \n", "\n");
             while (description.IndexOf("\n\n\n") != -1)
                 description = description.Replace("\n\n\n", "\n\n");
-            description = Regex.Replace(description, "\n\n[ \t]*[+\\-\\*][^+\\-\\*][ \t]*", "\n* ");
+            description = Regex.Replace(description, "\n\n[ \t]*[\\+\\-\\*][^\\+\\-\\*][ \t]*", "\n* ");
             description = Regex.Replace(description, "[ \t]+", " ");
 
             this.description = description.Trim();
@@ -232,9 +232,9 @@ namespace Bula.Fetcher.Controller {
                 var filterValue = STR(oCategory["s_Filter"]);
                 String[] filterChunks = Strings.Split("~", filterValue);
                 String[] includeChunks = SIZE(filterChunks) > 0 ?
-                    Strings.Split("|", filterChunks[0]) : Strings.EmptyArray();
+                    Strings.Split("\\|", filterChunks[0]) : Strings.EmptyArray();
                 String[] excludeChunks = SIZE(filterChunks) > 1 ?
-                    Strings.Split("|", filterChunks[1]) : Strings.EmptyArray();
+                    Strings.Split("\\|", filterChunks[1]) : Strings.EmptyArray();
 
                 var includeFlag = false;
                 for (int n2 = 0; n2 < SIZE(includeChunks); n2++) {
@@ -255,7 +255,7 @@ namespace Bula.Fetcher.Controller {
                     categoryTags.Add(name);
                  }
             }
-            if (SIZE(categoryTags) == 0)
+            if (categoryTags.Size() == 0)
                 return;
 
             //TODO
@@ -315,7 +315,7 @@ namespace Bula.Fetcher.Controller {
 
             title = Regex.Replace(title, "\\&amp\\;", " and ");
             title = Regex.Replace(title, "[^A-Za-z0-9\\-\\. ]", " ");
-            title = Regex.Replace(title, " +", " ");
+            title = Regex.Replace(title, "[ ]+", " ");
             title = title.Trim();
             title = Regex.Replace(title, "\\.+", "-");
             title = Regex.Replace(title, " \\- ", "-");

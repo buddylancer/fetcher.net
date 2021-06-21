@@ -43,7 +43,8 @@ namespace Bula.Fetcher.Controller {
                 (BLANK(filterName) ? null : CAT(" and filtered by '", filterName, "'"))
             );
             var xmlContent = Strings.Concat(
-                "<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">\r\n",
+                "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", EOL,
+                "<rss version=\"2.0\" xmlns:dc=\"http://purl.org/dc/elements/1.1/\">", EOL,
                 "<channel>", EOL,
                 //"<title>" . Config.SITE_NAME . "</title>", EOL,
                 "<title>", rssTitle, "</title>", EOL,
@@ -54,9 +55,6 @@ namespace Bula.Fetcher.Controller {
                 "<lastBuildDate>", pubDate, "</lastBuildDate>", EOL,
                 "<generator>", Config.SITE_NAME, "</generator>", EOL
             );
-            this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
-            this.context.Response.Write(CAT("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", EOL));
-            this.context.Response.Write(xmlContent);
             return xmlContent;
         }
 
@@ -67,8 +65,6 @@ namespace Bula.Fetcher.Controller {
             var xmlContent = Strings.Concat(
                 "</channel>", EOL,
                 "</rss>", EOL);
-            this.context.Response.Write(xmlContent);
-            this.context.Response.End();
             return xmlContent;
         }
 
@@ -89,7 +85,6 @@ namespace Bula.Fetcher.Controller {
                 "</item>", EOL
             );
             var itemContent = Util.FormatString(xmlTemplate, args);
-            this.context.Response.Write(itemContent);
             return itemContent;
         }
     }

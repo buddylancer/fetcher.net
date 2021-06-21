@@ -73,9 +73,9 @@ namespace Bula.Fetcher.Model {
         public String BuildSqlFilter(String filter) {
             String[] filterChunks = Strings.Split("~", filter);
             String[] includeChunks = SIZE(filterChunks) > 0 ?
-                Strings.Split("|", filterChunks[0]) : null;
+                Strings.Split("\\|", filterChunks[0]) : null;
             String[] excludeChunks = SIZE(filterChunks) > 1 ?
-                Strings.Split("|", filterChunks[1]) : null;
+                Strings.Split("\\|", filterChunks[1]) : null;
             var includeFilter = "";
             for (int n = 0; n < SIZE(includeChunks); n++) {
                 if (includeFilter.Length != 0)

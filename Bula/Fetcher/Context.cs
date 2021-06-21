@@ -69,7 +69,7 @@ namespace Bula.Fetcher {
         /// <param name="name">Name of internal variable.</param>
         /// <returns>True - variable exists, False - not exists.</returns>
         public Boolean Contains(String name) {
-            return this.Values.ContainsKey(name);
+            return this.Values.Contains(name);
         }
 
         /// Project root (where Bula folder is located) 

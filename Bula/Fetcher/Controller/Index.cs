@@ -100,7 +100,7 @@ namespace Bula.Fetcher.Controller {
             if (/*Config.RssAllowed != null && */Config.SHOW_BOTTOM) {
                 // Get bottom block either from cache or build it from the scratch
                 if (Config.CACHE_PAGES)
-                    prepare["[#Bottom]"] = Util.ShowFromCache(engine, this.context.CacheFolder, "bottom", "Bottom");
+                    prepare["[#Bottom]"] = Util.ShowFromCache(engine, this.context.CacheFolder, BLANK(apiName) ? "bottom" : CAT(apiName, "_bottom"), "Bottom");
                 else
                     prepare["[#Bottom]"] = engine.IncludeTemplate("Bottom");
             }

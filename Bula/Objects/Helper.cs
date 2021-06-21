@@ -107,7 +107,10 @@ namespace Bula.Objects {
         /// <param name="encoding">Encoding name [optional].</param>
         /// <returns>Resulting content.</returns>
         public static String ReadAllText(String filename, String encoding) {
-            return File.ReadAllText(filename, System.Text.Encoding.GetEncoding(encoding));
+            if (encoding == null)
+                return File.ReadAllText(filename);
+            else
+                return File.ReadAllText(filename, System.Text.Encoding.GetEncoding(encoding));
         }
 
           /// <summary>
