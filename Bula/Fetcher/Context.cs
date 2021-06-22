@@ -69,7 +69,7 @@ namespace Bula.Fetcher {
         /// <param name="name">Name of internal variable.</param>
         /// <returns>True - variable exists, False - not exists.</returns>
         public Boolean Contains(String name) {
-            return this.Values.Contains(name);
+            return this.Values.ContainsKey(name);
         }
 
         /// Project root (where Bula folder is located) 
@@ -146,7 +146,7 @@ namespace Bula.Fetcher {
             var rootDir = Request.GetVar(TRequest.INPUT_SERVER, "APPL_PHYSICAL_PATH");
             rootDir = rootDir.Replace("\\", "/"); // Fix for IIS
             // Regarding that we have the ordinary local website (not virtual directory)
-            for (int n = 0; n <= 3; n++) {
+            for (int n = 0; n <= 2; n++) {
                 var lastSlashIndex = rootDir.LastIndexOf("/");
                 rootDir = rootDir.Substring(0, lastSlashIndex);
             }

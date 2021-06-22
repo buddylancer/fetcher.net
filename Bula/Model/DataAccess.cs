@@ -147,7 +147,7 @@ namespace Bula.Model {
             for (int n = 0; n < row.Table.Columns.Count; n++)
             {
                 Object obj = row.ItemArray.GetValue(n);
-                hash.Add(row.Table.Columns[n].ColumnName, obj);
+                hash.Add(row.Table.Columns[n].ColumnName, obj is System.DBNull ? Bula.Objects.TNull.GetValue() : obj);
             }
             ((Object[])result)[0] = ++pointer;
             return hash;
