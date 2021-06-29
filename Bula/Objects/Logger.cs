@@ -19,7 +19,7 @@ namespace Bula.Objects {
         /// <summary>
         /// Initialize logging into file.
         /// </summary>
-        /// <param name="filename">Log file name.</param>
+        /// <param name="filename">Filename to write to.</param>
         public void InitFile(String filename) {
             this.response = null;
             this.fileName = filename;
@@ -30,10 +30,10 @@ namespace Bula.Objects {
         }
 
         /// <summary>
-        /// Initialize logging into file.
+        /// Initialize logging into response.
         /// </summary>
-        /// <param name="filename">Log file name.</param>
-        public void InitTResponse(TResponse response) {
+        /// <param name="response">Response to write to.</param>
+        public void InitResponse(TResponse response) {
             this.fileName = null;
             if (!NUL(response))
                 this.response = response;

@@ -24,10 +24,6 @@ namespace Bula.Objects {
             return new String[0];
         }
 
-        public static int IndexOf(String sample, String input) {
-            return input.IndexOf(sample);
-        }
-
         /// <summary>
         /// Convert first char of a string to upper case.
         /// </summary>
@@ -192,12 +188,17 @@ namespace Bula.Objects {
             var keys = new TEnumerator(hash.Keys.GetEnumerator());
             while (keys.MoveNext()) {
                 var key = STR(keys.GetCurrent());
-                if (Strings.IndexOf(key, template) != -1)
-                    template = Strings.Replace(key, STR(hash[key]), template);
+                if (template.IndexOf(key) != -1)
+                    template = template.Replace(key, STR(hash[key]));
             }
             return template;
         }
 
+        /// <summary>
+        /// Trim this string.
+        /// </summary>
+        /// <param name="input">String to trim.</param>
+        /// <returns>Resulting string.</returns>
         public static String Trim(String input) {
             return Trim(input, null);
         }
@@ -205,6 +206,7 @@ namespace Bula.Objects {
         /// <summary>
         /// Trim this string.
         /// </summary>
+        /// <param name="input">String to trim.</param>
         /// <param name="chars">Which chars to trim [optional].</param>
         /// <returns>Resulting string.</returns>
         public static String Trim(String input, String chars) {

@@ -7,6 +7,8 @@ namespace Bula.Objects {
     using System;
     using System.Collections;
 
+    using Bula.Objects;
+
     /// <summary>
     /// Helper class for processing server response.
     /// </summary>
@@ -14,8 +16,12 @@ namespace Bula.Objects {
         /// Current response 
         private System.Web.HttpResponse httpResponse = null;
 
-        public TResponse (Object response) {
-            httpResponse = (System.Web.HttpResponse)response;
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="currentResponse">Current http response object.</param>
+        public TResponse (Object currentResponse) {
+            httpResponse = (System.Web.HttpResponse)currentResponse;
         }
 
         /// <summary>
@@ -23,6 +29,20 @@ namespace Bula.Objects {
         /// </summary>
         /// <param name="input">Text to write.</param>
         public void Write(String input) {
+            this.Write(input, null);
+        }
+
+        /// <summary>
+        /// Write text to current response.
+        /// </summary>
+        /// <param name="input">Text to write.</param>
+        /// <param name="lang">Language to tranlsate to (default - none).</param>
+        public void Write(String input, String langFile) {
+            if (langFile != null) {
+                if (!Translator.IsInitialized())
+                    Translator.Initialize(langFile);
+                input = Translator.Translate(input);
+            }
             httpResponse.Write(input);
         }
 

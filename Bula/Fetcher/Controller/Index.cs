@@ -8,7 +8,6 @@ namespace Bula.Fetcher.Controller {
     using System.Collections;
 
     using Bula.Fetcher;
-    using Bula.Objects;
     using System.Text.RegularExpressions;
     using Bula.Objects;
     using Bula.Model;

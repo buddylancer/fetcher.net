@@ -23,7 +23,8 @@ namespace Bula.Fetcher.Controller {
             var output = Strings.StripSlashes(input);
             output = output.Replace("<", "&lt;");
             output = output.Replace(">", "&gt;");
-            output = output.Replace("&", "&amp;");
+            output = output.Replace("&#34;", "&quot;");
+            //output = output.Replace("&", "&amp;");
             output = output.Replace("\"", "&quot;");
             return output;
         }
@@ -42,12 +43,22 @@ namespace Bula.Fetcher.Controller {
         }
 
         /// <summary>
-        /// Format date/time to GMT presentation.
+        /// Format date/time according to Config settings.
+        /// </summary>
+        /// <returns>Resulting current date/time.</returns>
+        public static String ShowTime() {
+            return ShowTime(null);
+        }
+
+        /// <summary>
+        /// Format date/time according to Config settings.
         /// </summary>
         /// <param name="input">Input date/time.</param>
         /// <returns>Resulting date/time.</returns>
         public static String ShowTime(String input) {
-            return DateTimes.Format(DateTimes.GMT_DTS, DateTimes.GetTime(input));
+            var time = DateTimes.GetTime(input);
+            time += 3600 * (Config.TIME_SHIFT / 100) + 60 * (Config.TIME_SHIFT % 100);
+            return CAT(DateTimes.Format(DateTimes.DTS, time), " ", Config.TIME_ZONE);
         }
 
         /// <summary>

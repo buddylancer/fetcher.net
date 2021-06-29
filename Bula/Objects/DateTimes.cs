@@ -15,6 +15,8 @@ namespace Bula.Objects {
     /// Helper class to manipulate with Date and Times.
     /// </summary>
     public class DateTimes : Bula.Meta {
+        /// Date/time format for processing custom date/times 
+        public const String DTS = "dd-MMM-yyyy HH:mm";
         /// Date/time format for processing GMT date/times 
         public const String GMT_DTS = "dd-MMM-yyyy HH:mm \\G\\M\\T";
         /// Date/time format for RSS operations 
@@ -41,6 +43,9 @@ namespace Bula.Objects {
         /// <param name="timeString">Input string.</param>
         /// <returns>Resulting time (Unix timestamp).</returns>
         public static long GetTime(String timeString) {
+            if (timeString == null) {
+                return GetTime();
+            }
             return (long)DateTime.Parse(timeString).Subtract(unix).TotalSeconds;
         }
 

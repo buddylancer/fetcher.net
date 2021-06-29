@@ -63,12 +63,16 @@ namespace Bula.Fetcher.Controller.Actions {
             else
                 insertRequired = true;
 
+            var from = (String)null;
+            if (this.context.Request.Contains("from"))
+                from = this.context.Request["from"];
+
             this.context.Response.Write(TOP);
             if (updateRequired || insertRequired) {
                 this.context.Response.Write(CAT("Fetching new items... Please wait...<br/>", EOL));
 
                 var boFetcher = new BOFetcher(this.context);
-                boFetcher.FetchFromSources();
+                boFetcher.FetchFromSources(from);
 
                 doTime = new DOTime(); // Need for DB reopen
                 var fields = new THashtable();

@@ -15,6 +15,7 @@ namespace Bula.Fetcher.Controller {
     /// Engine for processing templates.
     /// </summary>
     public class Engine : Bula.Meta {
+        /// Instance of Context 
         public Context context = null;
         private Boolean printFlag = false;
         private String printString = "";
@@ -63,8 +64,12 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="val">String to write.</param>
         public void Write(String val) {
-            if (this.printFlag)
-                this.context.Response.Write(val);
+            if (this.printFlag) {
+                var langFile = (String)null;
+                if (BLANK(this.context.Api) && Config.SITE_LANGUAGE != null)
+                    langFile = CAT(this.context.LocalRoot, "local/", Config.SITE_LANGUAGE, ".txt");
+                this.context.Response.Write(val, langFile);
+            }
             else
                 this.printString += val;
         }

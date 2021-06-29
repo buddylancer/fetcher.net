@@ -232,6 +232,27 @@ namespace Bula.Model {
         }
 
         /// <summary>
+        /// Get DataSet containing counter only.
+        /// </summary>
+        /// <returns>Resulting data set.</returns>
+        public DataSet CountIds() {
+            return CountIds(null); }
+
+        /// <summary>
+        /// Get DataSet containing counter only.
+        /// </summary>
+        /// <param name="where">Where condition [optional].</param>
+        /// <returns>Resulting data set.</returns>
+        public DataSet CountIds(String where) {
+            var query = Strings.Concat(
+                " select Count(", this.idField, ") as i_Counter from ", this.tableName, " _this ",
+                (BLANK(where) ? null : CAT(" where ", where))
+            );
+            Object[] pars = ARR();
+            return this.GetDataSet(query, pars);
+        }
+
+        /// <summary>
         /// Get DataSet with all records enumerated.
         /// </summary>
         /// <returns>Resulting data set.</returns>
@@ -433,6 +454,21 @@ namespace Bula.Model {
                 " values (", fieldValues, ")"
             );
             return this.UpdateInternal(query, pars, "insert");
+        }
+
+        /// <summary>
+        /// Execute update query.
+        /// </summary>
+        /// <param name="setValues">String with "set" clause.</param>
+        /// <param name="where">String with "where" clause.</param>
+        /// <returns>Number of records updated.</returns>
+        public int Update(String setValues, String where) {
+            var query = Strings.Concat(
+                " update ", this.tableName, " _this set ", setValues,
+                " where (", where, ")"
+            );
+            Object[] pars = ARR();
+            return this.UpdateInternal(query, pars, "update");
         }
 
         /// <summary>

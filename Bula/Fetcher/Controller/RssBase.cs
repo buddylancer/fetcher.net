@@ -10,7 +10,6 @@ namespace Bula.Fetcher.Controller {
     using Bula.Fetcher;
     using Bula.Objects;
     using System.Text.RegularExpressions;
-    using Bula.Objects;
     using Bula.Model;
     using Bula.Fetcher.Model;
     using Bula.Fetcher.Controller;
@@ -57,6 +56,7 @@ namespace Bula.Fetcher.Controller {
             // Check filter
             var filter = (String)null;
             var filterName = (String)null;
+            var categoryName = (String)null;
             var doCategory = new DOCategory();
             var dsCategories = doCategory.EnumCategories();
             if (dsCategories.GetSize() > 0) {
@@ -70,8 +70,10 @@ namespace Bula.Fetcher.Controller {
                     else {
                         THashtable[] oCategory =
                             {new THashtable()};
-                        if (doCategory.CheckFilterName(filterName, oCategory))
+                        if (doCategory.CheckFilterName(filterName, oCategory)) {
+                            categoryName = STR(oCategory[0]["s_Name"]);
                             filter = STR(oCategory[0]["s_Filter"]);
+                        }
                         else {
                             if (anyFilter)
                                 filter = filterName;
@@ -153,12 +155,14 @@ namespace Bula.Fetcher.Controller {
             var nowDate = DateTimes.Format(DateTimes.SQL_DTS);
             var nowTime = DateTimes.GetTime(nowDate);
             var fromDate = DateTimes.GmtFormat(DateTimes.SQL_DTS, nowTime - 6*60*60);
-            var dsItems = doItem.EnumItemsFromSource(fromDate, source, filter, count);
+            //String search = DOItem.BuildSqlByFilter(filter);
+            var search = DOItem.BuildSqlByCategory(categoryName);
+            var dsItems = doItem.EnumItemsFromSource(fromDate, source, search, count);
             var current = 0;
 
             var contentToCache = "";
             if (dsItems.GetSize() == 0)
-                contentToCache = this.WriteStart(source, filterName, pubDate);
+                contentToCache = this.WriteStart(source, categoryName, pubDate);
 
             for (int n = 0; n < dsItems.GetSize(); n++) {
                 var oItem = dsItems.GetRow(n);
@@ -169,7 +173,7 @@ namespace Bula.Fetcher.Controller {
                 if (current == 0) {
                     // Get puDate from the first item and write starting block
                     pubDate = DateTimes.Format(DateTimes.XML_DTS, DateTimes.GetTime(date));
-                    contentToCache = this.WriteStart(source, filterName, pubDate);
+                    contentToCache = this.WriteStart(source, categoryName, pubDate);
                 }
 
                 var category = this.context.Contains("Name_Category") ? STR(oItem["s_Category"]) : null;
@@ -215,18 +219,34 @@ namespace Bula.Fetcher.Controller {
                 args[2] = this.GetAbsoluteLink(Config.ACTION_PAGE, "?p=do_redirect_source&amp;source=", "redirect/source/", sourceName);
                 args[3] = sourceName;
                 args[4] = DateTimes.Format(DateTimes.XML_DTS, DateTimes.GetTime(date));
-                var additional = CAT(
-                    (BLANK(creator) ? null : CAT(this.context["Name_Creator"], ": ", creator, "<br/>")),
-                    (BLANK(category) ? null : CAT(this.context["Name_Categories"], ": ", category, "<br/>")),
-                    (BLANK(custom2) ? null : CAT(this.context["Name_Custom2"], ": ", custom2, "<br/>")),
-                    (BLANK(custom1) ? null : CAT(this.context["Name_Custom1"], ": ", custom1, "<br/>"))
-                );
+                var additional = (String)null;
+                if (!BLANK(creator)) {
+                    if (additional != null)
+                        additional = CAT(additional, "<br/>");
+                    additional = CAT(additional, this.context["Name_Creator"], ": ", creator);
+                }
+                if (!BLANK(category)) {
+                    if (additional != null)
+                        additional = CAT(additional, "<br/>");
+                    additional = CAT(additional, this.context["Name_Categories"], ": ", category);
+                }
+                if (!BLANK(custom2)) {
+                    if (additional != null)
+                        additional = CAT(additional, "<br/>");
+                    additional = CAT(additional, this.context["Name_Custom2"], ": ", custom2);
+                }
+                if (!BLANK(custom1)) {
+                    if (additional != null)
+                        additional = CAT(additional, "<br/>");
+                    additional = CAT(additional, this.context["Name_Custom1"], ": ", custom1);
+                }
+
                 var extendedDescription = (String)null;
                 if (!BLANK(description)) {
                     if (BLANK(additional))
                         extendedDescription = description;
                     else
-                        extendedDescription = CAT(additional, "<br/>", description);
+                        extendedDescription = CAT(description, "<br/><br/>", additional);
                 }
                 else if (!BLANK(additional))
                     extendedDescription = additional;
@@ -269,9 +289,9 @@ namespace Bula.Fetcher.Controller {
         /// Write start block (header) of an RSS-feed.
         /// </summary>
         /// <param name="source">Source selected (or empty).</param>
-        /// <param name="filterName">Filter name selected (or empty).</param>
+        /// <param name="category">Category name selected (or empty).</param>
         /// <param name="pubDate">Date shown in the header.</param>
-        public abstract String WriteStart(String source, String filterName, String pubDate);
+        public abstract String WriteStart(String source, String category, String pubDate);
 
         /// <summary>
         /// Write end block of an RSS-feed.

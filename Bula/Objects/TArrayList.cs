@@ -11,6 +11,12 @@ namespace Bula.Objects {
     /// Straight-forward implementation of ArrayList.
     /// </summary>
     public class TArrayList : TArrayListBase {
+        /// <summary>
+        /// Public constructors.
+        /// </summary>
+        public TArrayList() : base() { }
+        public TArrayList(Object[] items) : base(items) { }
+
         /// Create new array list. 
         public static TArrayList Create() {
             return new TArrayList();
@@ -20,9 +26,14 @@ namespace Bula.Objects {
         /// Add multiple objects.
         /// </summary>
         /// <param name="inputs">Array of objects.</param>
-        public void AddAll(Object[] inputs) {
-            foreach (Object input in inputs)
+        /// <returns>Number of added objects,</returns>
+        public int AddAll(Object[] inputs) {
+            var counter = 0;
+            foreach (Object input in inputs) {
                 this.Add(input);
+                counter++;
+            }
+            return counter;
         }
 
         /// <summary>

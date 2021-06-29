@@ -25,9 +25,12 @@ namespace Bula.Fetcher.Controller {
         /// Execute main logic for Bottom block 
         public override void Execute() {
             var prepare = new THashtable();
+            prepare.Put("[#Items_By_Category]",
+                CAT(Config.NAME_ITEMS, "_by_", this.context["Name_Category"]));
 
             var doCategory = new DOCategory();
-            var dsCategory = doCategory.EnumAll("_this.i_Counter <> 0"); //, "_this.s_CatId");
+            var dsCategory = doCategory.EnumAll(Config.SHOW_EMPTY ? null : "_this.i_Counter <> 0", 
+                Config.SORT_CATEGORIES == null ? null : CAT("_this.", Config.SORT_CATEGORIES));
             var size = dsCategory.GetSize();
             int size3 = size % 3;
             int n1 = INT(size / 3) + (size3 == 0 ? 0 : 1);
@@ -42,7 +45,7 @@ namespace Bula.Fetcher.Controller {
                     if (NUL(oCategory))
                         continue;
                     var counter = INT(oCategory["i_Counter"]);
-                    if (INT(counter) == 0)
+                    if (Config.SHOW_EMPTY == false && INT(counter) == 0)
                         continue;
                     var key = STR(oCategory["s_CatId"]);
                     var name = STR(oCategory["s_Name"]);
@@ -59,7 +62,7 @@ namespace Bula.Fetcher.Controller {
             prepare["[#FilterBlocks]"] = filterBlocks;
 
             if (!this.context.IsMobile) {
-                dsCategory = doCategory.EnumAll(); //null, "_this.s_CatId");
+                //dsCategory = doCategory.EnumAll(null, Config.SORT_CATEGORIES == null ? null : CAT("_this.", Config.SORT_CATEGORIES));
                 size = dsCategory.GetSize(); //50
                 size3 = size % 3; //2
                 n1 = INT(size / 3) + (size3 == 0 ? 0 : 1); //17.3

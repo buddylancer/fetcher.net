@@ -97,6 +97,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var errorMessage = "";
             var filter = (String)null;
+            var category = (String)null;
 
             if (!NUL(filterName)) {
                 var doCategory = new DOCategory();
@@ -104,10 +105,13 @@ namespace Bula.Fetcher.Controller.Pages {
                     {new THashtable()};
                 if (!doCategory.CheckFilterName(filterName, oCategory))
                     errorMessage += "Non-existing filter name!";
-                else
+                else  {
+                    category = STR(oCategory[0]["s_Name"]);
                     filter = STR(oCategory[0]["s_Filter"]);
+                }
             }
 
+            var sourceId = -1;
             if (!NUL(sourceName)) {
                 var doSource = new DOSource();
                 THashtable[] oSource =
@@ -117,6 +121,8 @@ namespace Bula.Fetcher.Controller.Pages {
                         errorMessage += "<br/>";
                     errorMessage += "Non-existing source name!";
                 }
+                else
+                    sourceId = INT(oSource[0]["i_SourceId"]);
             }
 
             var engine = this.context.GetEngine();
@@ -130,6 +136,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             if (Config.SHOW_IMAGES)
                 prepare["[#Show_Images]"] = 1;
+            prepare["[#ColSpan]"] = Config.SHOW_IMAGES ? 4 : 3;
 
             // Uncomment to enable filtering by source and/or category
             prepare["[#FilterItems]"] = engine.IncludeTemplate("Pages/FilterItems");
@@ -139,7 +146,7 @@ namespace Bula.Fetcher.Controller.Pages {
                 Config.NAME_ITEMS,
                 (this.context.IsMobile ? "<br/>" : null),
                 (!BLANK(sourceName) ? CAT(" ... from '", sourceName, "'") : null),
-                (!BLANK(filter) ? CAT(" ... for '", filterName, "'") : null)
+                (!BLANK(filter) ? CAT(" ... for '", category, "'") : null)
             );
 
             prepare["[#Title]"] = s_Title;
@@ -147,13 +154,22 @@ namespace Bula.Fetcher.Controller.Pages {
             var maxRows = Config.DB_ITEMS_ROWS;
 
             var doItem = new DOItem();
-            var dsItems = doItem.EnumItems(sourceName, filter, listNumber, maxRows);
+            //String realFilter = DOItem.BuildSqlByFilter(filter);
+            var realFilter = DOItem.BuildSqlByCategory(category);
+            var dsItems = doItem.EnumItems(sourceName, realFilter, listNumber, maxRows);
 
             var listTotal = dsItems.GetTotalPages();
             if (listNumber > listTotal) {
-                prepare["[#ErrMessage]"] = "List number is too large!";
-                this.Write("error", prepare);
-                return;
+                if (listTotal > 0) {
+                    prepare["[#ErrMessage]"] = "List number is too large!";
+                    this.Write("error", prepare);
+                    return;
+                }
+                else {
+                    prepare["[#ErrMessage]"] = "Empty list!";
+                    this.Write("error", prepare);
+                    return;
+                }
             }
             if (listTotal > 1) {
                 prepare["[#List_Total]"] = listTotal;

@@ -19,6 +19,10 @@ namespace Bula.Objects {
         /// Internal storage for SERVER variables 
         private THashtable ServerVars = null;
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="currentRequest">Current http request object.</param>
         public TRequest(Object currentRequest) : base(currentRequest) { Initialize(); }
 
         /// Initialize internal variables for new request. 
@@ -272,7 +276,7 @@ namespace Bula.Objects {
         /// <param name="input">Input text.</param>
         /// <returns>True - text matches domain name, False - not matches.</returns>
         public static Boolean IsDomainName(String input) {
-            return Regex.IsMatch(input, "^[A-Za-z]+[A-Za-z0-9\\.]*$");
+            return Regex.IsMatch(input, "^[A-Za-z0-9]+[A-Za-z0-9\\.\\-]*$");
         }
 
         /// <summary>

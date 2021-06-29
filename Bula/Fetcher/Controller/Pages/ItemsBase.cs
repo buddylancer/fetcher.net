@@ -7,9 +7,9 @@ namespace Bula.Fetcher.Controller.Pages {
     using System;
     using System.Collections;
 
-    using Bula.Objects;
-    using System.Text.RegularExpressions;
     using Bula.Fetcher;
+    using System.Text.RegularExpressions;
+
     using Bula.Objects;
     using Bula.Fetcher.Controller;
 

@@ -102,7 +102,7 @@ namespace Bula.Fetcher.Model {
         /// <param name="category">Category object (if found) copied to element 0 of object array.</param>
         /// <returns>True if exists.</returns>
         public Boolean CheckFilterName(String filterName, Object[]category) {
-            var dsCategories = this.Select("_this.s_CatId, _this.s_Filter");
+            var dsCategories = this.Select();
             var filterFound = false;
             for (int n = 0; n < dsCategories.GetSize(); n++) {
                 var oCategory = dsCategories.GetRow(n);

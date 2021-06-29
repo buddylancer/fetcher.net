@@ -36,9 +36,16 @@ namespace Bula.Fetcher.Controller.Testing {
                 this.context.Response.End("Empty source!");
                 return;
             }
+            var encoding = (String)"UTF-8";
+            if (this.context.Request.Contains("encoding"))
+                encoding = this.context.Request["encoding"];
 
-            this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
-            this.context.Response.Write(Helper.ReadAllText(CAT(this.context.LocalRoot, "local/tests/input/U.S. News - ", source, ".xml"), "UTF-8"));
+            var from = (String)"tests/input";
+            if (this.context.Request.Contains("from"))
+                from = this.context.Request["from"];
+
+            this.context.Response.WriteHeader("Content-type", CAT("text/xml; charset=", encoding));
+            this.context.Response.Write(Helper.ReadAllText(CAT(this.context.LocalRoot, "local/", from, "/", source, ".xml"), encoding));
             this.context.Response.End();
         }
     }

@@ -40,14 +40,14 @@ namespace Bula.Objects {
         }
 
         public void Add(Object value) {
-            var cloned = this.Clone();
+            var cloned = this.CloneMe();
             this.Instantiate(this.Size() + 1);
             for (int n = 0; n < cloned.Size(); n++)
                 this[n] = cloned[n];
             this[cloned.Size() + 1] = value;
         }
 
-        public TArray Clone() {
+        public TArray CloneMe() {
             var cloned = new TArray(this.Size());
             for (int n = 0; n < this.Size(); n++)
                 cloned[n] = this[n];

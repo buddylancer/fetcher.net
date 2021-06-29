@@ -8,6 +8,8 @@ namespace Bula.Fetcher.Model {
     using System.Collections;
 
     using Bula.Fetcher;
+    using System.Text.RegularExpressions;
+
     using Bula.Objects;
     using Bula.Model;
 
@@ -66,11 +68,27 @@ namespace Bula.Fetcher.Model {
         }
 
         /// <summary>
+        /// Build SQL query from category name.
+        /// </summary>
+        /// <param name="category">Category name.</param>
+        /// <returns>Appropriate SQL-query.</returns>
+        public static String BuildSqlByCategory(String category) {
+            if (NUL(category))
+                return null;
+            //category = Regex.Escape(Regex.Escape(category));
+            category = CAT("\\\\b", Regex.Escape(Regex.Escape(category))); //, "\\\\b");
+            return category == null ? null : CAT("_this.s_Category REGEXP '", category, "'");
+        }
+
+        /// <summary>
         /// Build SQL query from categories filter.
         /// </summary>
         /// <param name="filter">Filter from the category.</param>
         /// <returns>Appropriate SQL-query.</returns>
-        public String BuildSqlFilter(String filter) {
+        public static String BuildSqlByFilter(String filter) {
+            if (filter == null)
+                return null;
+
             String[] filterChunks = Strings.Split("~", filter);
             String[] includeChunks = SIZE(filterChunks) > 0 ?
                 Strings.Split("\\|", filterChunks[0]) : null;
@@ -80,11 +98,11 @@ namespace Bula.Fetcher.Model {
             for (int n = 0; n < SIZE(includeChunks); n++) {
                 if (includeFilter.Length != 0)
                     includeFilter += " OR ";
-                includeFilter += "(_this.s_Title LIKE '%";
+                includeFilter += "(_this.s_Title REGEXP '";
                     includeFilter += includeChunks[n];
-                includeFilter += "%' OR _this.t_FullDescription LIKE '%";
+                includeFilter += "' OR _this.t_FullDescription REGEXP '";
                     includeFilter += includeChunks[n];
-                includeFilter += "%')";
+                includeFilter += "')";
             }
             if (includeFilter.Length != 0)
                 includeFilter = Strings.Concat(" (", includeFilter, ") ");
@@ -94,7 +112,7 @@ namespace Bula.Fetcher.Model {
                 if (!BLANK(excludeFilter))
                     excludeFilter = Strings.Concat(excludeFilter, " AND ");
                 excludeFilter = Strings.Concat(excludeFilter,
-                    "(_this.s_Title not like '%", excludeChunks[n], "%' AND _this.t_Description not like '%", excludeChunks[n], "%')");
+                    "(_this.s_Title NOT REGEXP '", excludeChunks[n], "' AND _this.t_Description NOT REGEXP '", excludeChunks[n], "')");
             }
             if (excludeFilter.Length != 0)
                 excludeFilter = Strings.Concat(" (", excludeFilter, ") ");
@@ -114,13 +132,12 @@ namespace Bula.Fetcher.Model {
         /// <param name="rows">List size.</param>
         /// <returns>Resulting data set.</returns>
         public DataSet EnumItems(String source, String search, int list, int rows) { //, totalRows) {
-            var realSearch = BLANK(search) ? null : this.BuildSqlFilter(search);
             String query1 = Strings.Concat(
                 " SELECT _this.", this.idField, " FROM ", this.tableName, " _this ",
                 " LEFT JOIN sources s ON (s.i_SourceId = _this.i_SourceLink) ",
-                " WHERE s.b_SourceActive = 1 ",
+                " WHERE s.b_SourceActive = 1 AND _this.b_Counted = 1",
                 (BLANK(source) ? null : CAT(" AND s.s_SourceName = '", source, "' ")),
-                (BLANK(realSearch) ? null : CAT(" AND (", realSearch, ") ")),
+                (BLANK(search) ? null : CAT(" AND (", search, ") ")),
                 " ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC "
             );
 
@@ -163,7 +180,7 @@ namespace Bula.Fetcher.Model {
             var query = Strings.Concat(
                 " SELECT _this.*, s.s_SourceName FROM ", this.tableName, " _this ",
                 " INNER JOIN sources s ON (s.i_SourceId = _this.i_SourceLink) ",
-                " WHERE _this.d_Date > ? ",
+                " WHERE _this.b_Counted = 1 AND _this.d_Date > ? ",
                 " ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC "
             );
             Object[] pars = ARR("SetDate", fromdate);
@@ -187,17 +204,16 @@ namespace Bula.Fetcher.Model {
         /// </summary>
         /// <param name="fromDate">Date to include items starting from.</param>
         /// <param name="source">Source name to include items from (default - all sources).</param>
-        /// <param name="filter">Filter for the category (or empty - no filtering).</param>
+        /// <param name="search">Search for filtering category (or empty - no filtering).</param>
         /// <param name="maxItems">Max number of returned items.</param>
         /// <returns>Resulting data set.</returns>
-        public DataSet EnumItemsFromSource(String fromDate, String source, String filter, int maxItems) {
-            var realFilter = BLANK(filter) ? null : this.BuildSqlFilter(filter);
+        public DataSet EnumItemsFromSource(String fromDate, String source, String search, int maxItems) {
             String query1 = Strings.Concat(
                 " SELECT _this.*, s.s_SourceName FROM ", this.tableName, " _this ",
                 " INNER JOIN sources s ON (s.i_SourceId = _this.i_SourceLink) ",
-                " WHERE s.b_SourceActive = 1 ",
+                " WHERE s.b_SourceActive = 1 AND _this.b_Counted = 1",
                 (BLANK(source) ? null : Strings.Concat(" AND s.s_SourceName = '", source, "' ")),
-                (BLANK(realFilter) ? null : Strings.Concat(" AND (", realFilter, ") ")),
+                (BLANK(search) ? null : Strings.Concat(" AND (", search, ") ")),
                 " ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC ",
                 " LIMIT ", STR(maxItems)
             );
@@ -212,7 +228,7 @@ namespace Bula.Fetcher.Model {
                 " WHERE s.b_SourceActive = 1 ",
                 (BLANK(source) ? null : Strings.Concat(" AND s.s_SourceName = '", source, "' ")),
                 " AND _this.d_Date > ? ",
-                (BLANK(realFilter) ? null : Strings.Concat(" AND (", realFilter, ") ")),
+                (BLANK(search) ? null : Strings.Concat(" AND (", search, ") ")),
                 " ORDER BY _this.d_Date DESC, _this.", this.idField, " DESC ",
                 " LIMIT ", STR(maxItems)
             );

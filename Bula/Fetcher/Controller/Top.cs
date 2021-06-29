@@ -7,7 +7,6 @@ namespace Bula.Fetcher.Controller {
     using System;
     using System.Collections;
 
-    using Bula.Objects;
     using Bula.Fetcher;
     using Bula.Objects;
 
@@ -29,7 +28,7 @@ namespace Bula.Fetcher.Controller {
             if (this.context.TestRun)
                 prepare["[#Date]"] = "28-Jun-2020 16:49 GMT";
             else
-                prepare["[#Date]"] = Util.ShowTime(DateTimes.GmtFormat(DateTimes.SQL_DTS));
+                prepare["[#Date]"] = Util.ShowTime();
 
             this.Write("top", prepare);
         }

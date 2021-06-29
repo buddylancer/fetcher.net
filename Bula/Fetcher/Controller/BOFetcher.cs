@@ -21,6 +21,7 @@ namespace Bula.Fetcher.Controller {
         private Context context = null;
         private Logger oLogger = null;
         private DataSet dsCategories = null;
+        private DataSet dsRules = null;
 
         /// Public default constructor 
         public BOFetcher (Context context) {
@@ -42,7 +43,7 @@ namespace Bula.Fetcher.Controller {
                 this.oLogger.InitFile(filename);
             }
             else
-                this.oLogger.InitTResponse(this.context.Response);
+                this.oLogger.InitResponse(this.context.Response);
         }
 
         /// <summary>
@@ -51,6 +52,8 @@ namespace Bula.Fetcher.Controller {
         private void PreLoadCategories() {
             var doCategory = new DOCategory();
             this.dsCategories = doCategory.EnumCategories();
+            var doRule = new DORule();
+            this.dsRules = doRule.EnumAll();
         }
 
         /// <summary>
@@ -58,10 +61,14 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         /// <param name="oSource">Source object.</param>
         /// <returns>Resulting items.</returns>
-        private Object[] FetchFromSource(THashtable oSource) {
+        /// <param name="from">Addition to feed URL (for testing purposes)</param>
+        private Object[] FetchFromSource(THashtable oSource, String from) {
             var url = STR(oSource["s_Feed"]);
             if (url.Length == 0)
                 return null;
+
+            if (!NUL(from))
+                url = Strings.Concat(url, "&from=", from);
 
             var source = STR(oSource["s_SourceName"]);
             if (this.context.Request.Contains("m") && !source.Equals(this.context.Request["m"]))
@@ -74,7 +81,7 @@ namespace Bula.Fetcher.Controller {
             //    encUrl = encUrl.Replace("&", "%26");
             //    url = Strings.Concat(Config.Site, "/get_ssl_rss.php?url=", encUrl);
             //}
-            this.oLogger.Output(CAT("[[[", url, "]]]<br/>", EOL));
+            this.oLogger.Output(CAT("[[[", url, "]]]"));
             Object[] rss = Internal.FetchRss(url);
             if (rss == null) {
                 this.oLogger.Output(CAT("-- problems --<br/>", EOL));
@@ -101,7 +108,27 @@ namespace Bula.Fetcher.Controller {
             var sourceId = INT(oSource["i_SourceId"]);
             var boItem = new BOItem(sourceName, item);
             var pubDate = STR(item["pubdate"]);
+            if (BLANK(pubDate) && !BLANK(item["dc"])) { //TODO implement [dc][time]
+                var temp = (THashtable)item["dc"];
+                if (!BLANK(temp["date"]))
+                    pubDate = STR(temp["date"]);
+            }
+            //TODO -- workaround for life.ru (error - pubDate inside guid)
+
+            if (BLANK(pubDate)) pubDate = STR(item["guid_pubdate"]);
+
             var date = DateTimes.GmtFormat(DateTimes.SQL_DTS, DateTimes.FromRss(pubDate));
+
+            boItem.ProcessDescription();
+            //boItem.ProcessCustomFields(); // Uncomment for processing custom fields
+            boItem.ProcessCategory();
+            boItem.ProcessCreator();
+
+            // Process rules AFTER processing description (as some info can be extracted from it)
+            boItem.ProcessRules(this.dsRules);
+
+            if (BLANK(boItem.link)) //TODO - what we can do else?
+                return 0;
 
             // Check whether item with the same link exists already
             var doItem = new DOItem();
@@ -109,13 +136,16 @@ namespace Bula.Fetcher.Controller {
             if (dsItems.GetSize() > 0)
                 return 0;
 
-            boItem.ProcessDescription();
-            //boItem.ProcessCustomFields(); // Uncomment for processing custom fields
-            boItem.ProcessCategory();
-            boItem.ProcessCreator();
-
             // Try to add/embed standard categories from description
-            boItem.AddStandardCategories(this.dsCategories, this.context.Lang);
+            var countCategories = boItem.AddStandardCategories(this.dsCategories, this.context.Lang);
+            //print "countCategories: '" . countCategories . "'<br/>\r\n";
+
+            // Check the link once again after processing rules
+            if (dsItems == null && !BLANK(boItem.link)) {
+                doItem.FindItemByLink(boItem.link, sourceId);
+                if (dsItems.GetSize() > 0)
+                    return 0;
+            }
 
             var url = boItem.GetUrlTitle(true); //TODO -- Need to pass true if transliteration is required
             var fields = new THashtable();
@@ -123,6 +153,7 @@ namespace Bula.Fetcher.Controller {
             fields["s_Title"] = boItem.title;
             fields["s_FullTitle"] = boItem.fullTitle;
             fields["s_Url"] = url;
+            fields["i_Categories"] = countCategories;
             if (boItem.description != null)
                 fields["t_Description"] = boItem.description;
             if (boItem.fullDescription != null)
@@ -145,7 +176,8 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Main logic.
         /// </summary>
-        public void FetchFromSources() {
+        /// <param name="from">Addition to feed URL (for testing purposes)</param>
+        public void FetchFromSources(String from) {
             this.oLogger.Output(CAT("Start logging<br/>", EOL));
 
             //TODO -- Purge old items
@@ -162,12 +194,12 @@ namespace Bula.Fetcher.Controller {
             for (int n = 0; n < dsSources.GetSize(); n++) {
                 var oSource = dsSources.GetRow(n);
 
-                Object[] itemsArray = this.FetchFromSource(oSource);
+                Object[] itemsArray = this.FetchFromSource(oSource, from);
                 if (itemsArray == null)
                     continue;
 
                 // Fetch done for this source
-                this.oLogger.Output(" fetched ");
+                //this.oLogger.Output(" fetched ");
 
                 var itemsCounter = 0;
                 // Loop through fetched items and parse their data
@@ -188,13 +220,13 @@ namespace Bula.Fetcher.Controller {
                     DBConfig.Connection = null;
                 }
 
-                this.oLogger.Output(CAT(" (", itemsCounter, " items) end<br/>", EOL));
+                this.oLogger.Output(CAT("<br/>", EOL, "... fetched (", itemsCounter, " items) end"));
             }
 
             // Re-count categories
             this.RecountCategories();
 
-            this.oLogger.Output(CAT("<hr/>Total items added - ", totalCounter, "<br/>", EOL));
+            this.oLogger.Output(CAT("<br/>", EOL, "<hr/>Total items added - ", totalCounter, "<br/>", EOL));
 
             if (Config.CACHE_PAGES && totalCounter > 0) {
                 var doCleanCache = new DoCleanCache(this.context);
@@ -206,22 +238,35 @@ namespace Bula.Fetcher.Controller {
         /// Execute re-counting of categories.
         /// </summary>
         private void RecountCategories() {
-            this.oLogger.Output(CAT("Recount categories ... <br/>", EOL));
+            this.oLogger.Output(CAT("<br/>", EOL, "Recount categories ... "));
             var doCategory = new DOCategory();
+            var doItem = new DOItem();
             var dsCategories = doCategory.EnumCategories();
             for (int n = 0; n < dsCategories.GetSize(); n++) {
                 var oCategory = dsCategories.GetRow(n);
-                var id = STR(oCategory["s_CatId"]);
-                var filter = STR(oCategory["s_Filter"]);
-                var doItem = new DOItem();
-                var sqlFilter = doItem.BuildSqlFilter(filter);
-                var dsItems = doItem.EnumIds(sqlFilter);
-                var fields = new THashtable();
-                fields["i_Counter"] = dsItems.GetSize();
-                var result = doCategory.UpdateById(id, fields);
-                if (result < 0)
-                    this.oLogger.Output(CAT("-- problems --<br/>", EOL));
+                var categoryId = STR(oCategory["s_CatId"]);
+                var oldCounter = INT(oCategory["i_Counter"]);
+
+                //String filter = STR(oCategory["s_Filter"]);
+                //String sqlFilter = DOItem.BuildSqlByFilter(filter);
+
+                var categoryName = STR(oCategory["s_Name"]);
+                var sqlFilter = DOItem.BuildSqlByCategory(categoryName);
+
+                var dsCounters = doItem.EnumIds(CAT("_this.b_Counted = 0 AND ", sqlFilter));
+                if (dsCounters.GetSize() == 0)
+                    continue;
+
+                var newCounter = INT(dsCounters.GetSize());
+
+                //Update category
+                var categoryFields = new THashtable();
+                categoryFields["i_Counter"] = oldCounter + newCounter;
+                doCategory.UpdateById(categoryId, categoryFields);
             }
+
+            doItem.Update("_this.b_Counted = 1", "_this.b_Counted = 0");
+
             this.oLogger.Output(CAT(" ... Done<br/>", EOL));
         }
     }

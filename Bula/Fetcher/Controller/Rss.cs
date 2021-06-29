@@ -34,13 +34,13 @@ namespace Bula.Fetcher.Controller {
         /// Write starting block of RSS-feed.
         /// </summary>
         /// <param name="source">RSS-feed source name.</param>
-        /// <param name="filterName">RSS-feed 'filtered by' value.</param>
+        /// <param name="category">RSS-feed 'filtered by' category.</param>
         /// <param name="pubDate">Publication date.</param>
         /// <returns>Resulting XML-content of starting block.</returns>
-        public override String WriteStart(String source, String filterName, String pubDate) {
+        public override String WriteStart(String source, String category, String pubDate) {
             var rssTitle = CAT(
                 "Items for ", (BLANK(source) ? "ALL sources" : CAT("'", source, "'")),
-                (BLANK(filterName) ? null : CAT(" and filtered by '", filterName, "'"))
+                (BLANK(category) ? null : CAT(" and filtered by '", category, "'"))
             );
             var xmlContent = Strings.Concat(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>", EOL,

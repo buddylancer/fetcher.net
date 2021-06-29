@@ -5,6 +5,14 @@ namespace Bula.Objects
 {
     public class TArrayListBase : Bula.Meta
     {
+        public TArrayListBase() {
+        }
+
+        public TArrayListBase(Object[] items) {
+            foreach (Object item in items)
+                content.Add(item);
+        }
+
         private ArrayList content = new ArrayList();
 
         public int Add(Object value) { return content.Add(value); }

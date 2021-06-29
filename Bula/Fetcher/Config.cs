@@ -61,24 +61,26 @@ namespace Bula.Fetcher {
         public const int DB_ITEMS_ROWS = 25;
 
         // Fill these fields by your site data
+        /// Site language (default - null) 
+        public const String SITE_LANGUAGE = null;          
         /// Site name 
         public const String SITE_NAME = "Buddy Fetcher";
         /// Site comments 
-        public const String SITE_COMMENTS = "Latest Items";
+        public const String SITE_COMMENTS = "Latest News Headlines";
         /// Site keywords 
         public const String SITE_KEYWORDS = "Buddy Fetcher, rss, fetcher, aggregator, NET, MySQL";
         /// Site description 
         public const String SITE_DESCRIPTION = "Buddy Fetcher is a simple RSS fetcher/aggregator written in NET/MySQL";
 
         /// Name of item (in singular form) 
-        public const String NAME_ITEM = "Item";
+        public const String NAME_ITEM = "Headline";
         /// Name of items (in plural form) 
-        public const String NAME_ITEMS = "Items";
+        public const String NAME_ITEMS = "Headlines";
         // Uncomment what fields should be extracted and name them appropriately
         /// Name of category (in singular form) 
-        public const String NAME_CATEGORY = "Category";
+        public const String NAME_CATEGORY = "Region";
         /// Name of categories (in plural form) 
-        public const String NAME_CATEGORIES = "Categories";
+        public const String NAME_CATEGORIES = "Regions";
         /// Name of creator 
         public const String NAME_CREATOR = "Creator";
         /// Name of custom field 1 (comment when not extracted) 
@@ -88,6 +90,15 @@ namespace Bula.Fetcher {
 
         /// Show bottom blocks (Filtering and RSS) 
         public const Boolean SHOW_BOTTOM = true;
+        /// Show empty categories 
+        public const Boolean SHOW_EMPTY = false;
+        /// Sort categories by Id (s_CatId) or Name (s_Name) or NULL for default (as-is) 
+        public const String SORT_CATEGORIES = null;
+
+        /** Site time shift with respect to GMT (hours*100+minutes) */
+        public const int TIME_SHIFT = 0;
+        /// Site time zone name (GMT or any other) 
+        public const String TIME_ZONE = "GMT";
 
         /// Powered By string 
         public const String POWERED_BY = "Buddy Fetcher for NET";

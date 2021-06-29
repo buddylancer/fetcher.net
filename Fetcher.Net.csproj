@@ -90,6 +90,7 @@
     <Compile Include="Bula\Fetcher\Controller\Util.cs" />
     <Compile Include="Bula\Fetcher\Model\DOCategory.cs" />
     <Compile Include="Bula\Fetcher\Model\DOItem.cs" />
+    <Compile Include="Bula\Fetcher\Model\DORule.cs" />
     <Compile Include="Bula\Fetcher\Model\DOSource.cs" />
     <Compile Include="Bula\Fetcher\Model\DOTime.cs" />
     <Compile Include="Bula\Internal.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Bula\Objects\THashtable.cs" />
     <Compile Include="Bula\Objects\THashtableBase.cs" />
     <Compile Include="Bula\Objects\TNull.cs" />
+    <Compile Include="Bula\Objects\Translator.cs" />
     <Compile Include="Bula\Objects\TRequest.cs" />
     <Compile Include="Bula\Objects\TRequestBase.cs" />
     <Compile Include="Bula\Objects\TResponse.cs" />

@@ -31,7 +31,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 oLogger.InitFile(filename);
             }
             else
-                oLogger.InitTResponse(this.context.Response);
+                oLogger.InitResponse(this.context.Response);
             this.CleanCache(oLogger);
         }
 

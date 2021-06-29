@@ -24,13 +24,16 @@ namespace Bula.Fetcher.Controller {
         public override void Execute() {
             var publicPages = new TArrayList();
 
+            var bookmark = (String)null;
+            if (this.context.Contains("Name_Category"))
+                bookmark = CAT("#", Config.NAME_ITEMS, "_by_", this.context["Name_Category"]); 
             publicPages.Add("Home");
             publicPages.Add("home");
             if (this.context.IsMobile) {
                 publicPages.Add(Config.NAME_ITEMS); publicPages.Add("items");
-                if (Config.SHOW_BOTTOM && this.context.Contains("Name_Categories")) {
-                    publicPages.Add(CAT("By ", this.context["Name_Categories"]));
-                    publicPages.Add("#items_by_skills");
+                if (Config.SHOW_BOTTOM && this.context.Contains("Name_Category")) {
+                    publicPages.Add(CAT("By ", this.context["Name_Category"]));
+                    publicPages.Add(bookmark);
                     //publicPages.Add("RSS Feeds");
                     //publicPages.Add("#read_rss_feeds");
                 }
@@ -40,12 +43,12 @@ namespace Bula.Fetcher.Controller {
             else {
                 publicPages.Add(CAT("Browse ", Config.NAME_ITEMS));
                 publicPages.Add("items");
-                if (Config.SHOW_BOTTOM && this.context.Contains("Name_Categories")) {
-                    publicPages.Add(CAT(Config.NAME_ITEMS, " by ", this.context["Name_Categories"]));
-                    publicPages.Add("#items_by_skills");
+                if (Config.SHOW_BOTTOM && this.context.Contains("Name_Category")) {
+                    publicPages.Add(CAT(Config.NAME_ITEMS, " by ", this.context["Name_Category"]));
+                    publicPages.Add(bookmark);
 
                     publicPages.Add("Read RSS Feeds");
-                    publicPages.Add("#read_rss_feeds");
+                    publicPages.Add("#Read_RSS_Feeds");
                 }
                 publicPages.Add("Sources");
                 publicPages.Add("sources");

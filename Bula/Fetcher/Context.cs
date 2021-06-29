@@ -145,8 +145,10 @@ namespace Bula.Fetcher {
             // You can change something below this line if you know what are you doing :)
             var rootDir = Request.GetVar(TRequest.INPUT_SERVER, "APPL_PHYSICAL_PATH");
             rootDir = rootDir.Replace("\\", "/"); // Fix for IIS
+            var removeSlashes =
+                3;
             // Regarding that we have the ordinary local website (not virtual directory)
-            for (int n = 0; n <= 2; n++) {
+            for (int n = 0; n <= removeSlashes; n++) {
                 var lastSlashIndex = rootDir.LastIndexOf("/");
                 rootDir = rootDir.Substring(0, lastSlashIndex);
             }
@@ -220,6 +222,7 @@ namespace Bula.Fetcher {
         /// Push engine.
         /// </summary>
         /// <param name="printFlag">Whether to print content immediately (true) or save it for further processing (false).</param>
+        /// <returns>New Engine instance.</returns>
         public Engine PushEngine(Boolean printFlag) {
             var engine = new Engine(this);
             engine.SetPrintFlag(printFlag);
@@ -243,7 +246,10 @@ namespace Bula.Fetcher {
             this.EngineIndex--;
         }
 
-        /// Get current engine 
+        /// <summary>
+        /// Get current engine
+        /// </summary>
+        /// <returns>Current engine instance.</returns>
         public Engine GetEngine() {
             return (Engine)this.EngineInstances[this.EngineIndex];
         }

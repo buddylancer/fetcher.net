@@ -11,8 +11,6 @@ namespace Bula.Model {
     using MySql.Data.MySqlClient;
     using Bula.Objects;
 
-    using Bula.Objects;
-
     /// <summary>
     /// Implement operations with prepared statement.
     /// </summary>
@@ -44,10 +42,10 @@ namespace Bula.Model {
         public RecordSet ExecuteQuery() {
             this.recordSet = new RecordSet();
             if (this.FormQuery()) {
-                DataAccess.CallPrintDelegate(CAT("Executing selection query [", this.query, "] ..."));
+                DataAccess.CallPrintDelegate(CAT("<br/>", EOL, "Executing selection query [", this.query, "] ..."));
                 var result = DataAccess.SelectQuery(this.link, this.query);
                 if (result == null) {
-                    DataAccess.CallErrorDelegate(CAT("Selection query failed [", this.query, "]"));
+                    DataAccess.CallErrorDelegate(CAT("<br/>", EOL, "Selection query failed [", this.query, "]"));
                     return null;
                 }
                 this.recordSet.result = result;

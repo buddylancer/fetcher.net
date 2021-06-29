@@ -7,6 +7,9 @@ namespace Bula.Objects {
     using System;
     using System.Collections;
 
+    /// <summary>
+    /// Implementation of DB NULL object.
+    /// </summary>
     public class TNull : Bula.Meta {
         private static TNull value;
 
@@ -14,6 +17,10 @@ namespace Bula.Objects {
             value = null;
         }
 
+        /// <summary>
+        /// Get NULL value.
+        /// </summary>
+        /// <returns>NULL value.</returns>
         public static TNull GetValue() {
             if (value == null)
                 value = new TNull();
