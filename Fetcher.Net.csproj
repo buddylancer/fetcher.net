@@ -90,6 +90,7 @@
     <Compile Include="Bula\Fetcher\Controller\Util.cs" />
     <Compile Include="Bula\Fetcher\Model\DOCategory.cs" />
     <Compile Include="Bula\Fetcher\Model\DOItem.cs" />
+    <Compile Include="Bula\Fetcher\Model\DOMapping.cs" />
     <Compile Include="Bula\Fetcher\Model\DORule.cs" />
     <Compile Include="Bula\Fetcher\Model\DOSource.cs" />
     <Compile Include="Bula\Fetcher\Model\DOTime.cs" />

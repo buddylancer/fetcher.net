@@ -85,6 +85,9 @@ namespace Bula.Fetcher {
         public String Api;
         /// Current language 
         public String Lang;
+        /// Current file extension 
+        /* Filename extension */
+        public const String FILE_EXT = ".aspx";
 
         /// Root cache folder for pages 
         public String CacheFolderRoot;
@@ -181,10 +184,16 @@ namespace Bula.Fetcher {
             this.GlobalConstants["[#Site_Name]"] = Config.SITE_NAME;
             this.GlobalConstants["[#Site_Comments]"] = Config.SITE_COMMENTS;
             this.GlobalConstants["[#Top_Dir]"] = Config.TOP_DIR;
-            this.GlobalConstants["[#Index_Page]"] = Config.INDEX_PAGE;
-            this.GlobalConstants["[#Action_Page]"] = Config.ACTION_PAGE;
-            this.GlobalConstants["[#Powered_By]"] = Config.POWERED_BY;
-            this.GlobalConstants["[#Github_Repo]"] = Config.GITHUB_REPO;
+
+            if (!this.TestRun)
+                this.GlobalConstants["[#File_Ext]"] = FILE_EXT;
+            this.GlobalConstants["[#Index_Page]"] = this.TestRun ? Config.INDEX_PAGE :
+                Strings.Replace("[#File_Ext]", FILE_EXT, Config.INDEX_PAGE);
+            this.GlobalConstants["[#Action_Page]"] = this.TestRun ? Config.ACTION_PAGE :
+                Strings.Replace("[#File_Ext]", FILE_EXT, Config.ACTION_PAGE);
+            this.GlobalConstants["[#Rss_Page]"] = this.TestRun ? Config.RSS_PAGE :
+                Strings.Replace("[#File_Ext]", FILE_EXT, Config.RSS_PAGE);
+
             //if (this.IsMobile)
             //    this.GlobalConstants["[#Is_Mobile]"] = "1";
             this.GlobalConstants["[#Lang]"] = this.Lang;

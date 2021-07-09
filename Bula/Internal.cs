@@ -11,6 +11,7 @@ namespace Bula
     using System.Xml;
 
     using System.Collections;
+    using System.Text;
     using System.Text.RegularExpressions;
 
     using Bula.Objects;
@@ -47,7 +48,7 @@ namespace Bula
 
         private static String RemoveTag(String input, String tag)
         {
-            return Regex.Replace(input, CAT("<[/]*", tag, "[^>]*[/]*>"), "");
+            return Regex.Replace(input, CAT("<[/]*", tag, "[^<>]*[/]*>"), "");
         }
 
         private static String DecorateTags(String input, String except)
@@ -64,12 +65,30 @@ namespace Bula
 
         private static String DecorateTag(String input, String tag)
         {
-            return Regex.Replace(input, CAT("<([/]*", tag, "[^>]*[/]*)>"), "~{$1}~");
+            return Regex.Replace(input, CAT("<([/]*", tag, "[^<>]*[/]*)>"), "~{$1}~");
         }
 
         private static String UndecorateTags(String input)
         {
             return Regex.Replace(input, CAT("~{([/]*[^}]+)}~"), "<$1>");
+        }
+
+        private static String AllowedChars = "€₹₽₴—•–‘’—№…"; //TODO!!! Hardcode Russian Ruble, Ukranian Hryvnia etc for now
+
+        /// <summary>
+        /// Clean out UTF-8 chars which are not accepted by MySQL.
+        /// </summary>
+        /// <param name="input">Input string</param>
+        /// <returns>Resulting string</returns>
+        public static String CleanChars(String input)
+        {
+            char[] inputChars = input.ToCharArray();
+            StringBuilder sb = new StringBuilder();
+            for (int n = 0; n < inputChars.Length; n++) {
+                if (inputChars[n] < 2048 || AllowedChars.IndexOf(inputChars[n]) != -1)
+                    sb.Append(inputChars[n]);
+            }
+            return sb.ToString();
         }
 
         /// <summary>
@@ -165,7 +184,31 @@ namespace Bula
             nsmgr.AddNamespace("dc", "http://purl.org/dc/elements/1.1/");
 
             // Load the RSS file from the RSS URL
-            rssXmlDoc.Load(url);
+            try {
+                rssXmlDoc.Load(url);
+            }
+            catch (Exception ex1) {
+                var matchCollection = Regex.Matches(ex1.Message, "'([^']+)' is an undeclared prefix. Line [0-9]+, position [0-9]+.");
+                if (matchCollection.Count > 0) {
+                    var prefix = matchCollection[0].Groups[1].Value;
+                    try
+                    {
+                        var client = new System.Net.WebClient();
+                        var content = (new System.Net.WebClient()).DownloadString(url);
+                        byte[] bytes = Encoding.Default.GetBytes(content);
+                        content = Encoding.UTF8.GetString(bytes);
+                        //content = System.Text.Encoding.UTF8.GetBytes(content).ToString();
+                        var pattern = CAT("<", prefix, ":[^>]+>[^<]+</", prefix, ":[^>]+>");
+                        content = Regex.Replace(content, pattern, "");
+                        rssXmlDoc.LoadXml(content);
+                    }
+                    catch (Exception ex2) {
+                        return null;
+                    }
+                }
+                else
+                    return null;
+            }
 
             // Parse the Items in the RSS file
             XmlNodeList rssNodes = rssXmlDoc.SelectNodes("rss/channel/item");
@@ -175,31 +218,35 @@ namespace Bula
             {
                 var item = new THashtable();
 
-                XmlNode rssSubNode = rssNode.SelectSingleNode("title");
-                if (rssSubNode != null)
-                    item["title"] = rssSubNode.InnerText;
+                XmlNodeList itemNodes = rssNode.SelectNodes("*");
+                foreach (XmlNode itemNode in itemNodes) {
+                    String name = itemNode.Name;
+                    String text = itemNode.InnerXml;
+                    if (text.StartsWith("<![CDATA["))
+                        text = text.Replace("<![CDATA[", "").Replace("]]>", "");
 
-                rssSubNode = rssNode.SelectSingleNode("link");
-                if (rssSubNode != null)
-                    item["link"] = rssSubNode.InnerText;
-
-                rssSubNode = rssNode.SelectSingleNode("description");
-                if (rssSubNode != null)
-                    item["description"] = rssSubNode.InnerText;
-
-                rssSubNode = rssNode.SelectSingleNode("pubDate");
-                if (rssSubNode != null)
-                    item["pubdate"] = rssSubNode.InnerText; //Yes, lower case
-
-                rssSubNode = rssNode.SelectSingleNode("dc:creator", nsmgr);
-                if (rssSubNode != null)
-                {
-                    item["dc"] = new THashtable();
-                    ((THashtable)item["dc"])["creator"] = rssSubNode.InnerText;
+                    if (name == "category") {
+                        if (item[name] == null)
+                            item[name] = text;
+                        else
+                            item[name] += ", " + text;
+                    }
+                    else if (name == "dc:creator") {
+                        THashtable dc = item.ContainsKey("dc") ? (THashtable)item["dc"] : new THashtable();
+                        dc["creator"] = text;
+                        item["dc"] = dc;
+                    }
+                    else if (name == "dc:date") {
+                        THashtable dc = item.ContainsKey("dc") ? (THashtable)item["dc"] : new THashtable();
+                        dc["date"] = text;
+                        item["dc"] = dc;
+                    }
+                    else
+                        item[name] = text;
                 }
                 items.Add(item);
             }
             return items.ToArray();
-        }    
+        }
     }
 }

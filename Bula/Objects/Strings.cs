@@ -10,6 +10,7 @@ namespace Bula.Objects {
     using System.Text.RegularExpressions;
 
     using Bula;
+    using System.Text.RegularExpressions;
     using Bula.Objects;
 
     /// <summary>
@@ -22,6 +23,15 @@ namespace Bula.Objects {
         /// <returns>Empty array of strings.</returns>
         public static String[] EmptyArray() {
             return new String[0];
+        }
+
+        /// <summary>
+        /// Convert string to lower case.
+        /// </summary>
+        /// <param name="input">Input string.</param>
+        /// <returns>Resulting string.</returns>
+        public static String ToLowerCase(String input) {
+            return input.ToLower();
         }
 
         /// <summary>
@@ -217,5 +227,8 @@ namespace Bula.Objects {
             return input;
         }
 
+        public static String CleanChars(String input) {
+            return Internal.CleanChars(input);
+        }
     }
 }

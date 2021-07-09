@@ -65,13 +65,17 @@ namespace Bula.Fetcher.Controller {
             this.source = source;
             this.item = item;
 
-            this.link = (String)item["link"];
+            this.link = ((String)item["link"]).Trim();
 
             // Pre-process full description & title
             // Trick to eliminate non-UTF-8 characters
-            this.fullTitle = Regex.Replace((String)item["title"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
-            if (item.ContainsKey("description") && !BLANK(item["description"]))
-                this.fullDescription = Regex.Replace((String)item["description"], "[\xF0-\xF7][\x80-\xBF]{3}", "");
+            this.fullTitle = Strings.CleanChars((String)item["title"]);
+
+            if (item.ContainsKey("description") && !BLANK(item["description"])) {
+                this.fullDescription = Strings.CleanChars((String)item["description"]);
+                this.fullDescription = Strings.Replace("\n", "\r\n", this.fullDescription);
+                this.fullDescription = Strings.Replace("\r\r", "\r", this.fullDescription);
+            }
 
             this.PreProcessLink();
         }
@@ -79,8 +83,26 @@ namespace Bula.Fetcher.Controller {
         /// <summary>
         /// Pre-process link (just placeholder for now)
         /// </summary>
-        protected void PreProcessLink()
-        {}
+        protected void PreProcessLink() {
+        }
+
+        public void ProcessMappings(DataSet dsMappings) {
+            var title = this.fullTitle;
+            var description = this.fullDescription;
+
+            for (int n = 0; n < dsMappings.GetSize(); n++) {
+                var oMapping = dsMappings.GetRow(n);
+                var from = STR(oMapping["s_From"]);
+                var to = STR(oMapping["s_To"]);
+                title = Strings.Replace(from, to, title);
+                if (description != null)
+                    description = Strings.Replace(from, to, description);
+            }
+
+            this.title = title;
+            if (description != null)
+                this.description = description;
+        }
 
         /// <summary>
         /// Process description.
@@ -88,27 +110,21 @@ namespace Bula.Fetcher.Controller {
         public void ProcessDescription() {
             var BR = "\n";
 
-            var title = Strings.RemoveTags(this.fullTitle);
+            var title = Strings.RemoveTags(this.title);
             // Normalize \r\n to \n
             title = Regex.Replace(title, "\r\n", BR);
             title = Regex.Replace(title, "(^&)#", "1[sharp]");
-            title = title.Replace("&amp;", "&");
-            title = Regex.Replace(title, "&amp;laquo;", "&laquo;");
-            title = Regex.Replace(title, "&amp;raquo;", "&raquo;");
-            title = title.Trim();
-            title = Regex.Replace(title, "[\n]+", " ");
+            title = title.Trim(); //TODO -- sometimes doesn't work...
 
-            // Moved to Rules
-            //int httpIndex = Strings.LastIndexOf("http", title);
-            //if (httpIndex != -1)
-            //    title = Strings.Substring(title, 0, httpIndex);
+            title = Regex.Replace(title, "[\n]+", BR);
+            title = Regex.Replace(title, BR, EOL);
 
             this.title = title;
 
-            if (this.fullDescription == null)
+            if (this.description == null)
                 return;
             // Normalize \r\n to \n
-            var description = Regex.Replace(this.fullDescription, "\r\n", BR);
+            var description = Regex.Replace(this.description, "\r\n", BR);
 
             //TODO -- Fixes for FetchRSS feeds (parsed from Twitter) here...
             description = description.Replace("&#160;", " ");
@@ -150,17 +166,15 @@ namespace Bula.Fetcher.Controller {
             }
 
             // Process end-of-lines...
-            //description = Regex.Replace(description, "[\n]+$", "");
             description = Regex.Replace(description, "[ \t]+\n", "\n");
             description = Regex.Replace(description, "[\n]+\n\n", "\n\n");
             description = Regex.Replace(description, "\n\n[ \t]*[\\+\\-\\*][^\\+\\-\\*][ \t]*", "\n* ");
             description = Regex.Replace(description, "[ \t]+", " ");
 
-            description = Regex.Replace(description, "&amp;laquo;", "&laquo;");
-            description = Regex.Replace(description, "&amp;raquo;", "&raquo;");
+            description = description.Trim();
 
             // Normalize back to \r\n
-            this.description = Regex.Replace(description.Trim(), BR, EOL);
+            this.description = Regex.Replace(description, BR, EOL);
         }
 
         /// <summary>
@@ -193,21 +207,22 @@ namespace Bula.Fetcher.Controller {
                 // Fix categories from something.com
             }
 
+            if (categoryItem.Length == 0)
+                return null;
+
             var category = (String)null;
-            if (categoryItem.Length != 0) {
-                String[] categoriesArr = Strings.Split(",", categoryItem.Replace(",&,", " & "));
-                var categoriesNew = new TArrayList();
-                for (int c = 0; c < SIZE(categoriesArr); c++) {
-                    var temp = categoriesArr[c];
+            String[] categoriesArr = Strings.Split(",", categoryItem);
+            var categoriesNew = new TArrayList();
+            for (int c = 0; c < SIZE(categoriesArr); c++) {
+                var temp = categoriesArr[c];
                     temp = Strings.Trim(temp);
-                    if (BLANK(temp))
-                        continue;
-                    temp = Strings.FirstCharToUpper(temp);
-                    if (category == null)
-                        category = temp;
-                    else
-                        category += CAT(", ", temp);
-                }
+                if (BLANK(temp))
+                    continue;
+                temp = Strings.FirstCharToUpper(temp);
+                if (category == null)
+                    category = temp;
+                else
+                    category = category += CAT(", ", temp);
             }
 
             return category;
@@ -295,6 +310,30 @@ namespace Bula.Fetcher.Controller {
         }
 
         /// <summary>
+        /// Normalize list of categories.
+        /// </summary>
+        public void NormalizeCategories() {
+            if (BLANK(this.category))
+                return;
+
+            String[] categories = Strings.Split(", ", this.category);
+            var size = SIZE(categories);
+            if (size == 1)
+                return;
+
+            var categoryTags = new TArrayList();
+            for (int n1 = 0; n1 < size; n1++) {
+                String category1 = categories[n1];
+                if (!categoryTags.Contains(category1))
+                    categoryTags.Add(category1);
+            }
+
+            this.category = Strings.Join(", ", (String[])categoryTags.ToArray(
+                typeof(String)
+            ));
+        }
+
+        /// <summary>
         /// Process creator (publisher, company etc).
         /// </summary>
         public void ProcessCreator() {
@@ -320,18 +359,19 @@ namespace Bula.Fetcher.Controller {
         /// Process rules.
         /// </summary>
         /// <param name="rules">The list of rules to process.</param>
+        /// <returns>Number of rules applied.</returns>
         public int ProcessRules(DataSet rules) {
             var counter = 0;
             for (int n = 0; n < rules.GetSize(); n++) {
                 var rule = rules.GetRow(n);
                 var sourceName = STR(rule["s_SourceName"]);
                 if (EQ(sourceName, "*") || EQ(sourceName, this.source))
-                    counter += this.ProcessRule(rule);
+                    counter += this.ProcessRule(sourceName, rule);
             }
             return counter;
         }
 
-        private int ProcessRule(THashtable rule) {
+        private int ProcessRule(String sourceName, THashtable rule) {
             var counter = 0;
             var nameTo = STR(rule["s_To"]);
             var valueTo = (String)null;
@@ -341,23 +381,24 @@ namespace Bula.Fetcher.Controller {
             var intValue = INT(rule["i_Value"]);
             var pattern = STR(rule["s_Pattern"]);
             var stringValue = STR(rule["s_Value"]);
-            if (EQ(operation, "shrink") && !NUL(valueFrom) && LEN(pattern) > 0) {
+            var append = false;
+            if (EQ(operation, "get") && !NUL(valueFrom)) {
+                valueTo = valueFrom;
+            }
+            else if (EQ(operation, "shrink") && !NUL(valueFrom) && LEN(pattern) > 0) {
                 var shrinkIndex = valueFrom.IndexOf(pattern);
-                if (shrinkIndex != -1) 
+                if (shrinkIndex != -1)
                     valueTo = valueFrom.Substring(0, shrinkIndex).Trim();
             }
-            if (EQ(operation, "cut") && !NUL(valueFrom) && LEN(pattern) > 0) {
+            else if (EQ(operation, "cut") && !NUL(valueFrom) && LEN(pattern) > 0) {
                 var cutIndex = valueFrom.IndexOf(pattern);
-                if (cutIndex == 0) 
+                if (cutIndex != -1)
                     valueTo = valueFrom.Substring(cutIndex + LEN(pattern));
             }
-            if (EQ(operation, "replace") && !NUL(valueFrom) && LEN(pattern) > 0) {
+            else if (EQ(operation, "replace") && !NUL(valueFrom) && LEN(pattern) > 0) {
                 valueTo = Regex.Replace(valueFrom, pattern, stringValue, RegexOptions.IgnoreCase);
-                var replaceIndex = valueFrom.IndexOf(pattern);
-                if (replaceIndex != -1) 
-                    valueTo = valueFrom.Replace(pattern, stringValue);
             }
-            if (EQ(operation, "remove") && !NUL(valueFrom) && LEN(pattern) > 0) {
+            else if (EQ(operation, "remove") && !NUL(valueFrom) && LEN(pattern) > 0) {
                 var matches =
                     Regex.Matches(valueFrom, pattern, RegexOptions.IgnoreCase);
                 if (SIZE(matches) > 0)
@@ -370,29 +411,39 @@ namespace Bula.Fetcher.Controller {
                         valueTo = valueTo.Substring(0, LEN(valueTo) - 1);
                     valueTo = valueTo += "...";
                 }
-                //print "valueTo: '" . valueTo . "'<br/>\r\n";
             }
             else if (EQ(operation, "extract") && !NUL(valueFrom)) {
                 var matches =
                     Regex.Matches(valueFrom, pattern, RegexOptions.IgnoreCase);
-                if (SIZE(matches) > intValue) {
+                var groups = matches.Count == 0 ? null : matches[0].Groups;
+                if (SIZE(groups) > intValue) {
                     if (BLANK(stringValue))
-                        valueTo = matches[intValue].Value;
+                        valueTo = groups[intValue].Value;
                     else {
-                        valueTo = stringValue;
-                        for (int n = 0; n < SIZE(matches); n++) {
-                            if (valueTo.IndexOf(CAT("$", n)) != -1)
-                                valueTo = valueTo.Replace(CAT("$", n), matches[n].Value);
+                        if (EQ(nameTo, "date")) {
+                            valueTo = DateTimes.Format(DateTimes.RSS_DTS, DateTimes.Parse(stringValue, groups[intValue].Value));
+                        }
+                        else {
+                            valueTo = stringValue;
+                            for (int n = 0; n < SIZE(groups); n++) {
+                                if (valueTo.IndexOf(CAT("$", n)) != -1)
+                                    valueTo = valueTo.Replace(CAT("$", n), groups[n].Value);
+                            }
                         }
                     }
+                    if (EQ(nameTo, "category"))
+                        append = true;
                 }
             }
+            else if (EQ(operation, "map")) {
+                //TODO
+            }
             if (!NUL(valueTo))
-                this.SetString(nameTo, valueTo);
+                this.SetString(nameTo, valueTo, append);
             return counter;
         }
 
-        private void SetString(String name, String value) {
+        private void SetString(String name, String value, Boolean append) {
             if (EQ(name, "link"))
                 this.link = value;
             else if (EQ(name, "title"))
@@ -402,10 +453,10 @@ namespace Bula.Fetcher.Controller {
             else if (EQ(name, "date"))
                 this.date = value;
             else if (EQ(name, "category")) {
-                if (BLANK(this.category))
+                if (BLANK(this.category) || !append)
                     this.category = value;
-                else
-                    this.category = CAT(value, ", ", this.category);
+                else if (append)
+                    this.category = (String)CAT(value, ", ", this.category);
             }
             else if (EQ(name, "creator"))
                 this.creator = value;
@@ -424,6 +475,8 @@ namespace Bula.Fetcher.Controller {
                 return this.description;
             else if (EQ(name, "date"))
                 return this.date;
+            else if (EQ(name, "category"))
+                return this.category;
             else if (EQ(name, "creator"))
                 return this.creator;
             else if (EQ(name, "custom1"))

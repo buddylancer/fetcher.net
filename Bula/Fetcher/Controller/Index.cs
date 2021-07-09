@@ -13,6 +13,7 @@ namespace Bula.Fetcher.Controller {
     using Bula.Model;
     using Bula.Fetcher.Controller;
 
+
     /// <summary>
     /// Controller for main Index page.
     /// </summary>
@@ -75,8 +76,14 @@ namespace Bula.Fetcher.Controller {
                 title = CAT(title, " :: ", pFromVars, (!NUL(idFromVars) ? CAT(" :: ", idFromVars) : null));
 
             prepare["[#Title]"] = title; //TODO -- need unique title on each page
-            prepare["[#Keywords]"] = Config.SITE_KEYWORDS;
-            prepare["[#Description]"] = Config.SITE_DESCRIPTION;
+            prepare.Put("[#Keywords]",
+                this.context.TestRun ? Config.SITE_KEYWORDS :
+                Strings.Replace("[#Platform]", Config.PLATFORM, Config.SITE_KEYWORDS)
+            );
+            prepare.Put("[#Description]",
+                this.context.TestRun ? Config.SITE_DESCRIPTION :
+                Strings.Replace("[#Platform]", Config.PLATFORM, Config.SITE_DESCRIPTION)
+            );
             prepare["[#Styles]"] = CAT(
                     (this.context.TestRun ? null : Config.TOP_DIR),
                     this.context.IsMobile ? "styles2" : "styles");
@@ -103,6 +110,15 @@ namespace Bula.Fetcher.Controller {
                 else
                     prepare["[#Bottom]"] = engine.IncludeTemplate("Bottom");
             }
+
+            prepare.Put("[#Github_Repo]",
+                this.context.TestRun ? Config.GITHUB_REPO :
+                Strings.Replace("[#Platform]", Strings.ToLowerCase(Config.PLATFORM), Config.GITHUB_REPO)
+            );
+            prepare.Put("[#Powered_By]",
+                this.context.TestRun ? Config.POWERED_BY :
+                Strings.Replace("[#Platform]", Config.PLATFORM, Config.POWERED_BY)
+            );
 
             this.context.Response.WriteHeader("Content-type", CAT(
                 (BLANK(apiName) ? "text/html" : Config.API_CONTENT), "; charset=UTF-8")

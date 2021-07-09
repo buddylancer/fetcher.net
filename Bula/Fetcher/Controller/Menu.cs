@@ -26,7 +26,7 @@ namespace Bula.Fetcher.Controller {
 
             var bookmark = (String)null;
             if (this.context.Contains("Name_Category"))
-                bookmark = CAT("#", Config.NAME_ITEMS, "_by_", this.context["Name_Category"]); 
+                bookmark = CAT("#", Config.NAME_ITEMS, "_by_", this.context["Name_Category"]);
             publicPages.Add("Home");
             publicPages.Add("home");
             if (this.context.IsMobile) {

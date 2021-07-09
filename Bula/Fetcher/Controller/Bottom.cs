@@ -29,7 +29,7 @@ namespace Bula.Fetcher.Controller {
                 CAT(Config.NAME_ITEMS, "_by_", this.context["Name_Category"]));
 
             var doCategory = new DOCategory();
-            var dsCategory = doCategory.EnumAll(Config.SHOW_EMPTY ? null : "_this.i_Counter <> 0", 
+            var dsCategory = doCategory.EnumAll(Config.SHOW_EMPTY ? null : "_this.i_Counter <> 0",
                 Config.SORT_CATEGORIES == null ? null : CAT("_this.", Config.SORT_CATEGORIES));
             var size = dsCategory.GetSize();
             int size3 = size % 3;

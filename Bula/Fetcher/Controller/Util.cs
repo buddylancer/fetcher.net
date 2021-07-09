@@ -57,7 +57,8 @@ namespace Bula.Fetcher.Controller {
         /// <returns>Resulting date/time.</returns>
         public static String ShowTime(String input) {
             var time = DateTimes.GetTime(input);
-            time += 3600 * (Config.TIME_SHIFT / 100) + 60 * (Config.TIME_SHIFT % 100);
+            var delta = 3600 * (Config.TIME_SHIFT / 100) + 60 * (Config.TIME_SHIFT % 100);
+            time += delta;
             return CAT(DateTimes.Format(DateTimes.DTS, time), " ", Config.TIME_ZONE);
         }
 

@@ -22,7 +22,10 @@ namespace Bula.Objects {
         /// @param String @fileName Filename to load translation table from.
         /// <returns>Number of actual pairs in translation table.</returns>
         public static int Initialize(String fileName) {
-            pairs = new TArrayList(Helper.ReadAllLines(fileName));
+            String[] lines = Helper.ReadAllLines(fileName);
+            if (lines == null)
+                return 0;
+            pairs = new TArrayList(lines);
             return pairs.Size();
         }
 

@@ -41,7 +41,8 @@ namespace Bula.Objects {
             if (langFile != null) {
                 if (!Translator.IsInitialized())
                     Translator.Initialize(langFile);
-                input = Translator.Translate(input);
+                if (Translator.IsInitialized())
+                    input = Translator.Translate(input);
             }
             httpResponse.Write(input);
         }
@@ -52,7 +53,18 @@ namespace Bula.Objects {
         /// <param name="name">Header name.</param>
         /// <param name="value">Header value.</param>
         public void WriteHeader(String name, String value) {
+            WriteHeader(name, value, "UTF-8");
+        }
+
+        /// <summary>
+        /// Write header to current response.
+        /// </summary>
+        /// <param name="name">Header name.</param>
+        /// <param name="value">Header value.</param>
+        /// <param name="encoding">Response encoding.</param>
+        public void WriteHeader(String name, String value, String encoding) {
             httpResponse.AppendHeader(name, value);
+            if (encoding != null) httpResponse.ContentEncoding = System.Text.Encoding.GetEncoding(encoding);
         }
 
         /// <summary>

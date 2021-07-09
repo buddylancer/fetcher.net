@@ -23,6 +23,8 @@ namespace Bula.Objects
 
         public int Size() { return content.Count; }
 
+        public bool Contains(Object value) { return content.Contains(value); }
+
         public Object this[int pos] { get { return Get(pos); } set { Set(pos, value); } }
 
         public Object[] ToArray() { return content.ToArray(); }

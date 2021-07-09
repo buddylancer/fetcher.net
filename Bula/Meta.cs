@@ -183,8 +183,10 @@ namespace Bula
         public static int SIZE(object val) {
             if (val == null) return 0;
             else if (val is Object[]) return ((Object[])val).Length;
+            else if (val is String[]) return ((String[])val).Length;
             else if (val is TArrayList) return ((TArrayList)val).Size();
             else if (val is THashtable) return ((THashtable)val).Size();
+            else if (val is ICollection) return ((ICollection)val).Count;
             else if (val is String) return ((String)val).Length;
             return 0;
         }

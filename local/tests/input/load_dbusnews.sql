@@ -2,12 +2,13 @@
 
 delete from sources;
 /* DO NOT change IDs after initial load */
-insert into sources values (10, 'education.usnews.com', 1, 1,	'http://www.usnews.com/education',	'http://www.ff.com:8000/testing/feed.aspx?source=education.usnews.com');
-insert into sources values (20, 'health.usnews.com', 1, 1,	'http://health.usnews.com',		'http://www.ff.com:8000/testing/feed.aspx?source=health.usnews.com');
-insert into sources values (30, 'money.usnews.com', 1, 1,	'http://money.usnews.com',		'http://www.ff.com:8000/testing/feed.aspx?source=money.usnews.com');
-insert into sources values (40, 'news.usnews.com', 1, 1,	'http://www.usnews.com/news',		'http://www.ff.com:8000/testing/feed.aspx?source=news.usnews.com');
-insert into sources values (50, 'opinion.usnews.com', 1, 1,	'http://www.usnews.com/opinion',	'http://www.ff.com:8000/testing/feed.aspx?source=opinion.usnews.com');
-insert into sources values (60, 'travel.usnews.com', 1, 1,	'http://travel.usnews.com',		'http://www.ff.com:8000/testing/feed.aspx?source=travel.usnews.com');
+set @site = 'http://www.ff.com:8000/Testing/feed[#File_Ext]';
+insert into sources values (10, 'education.usnews.com', 1, 1,   'http://www.usnews.com/education',  concat(@site, '?source=education.usnews.com'));
+insert into sources values (20, 'health.usnews.com',    1, 1,   'http://health.usnews.com',         concat(@site, '?source=health.usnews.com'));
+insert into sources values (30, 'money.usnews.com',     1, 1,   'http://money.usnews.com',          concat(@site, '?source=money.usnews.com'));
+insert into sources values (40, 'news.usnews.com',      1, 1,   'http://www.usnews.com/news',       concat(@site, '?source=news.usnews.com'));
+insert into sources values (50, 'opinion.usnews.com',   1, 1,   'http://www.usnews.com/opinion',    concat(@site, '?source=opinion.usnews.com'));
+insert into sources values (60, 'travel.usnews.com',    1, 1,   'http://travel.usnews.com',         concat(@site, '?source=travel.usnews.com'));
 
 delete from categories;
 /*insert into categories values ('US', 'United States', '\\bUS.| US;| US,|U.S.|USA|U.S.A.|United States', 0);*/
@@ -85,6 +86,20 @@ insert into categories values ('Poland', 'World - Poland', 'Poland|Polish|Warsha
 insert into categories values ('Russia', 'World - Russia', 'Russia|Moscow', 0);
 insert into categories values ('South Korea', 'World - South Korea', 'South Korea', 0);
 insert into categories values ('Scotland', 'World - Scotland', 'Scotland', 0);
+
+delete from mappings;
+insert into mappings values (0, '&amp;', '&');
+insert into mappings values (0, '&lt;', '<');
+insert into mappings values (0, '&gt;', '>');
+insert into mappings values (0, '&laquo;', '«');
+insert into mappings values (0, '&raquo;', '»');
+insert into mappings values (0, '&#171;', '«');
+insert into mappings values (0, '&#187;', '»');
+insert into mappings values (0, '&#8364;', '€');
+insert into mappings values (0, '&#10625;', '-'); /* dot */
+insert into mappings values (0, '&#34;', '"');
+insert into mappings values (0, '&#39;', '\'');
+insert into mappings values (0, '&#8722;', '-'); /* dash */
 
 delete from rules;
 insert into rules values (0, '*', 'title', 'shrink', NULL, 0, 'http', NULL); /* shrink the end */

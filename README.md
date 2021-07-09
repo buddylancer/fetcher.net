@@ -9,9 +9,11 @@ Project features:
 - filtering items by categories (any number of categories)
 - generate output RSS-feeds (filtered by categories also)
 - caching logic for input RSS-feeds, web pages and output RSS-feeds
-- mobile version is configured through separate CSS
+- mobile version is configured in View section (just through separate CSS)
 - classic MVC (Model/View/Controller) implementation (own development)
 - simple REST API for extracting collected data
+- custom rules for item processing (shrink, cut, replace, extract etc)
+- custom character mappings for item processing
 - own testing framework (universal for PHP, .NET [Core] and Java versions)
 
 Test scripts are located in local/tests folder.

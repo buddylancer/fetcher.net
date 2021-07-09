@@ -107,27 +107,30 @@ namespace Bula.Objects {
         /// <param name="encoding">Encoding name [optional].</param>
         /// <returns>Resulting content.</returns>
         public static String ReadAllText(String filename, String encoding) {
-            if (encoding == null)
-                return File.ReadAllText(filename);
-            else
-                return File.ReadAllText(filename, System.Text.Encoding.GetEncoding(encoding));
+            try {
+                if (encoding == null)
+                    return File.ReadAllText(filename);
+                else
+                    return File.ReadAllText(filename, System.Text.Encoding.GetEncoding(encoding));
+            }
+            catch (Exception ex) { lastError = ex.Message; return null; }
         }
 
-          /// <summary>
-          /// Read all content of text file as list of lines.
-          /// </summary>
+        /// <summary>
+        /// Read all content of text file as list of lines.
+        /// </summary>
         /// <param name="filename">File name.</param>
         /// <returns>Resulting content (lines).</returns>
-        public static Object[] ReadAllLines(String filename) {
+        public static String[] ReadAllLines(String filename) {
             return ReadAllLines(filename, null); }
 
-          /// <summary>
-          /// Read all content of text file as list of lines.
-          /// </summary>
+        /// <summary>
+        /// Read all content of text file as list of lines.
+        /// </summary>
         /// <param name="filename">File name.</param>
         /// <param name="encoding">Encoding name [optional].</param>
         /// <returns>Resulting content (lines).</returns>
-        public static Object[] ReadAllLines(String filename, String encoding) {
+        public static String[] ReadAllLines(String filename, String encoding) {
             return encoding == null ? File.ReadAllLines(filename) : File.ReadAllLines(filename, System.Text.Encoding.GetEncoding(encoding));
         }
 

@@ -55,10 +55,12 @@ namespace Bula.Objects {
         /// <param name="timeString">Input string.</param>
         /// <returns>Resulting timestamp.</returns>
         public static long FromRss(String timeString) {
+            if (timeString == null)
+                return GetTime();
             timeString = timeString.Replace("PDT", "-07:00");
             timeString = timeString.Replace("PST", "-08:00");
-            return (int)DateTime.ParseExact(timeString, RSS_DTS,
-                DateTimeFormatInfo.InvariantInfo, DateTimeStyles.None).ToUniversalTime().Subtract(unix).TotalSeconds;
+            timeString = timeString.Replace("UTC", "GMT");
+            return (int)DateTime.Parse(timeString).ToUniversalTime().Subtract(unix).TotalSeconds;
         }
 
         /// <summary>
@@ -97,6 +99,10 @@ namespace Bula.Objects {
         /// <returns>Resulting string.</returns>
         public static String GmtFormat(String formatString, long timeValue) {
             return (timeValue == 0 ? DateTime.UtcNow : unix.AddSeconds((double)timeValue)).ToString(formatString);
+        }
+
+        public static long Parse(String formatString, String timeString) {
+            return (long)DateTime.Parse(timeString).ToUniversalTime().Subtract(unix).TotalSeconds;
         }
     }
 }

@@ -44,8 +44,13 @@ namespace Bula.Fetcher.Controller.Testing {
             if (this.context.Request.Contains("from"))
                 from = this.context.Request["from"];
 
-            this.context.Response.WriteHeader("Content-type", CAT("text/xml; charset=", encoding));
-            this.context.Response.Write(Helper.ReadAllText(CAT(this.context.LocalRoot, "local/", from, "/", source, ".xml"), encoding));
+            this.context.Response.WriteHeader("Content-type", CAT("text/xml; charset=", encoding), encoding);
+            var filename = Strings.Concat(this.context.LocalRoot, "local/", from, "/", source, ".xml");
+            if (filename.IndexOf("..") == -1) {
+                var content = Helper.ReadAllText(filename, encoding);
+                if (!BLANK(content))
+                    this.context.Response.Write(content);
+            }
             this.context.Response.End();
         }
     }

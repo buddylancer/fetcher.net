@@ -74,7 +74,14 @@ namespace Bula.Model {
         /// <returns>Query result</returns>
         public static int NonQuery(Object link, String query)
         {
-            return MySqlHelper.ExecuteNonQuery((MySqlConnection)link, query, new MySqlParameter[] { });
+            int ret = -1;
+            try {
+                ret = MySqlHelper.ExecuteNonQuery((MySqlConnection)link, query, new MySqlParameter[] { });
+            }
+            catch (Exception ex) {
+                CallErrorDelegate(ex.Message);
+            }
+            return ret;
         }
 
         /// <summary>
@@ -85,8 +92,14 @@ namespace Bula.Model {
         /// <returns>Query result</returns>
         public static Object SelectQuery(Object link, String query)
         {
-            System.Data.DataSet sysDs = MySqlHelper.ExecuteDataset((MySqlConnection)link, query);
-            return new Object[] { 0, sysDs };
+            try {
+                System.Data.DataSet sysDs = MySqlHelper.ExecuteDataset((MySqlConnection)link, query);
+                return new Object[] { 0, sysDs };
+            }
+            catch (Exception ex) {
+                CallErrorDelegate(ex.Message);
+            }
+            return null;
         }
 
         /// <summary>
@@ -97,8 +110,14 @@ namespace Bula.Model {
         /// <returns>Query result</returns>
         public static Object UpdateQuery(Object link, String query)
         {
-            System.Data.DataSet sysDs = MySqlHelper.ExecuteDataset((MySqlConnection)link, query);
-            return new Object[] { 0, sysDs };
+            try {
+                System.Data.DataSet sysDs = MySqlHelper.ExecuteDataset((MySqlConnection)link, query);
+                return new Object[] { 0, sysDs };
+            }
+            catch (Exception ex) {
+                CallErrorDelegate(ex.Message);
+            }
+            return null;
         }
 
         /// <summary>

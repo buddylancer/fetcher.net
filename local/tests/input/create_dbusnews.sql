@@ -109,9 +109,24 @@ CREATE TABLE `rules` (
   `s_Operation` varchar(16) DEFAULT NULL,
   `s_From` varchar(16) DEFAULT NULL,
   `i_Value` int(11) NOT NULL DEFAULT '0',
-  `s_Pattern` varchar(60) DEFAULT NULL,
+  `s_Pattern` varchar(128) DEFAULT NULL,
   `s_Value` varchar(60) DEFAULT NULL,
   UNIQUE KEY `i_RuleId` (`i_RuleId`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `rules`
+--
+
+DROP TABLE IF EXISTS `mappings`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `mappings` (
+  `i_MappingId` int(11) NOT NULL AUTO_INCREMENT,
+  `s_From` varchar(16) DEFAULT NULL,
+  `s_To` varchar(16) NOT NULL,
+  UNIQUE KEY `i_MappingId` (`i_MappingId`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

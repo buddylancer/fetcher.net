@@ -76,8 +76,8 @@ namespace Bula.Fetcher.Model {
             if (NUL(category))
                 return null;
             //category = Regex.Escape(Regex.Escape(category));
-            category = CAT("\\\\b", Regex.Escape(Regex.Escape(category))); //, "\\\\b");
-            return category == null ? null : CAT("_this.s_Category REGEXP '", category, "'");
+            category = CAT("[ ]", Regex.Escape(Regex.Escape(category)), "[, ]");
+            return category == null ? null : CAT("concat(' ', _this.s_Category, ' ') REGEXP '", category, "'");
         }
 
         /// <summary>

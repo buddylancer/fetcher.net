@@ -22,6 +22,7 @@ namespace Bula.Fetcher.Controller {
         private Logger oLogger = null;
         private DataSet dsCategories = null;
         private DataSet dsRules = null;
+        private DataSet dsMappings = null;
 
         /// Public default constructor 
         public BOFetcher (Context context) {
@@ -54,6 +55,8 @@ namespace Bula.Fetcher.Controller {
             this.dsCategories = doCategory.EnumCategories();
             var doRule = new DORule();
             this.dsRules = doRule.EnumAll();
+            var doMapping = new DOMapping();
+            this.dsMappings = doMapping.EnumAll();
         }
 
         /// <summary>
@@ -69,6 +72,9 @@ namespace Bula.Fetcher.Controller {
 
             if (!NUL(from))
                 url = Strings.Concat(url, "&from=", from);
+
+            if (url.IndexOf("[#File_Ext]") != -1)
+                url = url.Replace("[#File_Ext]", Context.FILE_EXT);
 
             var source = STR(oSource["s_SourceName"]);
             if (this.context.Request.Contains("m") && !source.Equals(this.context.Request["m"]))
@@ -107,17 +113,16 @@ namespace Bula.Fetcher.Controller {
             var sourceName = STR(oSource["s_SourceName"]);
             var sourceId = INT(oSource["i_SourceId"]);
             var boItem = new BOItem(sourceName, item);
-            var pubDate = STR(item["pubdate"]);
+            var pubDate = STR(item["pubDate"]);
             if (BLANK(pubDate) && !BLANK(item["dc"])) { //TODO implement [dc][time]
                 var temp = (THashtable)item["dc"];
-                if (!BLANK(temp["date"]))
+                if (!BLANK(temp["date"])) {
                     pubDate = STR(temp["date"]);
+                    item["pubDate"] = pubDate;
+                }
             }
-            //TODO -- workaround for life.ru (error - pubDate inside guid)
 
-            if (BLANK(pubDate)) pubDate = STR(item["guid_pubdate"]);
-
-            var date = DateTimes.GmtFormat(DateTimes.SQL_DTS, DateTimes.FromRss(pubDate));
+            boItem.ProcessMappings(this.dsMappings);
 
             boItem.ProcessDescription();
             //boItem.ProcessCustomFields(); // Uncomment for processing custom fields
@@ -130,6 +135,13 @@ namespace Bula.Fetcher.Controller {
             if (BLANK(boItem.link)) //TODO - what we can do else?
                 return 0;
 
+            // Get date here as it can be extracted in rules processing
+            if (boItem.date != null)
+                pubDate = boItem.date;
+            if (!BLANK(pubDate))
+                pubDate = pubDate.Trim();
+            var date = DateTimes.GmtFormat(DateTimes.SQL_DTS, DateTimes.FromRss(pubDate));
+
             // Check whether item with the same link exists already
             var doItem = new DOItem();
             var dsItems = doItem.FindItemByLink(boItem.link, sourceId);
@@ -138,7 +150,8 @@ namespace Bula.Fetcher.Controller {
 
             // Try to add/embed standard categories from description
             var countCategories = boItem.AddStandardCategories(this.dsCategories, this.context.Lang);
-            //print "countCategories: '" . countCategories . "'<br/>\r\n";
+
+            boItem.NormalizeCategories();
 
             // Check the link once again after processing rules
             if (dsItems == null && !BLANK(boItem.link)) {
