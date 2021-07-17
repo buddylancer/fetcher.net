@@ -100,7 +100,7 @@ namespace Bula.Fetcher.Controller.Pages {
             var category = (String)null;
 
             if (!NUL(filterName)) {
-                var doCategory = new DOCategory();
+                var doCategory = new DOCategory(this.context.Connection);
                 THashtable[] oCategory =
                     {new THashtable()};
                 if (!doCategory.CheckFilterName(filterName, oCategory))
@@ -113,7 +113,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var sourceId = -1;
             if (!NUL(sourceName)) {
-                var doSource = new DOSource();
+                var doSource = new DOSource(this.context.Connection);
                 THashtable[] oSource =
                     {new THashtable()};
                 if (!doSource.CheckSourceName(sourceName, oSource)) {
@@ -153,7 +153,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var maxRows = Config.DB_ITEMS_ROWS;
 
-            var doItem = new DOItem();
+            var doItem = new DOItem(this.context.Connection);
             //String realFilter = DOItem.BuildSqlByFilter(filter);
             var realFilter = DOItem.BuildSqlByCategory(category);
             var dsItems = doItem.EnumItems(sourceName, realFilter, listNumber, maxRows);

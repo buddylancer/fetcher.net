@@ -39,7 +39,7 @@ namespace Bula.Fetcher.Controller {
                 if (BLANK(source))
                     errorMessage += "Empty source!";
                 else {
-                    var doSource = new DOSource();
+                    var doSource = new DOSource(this.context.Connection);
                     THashtable[] oSource =
                         {new THashtable()};
                     if (!doSource.CheckSourceName(source, oSource))
@@ -57,7 +57,7 @@ namespace Bula.Fetcher.Controller {
             var filter = (String)null;
             var filterName = (String)null;
             var categoryName = (String)null;
-            var doCategory = new DOCategory();
+            var doCategory = new DOCategory(this.context.Connection);
             var dsCategories = doCategory.EnumCategories();
             if (dsCategories.GetSize() > 0) {
                 filterName = this.context.Request["filter"];
@@ -141,7 +141,7 @@ namespace Bula.Fetcher.Controller {
                 }
             }
 
-            var doItem = new DOItem();
+            var doItem = new DOItem(this.context.Connection);
 
             // 0 - item url
             // 1 - item title
@@ -272,11 +272,6 @@ namespace Bula.Fetcher.Controller {
             }
             this.context.Response.WriteHeader("Content-type", "text/xml; charset=UTF-8");
             this.context.Response.Write(contentToCache); //TODO -- BOM?
-
-            if (DBConfig.Connection != null) {
-                DBConfig.Connection.Close();
-                DBConfig.Connection = null;
-            }
         }
 
         /// <summary>

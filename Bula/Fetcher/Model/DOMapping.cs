@@ -14,7 +14,7 @@ namespace Bula.Fetcher.Model {
     /// </summary>
     public class DOMapping : DOBase {
         /// Public constructor (overrides base constructor) 
-        public DOMapping (): base() {
+        public DOMapping (Connection connection): base(connection) {
             this.tableName = "mappings";
             this.idField = "i_MappingId";
         }

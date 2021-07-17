@@ -16,7 +16,7 @@ namespace Bula.Fetcher.Model {
     /// </summary>
     public class DOCategory : DOBase {
         /// Public constructor (overrides base constructor) 
-        public DOCategory (): base() {
+        public DOCategory (Connection connection): base(connection) {
             this.tableName = "categories";
             this.idField = "s_CatId";
         }

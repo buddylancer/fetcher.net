@@ -133,11 +133,6 @@ namespace Bula.Fetcher.Controller {
 
             this.context.Response.Write(engine.GetPrintString());
             this.context.Response.End();
-
-            if (DBConfig.Connection != null) {
-                DBConfig.Connection.Close();
-                DBConfig.Connection = null;
-            }
         }
     }
 }

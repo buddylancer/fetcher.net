@@ -33,7 +33,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 if (!TRequest.IsInteger(id) || INT(id) <= 0)
                     errorMessage = "Incorrect item ID!";
                 else {
-                    var doItem = new DOItem();
+                    var doItem = new DOItem(this.context.Connection);
                     var dsItems = doItem.GetById(INT(id));
                     if (dsItems.GetSize() == 0)
                         errorMessage = "No item with such ID!";

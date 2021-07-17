@@ -18,6 +18,21 @@ namespace Bula.Model {
         private MySqlConnection link = null;
         private PreparedStatement stmt; // Prepared statement to use with connection
 
+        // Create connection to the database given parameters from DBConfig.
+        public static Connection CreateConnection() {
+            var oConn = new Connection();
+            var dbAdmin = DBConfig.DB_ADMIN != null ? DBConfig.DB_ADMIN : DBConfig.DB_NAME;
+            var dbPassword = DBConfig.DB_PASSWORD != null ? DBConfig.DB_PASSWORD : DBConfig.DB_NAME;
+            var ret = 0;
+            if (DBConfig.DB_CHARSET != null)
+                ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, dbAdmin, dbPassword, DBConfig.DB_NAME, DBConfig.DB_CHARSET);
+            else
+                ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, dbAdmin, dbPassword, DBConfig.DB_NAME);
+            if (ret == -1)
+                oConn = null;
+            return oConn;
+        }
+
         /// <summary>
         /// Open connection to the database.
         /// </summary>

@@ -28,7 +28,7 @@ namespace Bula.Fetcher.Controller {
             prepare.Put("[#Items_By_Category]",
                 CAT(Config.NAME_ITEMS, "_by_", this.context["Name_Category"]));
 
-            var doCategory = new DOCategory();
+            var doCategory = new DOCategory(this.context.Connection);
             var dsCategory = doCategory.EnumAll(Config.SHOW_EMPTY ? null : "_this.i_Counter <> 0",
                 Config.SORT_CATEGORIES == null ? null : CAT("_this.", Config.SORT_CATEGORIES));
             var size = dsCategory.GetSize();

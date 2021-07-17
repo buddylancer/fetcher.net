@@ -51,11 +51,11 @@ namespace Bula.Fetcher.Controller {
         /// Pre-load categories into DataSet.
         /// </summary>
         private void PreLoadCategories() {
-            var doCategory = new DOCategory();
+            var doCategory = new DOCategory(this.context.Connection);
             this.dsCategories = doCategory.EnumCategories();
-            var doRule = new DORule();
+            var doRule = new DORule(this.context.Connection);
             this.dsRules = doRule.EnumAll();
-            var doMapping = new DOMapping();
+            var doMapping = new DOMapping(this.context.Connection);
             this.dsMappings = doMapping.EnumAll();
         }
 
@@ -143,7 +143,7 @@ namespace Bula.Fetcher.Controller {
             var date = DateTimes.GmtFormat(DateTimes.SQL_DTS, DateTimes.FromRss(pubDate));
 
             // Check whether item with the same link exists already
-            var doItem = new DOItem();
+            var doItem = new DOItem(this.context.Connection);
             var dsItems = doItem.FindItemByLink(boItem.link, sourceId);
             if (dsItems.GetSize() > 0)
                 return 0;
@@ -194,10 +194,10 @@ namespace Bula.Fetcher.Controller {
             this.oLogger.Output(CAT("Start logging<br/>", EOL));
 
             //TODO -- Purge old items
-            //doItem = new DOItem();
+            //doItem = new DOItem(this.context.Connection);
             //doItem.PurgeOldItems(10);
 
-            var doSource = new DOSource();
+            var doSource = new DOSource(this.context.Connection);
             var dsSources = doSource.EnumFetchedSources();
 
             var totalCounter = 0;
@@ -226,13 +226,6 @@ namespace Bula.Fetcher.Controller {
                         totalCounter++;
                     }
                 }
-
-                // Release connection after each source
-                if (DBConfig.Connection != null) {
-                    DBConfig.Connection.Close();
-                    DBConfig.Connection = null;
-                }
-
                 this.oLogger.Output(CAT("<br/>", EOL, "... fetched (", itemsCounter, " items) end"));
             }
 
@@ -252,8 +245,8 @@ namespace Bula.Fetcher.Controller {
         /// </summary>
         private void RecountCategories() {
             this.oLogger.Output(CAT("<br/>", EOL, "Recount categories ... "));
-            var doCategory = new DOCategory();
-            var doItem = new DOItem();
+            var doCategory = new DOCategory(this.context.Connection);
+            var doItem = new DOItem(this.context.Connection);
             var dsCategories = doCategory.EnumCategories();
             for (int n = 0; n < dsCategories.GetSize(); n++) {
                 var oCategory = dsCategories.GetRow(n);

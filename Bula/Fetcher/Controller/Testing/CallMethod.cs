@@ -99,7 +99,8 @@ namespace Bula.Fetcher.Controller.Testing {
 
             fullClass = Strings.Replace("/", ".", fullClass);
             method = Strings.FirstCharToUpper(method);
-            result = Bula.Internal.CallMethod(fullClass, new TArrayList(), method, pars);
+            TArrayList pars0 = new TArrayList(new Object[] { this.context.Connection });
+            result = Bula.Internal.CallMethod(fullClass, pars0, method, pars);
 
             if (result == null)
                 buffer = "NULL";

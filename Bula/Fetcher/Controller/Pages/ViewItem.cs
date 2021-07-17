@@ -56,7 +56,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var prepare = new THashtable();
 
-            var doItem = new DOItem();
+            var doItem = new DOItem(this.context.Connection);
             var dsItems = doItem.GetById(INT(id));
             if (dsItems == null || dsItems.GetSize() == 0) {
                 prepare["[#ErrMessage]"] = "Wrong item ID!";

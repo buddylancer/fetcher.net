@@ -73,11 +73,6 @@ namespace Bula.Fetcher.Controller {
             var actionClass = CAT("Bula/Fetcher/Controller/Actions/", actionInfo["class"]);
             TArrayList args0 = new TArrayList(); args0.Add(this.context);
             Internal.CallMethod(actionClass, args0, "Execute", null);
-
-            if (DBConfig.Connection != null) {
-                DBConfig.Connection.Close();
-                DBConfig.Connection = null;
-            }
         }
     }
 }

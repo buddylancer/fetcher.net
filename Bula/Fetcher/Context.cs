@@ -10,6 +10,10 @@ namespace Bula.Fetcher {
     using Bula.Objects;
     using Bula.Fetcher.Controller;
 
+    using Bula.Model;
+
+
+
     /// <summary>
     /// Class for request context.
     /// </summary>
@@ -26,9 +30,22 @@ namespace Bula.Fetcher {
             this.Request = new TRequest(request);
             this.Response = new TResponse(response);
             this.Request.response = this.Response;
+
+            this.Connection = Connection.CreateConnection();
+
             this.Initialize();
         }
 
+        /// Public desctructor 
+        ~Context() {
+            if (this.Connection != null) {
+                this.Connection.Close();
+                this.Connection = null;
+            }
+        }
+
+        /// Current DB connection 
+        public Connection Connection = null;
         /// Current request 
         public TRequest Request = null;
         /// Current response 

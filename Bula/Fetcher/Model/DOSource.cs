@@ -16,7 +16,7 @@ namespace Bula.Fetcher.Model {
     /// </summary>
     public class DOSource : DOBase {
         /// Public constructor (overrides base constructor) 
-        public DOSource (): base() {
+        public DOSource (Connection connection): base(connection) {
             this.tableName = "sources";
             this.idField = "i_SourceId";
         }

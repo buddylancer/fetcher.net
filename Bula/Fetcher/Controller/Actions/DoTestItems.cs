@@ -50,7 +50,7 @@ namespace Bula.Fetcher.Controller.Actions {
             var insertRequired = false;
             var updateRequired = false;
 
-            var doTime = new DOTime();
+            var doTime = new DOTime(this.context.Connection);
 
             var dsTimes = doTime.GetById(1);
             var timeShift = 240; // 4 min
@@ -74,7 +74,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 var boFetcher = new BOFetcher(this.context);
                 boFetcher.FetchFromSources(from);
 
-                doTime = new DOTime(); // Need for DB reopen
+                doTime = new DOTime(this.context.Connection); // Need for DB reopen
                 var fields = new THashtable();
                 fields["d_Time"] = DateTimes.Format(DateTimes.SQL_DTS, DateTimes.GetTime());
                 if (insertRequired) {

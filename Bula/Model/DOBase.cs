@@ -8,6 +8,7 @@ namespace Bula.Model {
     using System.Collections;
 
     using Bula.Objects;
+    using Bula.Model;
 
     /// <summary>
     /// Base class for manipulating with DB objects.
@@ -28,26 +29,8 @@ namespace Bula.Model {
         protected String idField;
 
         /// Public constructor 
-        public DOBase () {
-            if (DBConfig.Connection == null)
-                DBConfig.Connection = this.CreateConnection();
-
-            this.dbConnection = DBConfig.Connection;
-        }
-
-        // Create connection to the database given parameters from DBConfig.
-        private Connection CreateConnection() {
-            var oConn = new Connection();
-            var dbAdmin = DBConfig.DB_ADMIN != null ? DBConfig.DB_ADMIN : DBConfig.DB_NAME;
-            var dbPassword = DBConfig.DB_PASSWORD != null ? DBConfig.DB_PASSWORD : DBConfig.DB_NAME;
-            var ret = 0;
-            if (DBConfig.DB_CHARSET != null)
-                ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, dbAdmin, dbPassword, DBConfig.DB_NAME, DBConfig.DB_CHARSET);
-            else
-                ret = oConn.Open(DBConfig.DB_HOST, DBConfig.DB_PORT, dbAdmin, dbPassword, DBConfig.DB_NAME);
-            if (ret == -1)
-                oConn = null;
-            return oConn;
+        public DOBase (Connection connection) {
+            this.dbConnection = connection;
         }
 
         /// <summary>

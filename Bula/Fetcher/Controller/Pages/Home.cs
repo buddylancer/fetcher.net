@@ -39,7 +39,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
             var prepare = new THashtable();
 
-            var doItem = new DOItem();
+            var doItem = new DOItem(this.context.Connection);
 
             prepare["[#BrowseItemsLink]"] = this.GetLink(Config.INDEX_PAGE, "?p=", null, "items");
             if (Config.SHOW_IMAGES)

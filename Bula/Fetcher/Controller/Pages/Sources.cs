@@ -37,8 +37,8 @@ namespace Bula.Fetcher.Controller.Pages {
             if (Config.SHOW_IMAGES)
                 prepare["[#Show_Images]"] = 1;
 
-            var doSource = new DOSource();
-            var doItem = new DOItem();
+            var doSource = new DOSource(this.context.Connection);
+            var doItem = new DOItem(this.context.Connection);
 
             var dsSources = doSource.EnumSources();
             var count = 1;

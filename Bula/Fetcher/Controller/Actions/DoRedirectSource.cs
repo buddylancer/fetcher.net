@@ -32,7 +32,7 @@ namespace Bula.Fetcher.Controller.Actions {
                 if (!TRequest.IsDomainName(sourceName))
                     errorMessage = "Incorrect source name!";
                 else {
-                    var doSource = new DOSource();
+                    var doSource = new DOSource(this.context.Connection);
                     THashtable[] oSource =
                         {new THashtable()};
                     if (!doSource.CheckSourceName(sourceName, oSource))

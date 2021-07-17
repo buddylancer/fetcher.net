@@ -25,7 +25,7 @@ namespace Bula.Fetcher.Controller.Pages {
 
         /// Execute main logic for FilterItems block. 
         public override void Execute() {
-            var doSource = new DOSource();
+            var doSource = new DOSource(this.context.Connection);
 
             var source = (String)null;
             if (this.context.Request.Contains("source"))
